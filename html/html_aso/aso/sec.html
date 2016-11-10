@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<link href="/ARIESRES/assets/appEngine/img/Appengine_logo.png" mce_href="/ARIESRES/assets/appEngine/img/Appengine_logo.png" rel="shortcut icon" />
+<link href="../assets/aries/css/base/aries-base.css" rel="stylesheet" type="text/css" />
+<link href="../assets/appEngine/css/common.css" rel="stylesheet" type="text/css" />
+<link href="../assets/appEngine/css/main.css" rel="stylesheet" type="text/css" />
+<link href="../assets/appEngine/css/font.css" rel="stylesheet" type="text/css" />
+<link href="/ARIESRES/assets/appEngine/css/font-md-new.css" rel="stylesheet" type="text/css" />
+<script src="/ARIESRES/assets/aries/lib/jquery.js"></script>
+<script src="/ARIESRES/assets/aries/main/sea.js"></script>
+<script src="/ARIESRES/assets/appEngine/js/index.js"></script>
+<title>ASO</title>
+<meta name="robots" content="noindex,follow" />
+</head>
+<body>
+	<div class="profile-top-banner-bg">
+		<div class="container profile-container">
+			<div class="header">
+				<img class="signin-logo-img"
+					src="../assets/appEngine/img/Appengine_logo1.png">
+				<div class="user-name">
+					<div class="active">
+						<span class="icon-account-circle"></span>
+						<div class="user-name-info" id="currentUser"></div>
+						<span class="icon-select1"></span>
+					</div>
+					<ul style="display: none">
+						<li><a href="/aso/profile.html">MyProfile</a></li>
+						<li>Logout</li>
+					</ul>
+					<button class="btn product-signIn-btn" onclick="signIn()"
+						style="display: none">Sign in</button>
+				</div>
+				<div class="header-info">
+					<ul>
+						<li src="#ide"><a href="/aso/index.html">Product</a></li>
+						<li src="#image"><a href="/aso/helpInfo.html">Help Center</a></li>
+					</ul>
+				</div>
+			</div>
+		</div>
+
+	</div>
+	<div class="m-md">
+		<div class="upload-box-line">
+			<div class="col-xs-2">
+				<div class="btn btn-primary m" id="selectFile">selectFile</div>
+			</div>
+		</div>
+		<div class="upload-list m-t-lg" style="display: none;">
+			<div class="row">
+				<div class="col-xs-8">
+					<h4>File List</h4>
+				</div>
+				<div class="col-xs-4 text-right">
+					<button class="btn btn-warning m-t-xs m-r-sm" type="button"
+						id="startUploadFile">
+						<span class="icon-uploadfiles m-r-sm"></span>开始上传
+					</button>
+				</div>
+			</div>
+			<ul>
+			</ul>
+		</div>
+	</div>	
+<script type="text/javascript">
+var uploader;
+seajs.use('aries-main',function(){
+	$.cookie($.aries.config.sec.SEC_AUTH_ROLETYPE_KEY, "Customer", {path : '/'});
+    var currentUser =  $.cookie("login_customer_id");
+    if(currentUser){
+        $('#currentUser').html(currentUser);
+    }else{
+         $('.product-signIn-btn').show();
+         $('.user-name').find('span').hide();
+         $('.user-name').find('#currentUser').hide();
+    }
+    uploader = WebUploader.create({
+		 pick:{
+            id: "#selectFile",
+            label: 'Select File',
+            multiple: true
+        },
+    	server: "/HubCrmServlet?servicecode=228b9aed-5501-0010-8e5f-51c8a52a5c8a"
+	});
+   //文件加入队列
+   uploader.on('fileQueued', addFile);
+   $("#startUploadFile").on('click',function(){
+   	uploader.upload();
+   });
+   //文件上传过程中创建进度条实时显示
+   uploader.on('uploadProgress', function(file,percentage){
+   	 var progressBar = $('#'+file.id).find('.progress .progress-bar');
+    	 $('#'+file.id).find('>div:eq(1)').show();
+   });
+   
+   //判断后台返回是否正确
+   uploader.on('uploadAccept', function(block,ret){
+   	if(ret){
+   		if(typeof ret.hub_code != 'undefined'){
+				if(ret.hub_code === '0' || ret.hub_code == 0){
+					return false;
+				}
+			}
+   	}
+   });
+   
+   //上传成功
+   uploader.on('uploadSuccess', function(file){
+   	var $li = $('#'+file.id);
+   	$li.find('.progress .progress-bar').addClass('progress-bar-success').width('100%');
+   	$li.find('>div:eq(1)').addClass('icon-check2');
+   	$li.find('>div:last').remove();
+   });
+
+   //上传出错
+   uploader.on('uploadError', function(file){
+   	var $li = $('#'+file.id);
+   	$li.find('.progress .progress-bar').width('30%');
+   	$li.find('>div:eq(1)').addClass('icon-warning');
+   	$li.find('>div:last >button').text('Reupload');
+   	$li.off('click').on('click','button.btn-default',function(){
+   		uploader.retry();
+   	});
+   });
+});
+function addFile(file){
+	var icon = 'icon-image';
+	if(file.ext){
+		switch(file.ext) {
+			case "xlsx":
+				icon = 'icon-file-excel';
+				break;
+			case "xls":
+				icon = 'icon-file-excel';
+				break;
+			case "docx":
+				icon = 'icon-file-word';
+				break;
+			case "doc":
+				icon = 'icon-file-word';
+				break;
+			case "pdf":
+				icon = 'icon-file-pdf';
+				break;
+			case "txt":
+				icon = 'icon-file-text';
+				break;
+        }
+	}
+	var $li = $('<li id="'+file.id+'">'+
+	               '<div class="col-xs-6">'+
+				      '<i class="icon '+icon+'"></i>'+
+				      '<span class="title padder">'+file.name+'</span>'+
+				      '<em class="info padder">File Size：'+(file.size/1024).toFixed(2)+' KB</em>'+
+		           '</div>'+
+				   '<div class="col-xs-4" style="display:none;"><div class="progress"><div class="progress-bar" data-role="progressbar" style="width:0%"><span class=""></span></div></div></div>'+
+				   '<div class="col-xs-2 text-right"><button class="btn btn-default" type="button" style="display:none;">Delete</button></div>'+
+				   '</li>');
+	$li.appendTo($(".upload-list").find('>ul'));
+	$(".upload-list").show();
+	//鼠标滑过显示delete按钮
+    $li.on('mouseover',function(){
+		$(this).find('div >button.btn-default').show();
+	}).on('mouseout',function(){
+		$(this).find('div >button.btn-default').hide();
+	});
+    //删除队列中文件
+    $li.on('click','button.btn-default',function(){
+    	uploader.removeFile(file,true);
+    	$(this).closest('li').remove();
+    });
+}
+</script>
+</body>
+</html>

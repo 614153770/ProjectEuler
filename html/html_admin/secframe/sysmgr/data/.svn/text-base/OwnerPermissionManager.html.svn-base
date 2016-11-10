@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Owner Permission Manager</title>
+    <link href="/ARIESRES/assets/aries/css/base/aries-base.css" rel="stylesheet" type="text/css"/>
+    <script src="/ARIESRES/assets/aries/lib/jquery.js"></script>
+    <script src="/ARIESRES/assets/aries/main/sea.js"></script>
+</head>
+<body>
+<div id="searchPanel" aeType="aePanel" aeInit="true" level="4" title="Search Condition">
+	<div aeType="aeForm" id="secDataSearchForm" aeInit="true" class="form-horizontal">
+	 	<div class="form-group">
+	 		<label class="col-xs-2 control-label">Data ID</label>
+			<div class="col-xs-4">
+				<span aeType="aeTextfield" id="dataId" aeInit="true" dataField="dataId"  ></span>
+			</div>
+			<label class="col-xs-2 control-label">ABO Code</label>
+			<div class="col-xs-4">
+				<span aeType="aeTextfield" id="aboCode" aeInit="true" dataField="aboCode"  ></span>
+			</div>						
+		</div>
+		<div class="form-group">
+			<label class="col-xs-2 control-label">Attribute Code</label>
+			<div class="col-xs-4">				
+				<span aeType="aeTextfield" id="attrCode" aeInit="true" dataField="attrCode"  ></span>
+			</div>
+			<div class="col-xs-6 text-right">
+				<button class="btn btn-primary" type="button" onclick="search()" ><span class="i18n">sec_query</span></button>
+		 	</div>			
+		</div>		
+	</div>
+</div>
+<div id="listPanel" aeType="aePanel" aeInit="true" level="4" title="Result List">
+	<div id="secDataSearchResultTable" aeType="aeGrid" aeInit="true"
+	    datafield="" isPaging="true" pagingSize="10"  width="100%" height="300px" 
+	    pagingAlign="right" editable="false"   showIndex="true" singleSelect="true" 
+	    singleRowClass="false" onRowClick="loadDataDetail" i18n="true">
+	    <span datafield="dataId" title="$.i18n('sec_data_dataid')" i18n="true" width="100" ></span>
+	    <span datafield="attrId" title="$.i18n('sec_data_attrid')" i18n="true" width="100" ></span>
+	    <span datafield="attrCode" title="$.i18n('sec_data_attrcode')" i18n="true" width="100" ></span>
+	    <span datafield="attrName" title="$.i18n('sec_data_attrname')" i18n="true" width="100"></span>
+	    <span datafield="aboCode" title="$.i18n('sec_data_abocode')" i18n="true" width="100"></span>
+	    <span datafield="relaId" title="$.i18n('sec_data_relaId')" i18n="true" visible="false"></span>
+	</div>
+</div>
+<div id="detailPanel" aeType="aePanel" aeInit="true" level="4" title="Owner Permission Detail">
+	<div aeType="aeForm" id="dataDetailForm" aeInit="true" class="form-horizontal">
+	 	<div class="form-group">
+			<label class="col-xs-2 control-label"><span class="require">*</span>ABO Code</label>
+			<div class="col-xs-4">
+				<span aeType="aeTextfield" id="aboCodeDetail" aeInit="true" dataField="aboCode" 
+				aeValidate="true" rules="{required:true,messages:{required:'Please enter aboCode!'}}" isValidate="true" ></span>
+			</div>
+			<label class="col-xs-2 control-label"><span class="require">*</span>Attribute Code</label>
+			<div class="col-xs-4">				
+				<span aeType="aeTextfield" id="attrCodeDetail" aeInit="true" dataField="attrCode" 
+				aeValidate="true" rules="{required:true,messages:{required:'Please enter attrCode!'}}" isValidate="true" ></span>
+			</div>			
+		</div>
+		<div class="form-group">
+			<label class="col-xs-2 control-label">Data ID</label>
+			<div class="col-xs-4">
+				<span aeType="aeTextfield" id="dataIdDetail" aeInit="true" dataField="dataId"  ></span>
+			</div>
+			<label class="col-xs-2 control-label">Attribute Name</label>
+			<div class="col-xs-4">
+				<span aeType="aeTextfield" id="attrNameDetail" aeInit="true" dataField="attrName"  ></span>
+			</div>			
+		</div>
+		<div class="form-group">
+			<div class="col-xs-4">
+				<span aeType="aeTextfield" id="relaIdDetail" aeInit="true" dataField="relaId" visible="false" ></span>
+				<span aeType="aeTextfield" id="attrIdDetail" aeInit="true" dataField="attrId"  visible="false"></span>
+			</div>
+		</div>
+		<div class="col-xs-12 text-center">
+			<button class="btn btn-primary" type="button" onclick="updateData()" id="updateBtn"><span class="i18n">sec_role_update</span></button>
+			<button class="btn btn-primary" type="button" onclick="addData()" id="addBtn"><span class="i18n">sec_role_add</span></button>
+			<button class="btn btn-primary" type="button" onclick="saveData()" id="saveBtn"><span class="i18n">sec_role_save</span></button>
+			<button class="btn btn-primary" type="button" onclick="delData()" id="delBtn"><span class="i18n">sec_role_del</span></button>
+		</div>		
+	</div>
+</div>
+
+
+ </body>
+  
+<!-- 运行脚本-->
+<script type="text/javascript">
+var flag = true;
+seajs.use('aries-main',function(){
+	$("#dataDetailForm").aeForm('reload',[]);
+	$("#dataDetailForm").aeForm('setEditSts',false);
+	initButton();
+});
+
+//初始化按钮
+function initButton(){
+	$.disabledButton("updateBtn",true);
+	$.disabledButton("addBtn",false);
+	$.disabledButton("saveBtn",true);
+	$.disabledButton("delBtn",true);
+}
+
+function search(){
+	var attrCode = $('#secDataSearchForm').aeForm('getValueByField','attrCode');
+    attrCode=$.trim(attrCode);
+	var aboCode = $('#secDataSearchForm').aeForm('getValueByField','aboCode');
+	aboCode=$.trim(aboCode);
+	var dataId = $('#secDataSearchForm').aeForm('getValueByField','dataId');
+	dataId=$.trim(dataId);
+    var cond = "".appendParam("attrCode",attrCode).appendParam("aboCode",aboCode).appendParam("dataId",dataId);
+	 $("#secDataSearchResultTable").aeGrid('reload',$.aries.service.secframe.refreshOwnerData,cond); 
+  } 
+
+//加载服务详细信息
+function loadDataDetail(rowIndex,rowData,event){
+	$.disabledButton("updateBtn",false);
+	$.disabledButton("addBtn",false);
+	$.disabledButton("saveBtn",false);
+	$.disabledButton("delBtn",false);
+	var relaId = rowData.relaId;
+	if (null == relaId || relaId =="")
+	{
+	   $.message.alert("",$.i18n('sec_data_sel_one_data'));
+	   return;
+	}
+	var param = "".appendParam("relaId",relaId);
+	$.ajaxPost($.aries.service.secframe.getOwnerABOByRelaId,param,function(data){
+		if(data){
+			$("#dataDetailForm").aeForm('reload',data);
+		}
+	});
+	$("#dataDetailForm").aeForm('setEditSts',false);
+	$.disabledButton("saveBtn",true);
+	}
+
+//更新服务
+function updateData(){
+	flag = false;
+	$.disabledButton("updateBtn",true);
+	$.disabledButton("addBtn",true);
+	$.disabledButton("saveBtn",false);
+	$.disabledButton("delBtn",true);
+	$("#dataDetailForm").aeForm('setEditSts',true);		
+}
+
+//新增服务
+function addData(){	
+	$.disabledButton("updateBtn",true);
+	$.disabledButton("addBtn",true);
+	$.disabledButton("saveBtn",false);
+	$.disabledButton("delBtn",true);
+	$("#dataDetailForm").aeForm('setEditSts',true);
+	$("#dataDetailForm").aeForm('setValueByField','relaId','-1');
+	$("#dataDetailForm").aeForm('setValueByField','attrName','');
+	$("#dataDetailForm").aeForm('setValueByField','attrCode','');
+	$("#dataDetailForm").aeForm('setValueByField','dataId','');
+	$("#dataDetailForm").aeForm('setValueByField','aboCode','');	
+}
+
+//保存服务
+function saveData() {
+		 var validate = $("#dataDetailForm").validate();
+	    if(!validate){
+	   	 return;
+	    }
+	    var param=$("#dataDetailForm").aeForm('getData','true');
+	    var newdata = $.aries.common.setSaveDataState(param,flag);
+	    $.ajaxPost($.aries.service.secframe.saveOwnerData,"voValue="+newdata,function(){			    
+				$.message.success("",$.i18n('sec_save_ok'));
+				$("#dataDetailForm").aeForm('setEditSts',false);
+				$("#dataDetailForm").aeForm('clear');
+				$.disabledButton("addBtn",false);
+				search();
+				initButton(); 
+			
+		  },function(code,info){
+				 $.message.error("",$.i18n('sec_save_fail'));			 
+			
+			//$.disabledButton("addBtn",false);
+		});
+	   
+	}
+
+//删除服务
+function delData(){	
+	var relaId = $('#dataDetailForm').aeForm('getValueByField','relaId');
+	var newdata = "".appendParam("relaId",relaId);
+	$.ajaxPost($.aries.service.secframe.delOwnerData,newdata,function(data){	
+			$.message.success("",$.i18n('sec_del_ok'));
+			$("#dataDetailForm").aeForm('setEditSts',false);
+			$("#dataDetailForm").aeForm('clear');
+			search();		
+	  },function(code,info){
+			$.message.error("",$.i18n('sec_delete_fail'));
+							
+	});
+   initButton();
+}
+
+</script>
+</html>

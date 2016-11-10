@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <link href="/ARIESRES/assets/aries/css/base/aries-base.css" rel="stylesheet" type="text/css"/>
+    <link href="/ARIESRES/assets/appEngine/css/common.css" rel="stylesheet" type="text/css"/>
+    <link href="/ARIESRES/assets/appEngine/css/signIn.css" rel="stylesheet" type="text/css"/>
+    <link href="/ARIESRES/assets/appEngine/css/font.css" rel="stylesheet" type="text/css"/>
+    <link href="/ARIESRES/assets/appEngine/css/font-md.css" rel="stylesheet" type="text/css"/>
+    <script src="/ARIESRES/assets/aries/lib/jquery.js"></script>
+    <script src="/ARIESRES/assets/aries/main/sea.js"></script>
+    <script type="text/javascript" src="/ARIESRES/assets/appEngine/js/login.js"></script>
+    <title>ASO</title>
+</head>
+<body>
+<div class="appEngine-container">
+    <img class="signin-logo-img" src="/assets/appEngine/img/Appengine_logo2.png">
+    <span class="icon-close"></span>
+</div>
+<!--title-->
+<div class="signin-content">
+    <div class="signin-title">
+        <span class="signin-logotext">Log In</span>
+        <p>New to APP Engine?<a href="/aso/signUp.html" class="signup-login-text">Sign Up</a></p>
+    </div>
+    <div aeType="aeForm" id="signDetail" aeInit="true" class="form-horizontal">
+        <div class="form-group">
+            <div class="signin-input">
+                <input id="email" class="sign-input" type="text"/>
+                <label for="email" >Email</label>
+                <div class="control-line"></div>
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="signin-input">
+                <input id="passWord" class="sign-input" type="password"/>
+                <label for="passWord" >Password</label>
+                <div class="control-line"></div>
+            </div>
+        </div>
+    </div>
+    <div class="re-checkbox clearfix">
+        <div class="ckbox ckbox-default ckbox_horizontal">
+            <input type="checkbox" id="1" value="1">
+            <label for="1" class="">Remember Me</label>
+        </div>
+        <span><a href="#">Forgot Password?</a></span>
+    </div>
+    <div class="signin">
+        <button type="button" class="btn btn-block signUp-btn" onclick="logIn()">Log In</button>
+    </div>
+</div>
+</body>
+<script type="text/javascript">
+    seajs.use('aries-main',function(){
+    	//清cookie
+    	$.removeCookie($.aries.config.sec.SEC_AUTH_TOKEN_KEY, {path : '/'});
+    	$.removeCookie("login_customer_id", {path : '/'});
+    	$.removeCookie($.aries.config.sec.SEC_AUTH_ROLETYPE_KEY, {path : '/'});
+    	
+		$.cookie($.aries.config.sec.SEC_AUTH_ROLETYPE_KEY, "Customer", {path : '/'});
+    });
+</script>
+ <script src="/ARIESRES/assets/appEngine/js/common.js"></script>
+</html>

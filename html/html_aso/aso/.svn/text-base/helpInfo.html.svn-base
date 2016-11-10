@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <link href="/ARIESRES/assets/appEngine/img/Appengine_logo.png" mce_href="/ARIESRES/assets/appEngine/img/Appengine_logo.png" rel="shortcut icon"/>
+    <link href="../assets/aries/css/base/aries-base.css" rel="stylesheet" type="text/css"/>
+    <link href="../assets/appEngine/css/common.css" rel="stylesheet" type="text/css"/>
+    <link href="../assets/appEngine/css/main.css" rel="stylesheet" type="text/css"/>
+    <link href="../assets/appEngine/css/font.css" rel="stylesheet" type="text/css"/>
+    <link href="/ARIESRES/assets/appEngine/css/font-md-new.css" rel="stylesheet" type="text/css"/>
+    <script src="/ARIESRES/assets/aries/lib/jquery.js"></script>
+    <script src="/ARIESRES/assets/aries/main/sea.js"></script>
+    <script src="/ARIESRES/assets/appEngine/js/index.js"></script>
+    <title>ASO</title>
+    <meta name="robots" content="noindex,follow" />
+</head>
+<body>
+<div class="help-top-banner-bg">
+    <div class="container">
+        <div class="header">
+            <img class="signin-logo-img" src="../assets/appEngine/img/Appengine_logo1.png">
+            <div class="user-name">
+                <div><span class="icon-account-circle"></span><div class="user-name-info" id="currentUser"></div><span class="icon-select1"></span></div>
+                <ul style="display: none">
+                    <li><a href="/aso/profile.html">MyProfile</a></li>
+                    <li>Logout</li>
+                </ul>
+                <button class="btn product-signIn-btn" onclick="signIn()" style="display: none">Sign in</button>
+            </div>
+            <div class="header-info">
+                <ul>
+                    <li src="#ide"  ><a href="/aso/index.html">Product</a></li>
+                    <li src="#image" ><a href="/aso/helpInfo.html">Help Center</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="top-banner-info col-sm-12 text-center">
+            <h1>If you have any questions, you can contact us.</h1>
+            <p><span class="icon-email"></span>GRD-CRM-TA-Architect@asiainfo.com</p>
+        </div>
+    </div>
+</div>
+<div class="container">
+    <div class="title">
+        <span class="title-inner">Help document</span>
+    </div>
+    <div class="col-xs-12 help-doc ">
+        <div class="col-xs-6 help-doc-item">
+            <span class="img-box-bg"><span class="icon-file-word"></span></span>
+            <div class="help-doc-item-info">
+                <p class="help-doc-item-tit">Veris7.5 help document <span class="downLoad-text pull-right"><span class="icon-download"></span><a href="#nogo" class="a-link pull-right">Download</a></span></p>
+                <p class="font-gray">2016.6.23</p>
+            </div>
+        </div>
+        <div class="col-xs-6 help-doc-item">
+            <span class="img-box-bg"><span class="icon-file-word"></span></span>
+            <div class="help-doc-item-info">
+                <p class="help-doc-item-tit">Veris7.5 help document <span class="downLoad-text pull-right"><span class="icon-download"></span><a href="#nogo" class="a-link pull-right">Download</a></span></p>
+                <p class="font-gray">2016.6.23</p>
+            </div>
+        </div>
+        <div class="col-xs-6 help-doc-item">
+            <span class="img-box-bg"><span class="icon-file-word"></span></span>
+            <div class="help-doc-item-info">
+                <p class="help-doc-item-tit">Veris7.5 help document <span class="downLoad-text pull-right"><span class="icon-download"></span><a href="#nogo" class="a-link pull-right">Download</a></span></p>
+                <p class="font-gray">2016.6.23</p>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="container">
+    <div class="title">
+        <span class="title-inner">Video Demo</span>
+    </div>
+    <div class="row video-box">
+        <div class="col-xs-3 video-file">
+            <video width="250" height="190" poster="../assets/appEngine/img/media.png">
+                <source src="../assets/appEngine/img/media/cars.mp4" type="video/mp4">
+            </video>
+        </div>
+        <div class="col-xs-3 video-file">
+            <video width="250" height="190" poster="../assets/appEngine/img/media.png">
+                <source src="../assets/appEngine/img/media/cars.mp4" type="video/mp4">
+            </video>
+        </div>
+        <div class="col-xs-3 video-file">
+            <video width="250" height="190" poster="../assets/appEngine/img/media.png">
+                <source src="../assets/appEngine/img/media/cars.mp4" type="video/mp4">
+            </video>
+        </div>
+        <div class="col-xs-3 video-file">
+            <video width="250" height="190" poster="../assets/appEngine/img/media.png">
+                <source src="../assets/appEngine/img/media/cars.mp4" type="video/mp4">
+            </video>
+        </div>
+    </div>
+</div>
+<div class="footer">2016 Asiainfo, Inc. All Rights Reserved</div>
+</body>
+<script>
+    seajs.use('aries-main',function() {
+    	 $.cookie($.aries.config.sec.SEC_AUTH_ROLETYPE_KEY, "Customer", {path : '/'});
+         var currentUser =  $.cookie("login_customer_id");
+         if(currentUser){
+             $('#currentUser').html(currentUser);
+         }else{
+              $('.product-signIn-btn').show();
+              $('.user-name').find('span').hide();
+              $('.user-name').find('#currentUser').hide();
+         }
+
+    })
+</script>
+<script src="/ARIESRES/assets/appEngine/js/common.js"></script>
+</html>

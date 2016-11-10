@@ -1,0 +1,312 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Function Set Exclude</title>
+    <link href="/ARIESRES/assets/aries/css/base/aries-base.css" rel="stylesheet" type="text/css"/>
+    <script src="/ARIESRES/assets/aries/lib/jquery.js"></script>
+    <script src="/ARIESRES/assets/aries/main/sea.js"></script>
+</head>
+<body>
+<div id="searchPanel" aeType="aePanel" aeInit="true" level="4" title="Function Set Search">
+	<div aeType="aeForm" id="secRoleSearchForm" aeInit="true" class="form-horizontal">
+	 	<div class="form-group">
+			<label class="col-xs-2 control-label">Function Set Name</label>
+			<div class="col-xs-4">				
+				<span aeType="aeTextfield" id="roleName" aeInit="true" dataField="roleName"  ></span>
+			</div>	
+			<label class="col-xs-2 control-label">Function Set Type</label>
+			<div class="col-xs-4">
+				<span aeType="aeCombo" id="roleType" aeInit="true" dataField="roleType"  valueField="codeId" optionField="codeName" ></span>
+			</div>		
+		</div>
+		<div class="form-group">			
+			<label class="col-xs-2 control-label">Attribution City</label>
+			<div class="col-xs-4">				
+				<span aeType="aeCombo" id="regionCode" aeInit="true" dataField="regionCode" valueField="codeId" optionField="codeName" ></span>
+			</div>	
+			<div class="col-xs-6 text-right">
+				<button class="btn btn-primary" type="button" onclick="search()"><span class="i18n">sec_role_query</span></button>
+		 	</div>		
+		</div>		
+	</div>
+</div>
+<div id="listPanel" aeType="aePanel" aeInit="true" level="4" title="Available Function Set List">
+	<div id="secRoleSearchResultTable" aeType="aeGrid" aeInit="true"
+	    datafield="" isPaging="true" pagingSize="5" editable="false"
+	    width="100%" height="300px" pagingAlign="right"
+	    showIndex="false" singleSelect="true" 
+	    singleRowClass="false" onRowClick="onFuncSetRowClick" i18n="true" width="100">
+	    <span datafield="roleId" title="$.i18n('sec_role_id')"  i18n="true" width="100"></span>
+	    <span datafield="roleName" title="$.i18n('sec_rolequery_name')"  i18n="true" width="100"></span>
+	    <span datafield="roleType" title="$.i18n('sec_rolequery_style')"  i18n="true" width="100"  renderer="roleTypeRenderer"></span>
+	    <span datafield="regionCode" title="$.i18n('sec_rolequery_city')"  i18n="true" width="100" renderer="roleCityRenderer"></span>
+	  </div>
+</div>
+<div id="excludePanel" aeType="aePanel" aeInit="true" level="4" title="role Exclude Table">
+	<div id="roleExcludeTable" aeType="aeGrid" aeInit="true"
+	    datafield="" isPaging="true" pagingSize="5"
+	    width="100%" height="300px" pagingAlign="right"
+	    showIndex="false" singleSelect="false"  onRowClick="onRoleExcludeRowClick">
+	    <span datafield="roleId"  visible="false" i18n="true"></span>
+	    <span datafield="relatRoleId"  visible="false" i18n="true"></span>
+	    <span datafield="Flag"  visible="false" i18n="true"></span>
+	    <span datafield="relatRoleName" title="$.i18n('SETSecRoleExclude_excluename')" i18n="true"  width="100%"></span>  
+	 </div>
+	 <div class="col-xs-12 text-center">			
+		<button class="btn btn-primary" type="button" onclick="add()" ><span class="i18n">sec_role_add</span></button>
+		<button class="btn btn-primary" type="button" onclick="del()" ><span class="i18n">sec_role_del</span></button>
+	</div>
+</div>
+
+
+<!-- popup div -->
+ <div id="roleNotExclude" style="display: none;" afterAction="doAfterActionForDiv()">
+	<div id="excludeSearchPanel" aeType="aePanel" aeInit="true" level="4" title="Search Available Mutex Function Set">
+		<div aeType="aeForm" id="secRoleExcludSearchForm" aeInit="true" class="form-horizontal">
+		 	<div class="form-group">
+				<label class="col-xs-2 control-label">Function Set Name</label>
+				<div class="col-xs-4">				
+					<span aeType="aeTextfield" id="roleNameExclude" aeInit="true" dataField="roleName"  ></span>
+				</div>	
+				<div class="col-xs-6 text-right">
+					<button class="btn btn-primary" type="button"  onclick="searchExclud()"><span class="i18n">sec_role_query</span></button>
+		 		</div>		
+			</div>		
+		</div>
+	</div>
+	<div id="excludeDetailPanel" aeType="aePanel" aeInit="true" level="4" title="Optional Mutex Function Set Detail">
+		<div id="roleNotExcludeTable" aeType="aeGrid" aeInit="true"
+	        datafield="" isPaging="true" pagingSize="5"
+	        width="100%" height="300px" pagingAlign="right"
+	        showIndex="true" singleSelect="false" singleRowClass="false"  onRowClick="onRoleNotExcludeRowClick" >
+           <span datafield="roleId"  visible="false"></span>
+           <span datafield="Flag"  visible="false" ></span>
+           <span datafield="roleName" title="$.i18n('SETSecRoleExclude_notexcluename')"  i18n="true"  width="300px"></span>
+         </div>
+	</div>
+</div>
+
+
+</body>
+ 
+<!-- 运行脚本 -->
+<script type="text/javascript">
+seajs.use('aries-main',function() {
+	//初始化下拉选项	
+	$.ajaxPost($.aries.service.secframe.getSecStaticData,'codeType=201309',function(data){
+		if(data&&data.length!=0){
+			$.setPrivateData("_function_set_type",data);
+			$("#roleType").aeCombo('reload',data);  
+    		}
+     	},function(code,info){	
+     		
+ 		}); 
+	
+	$.ajaxPost($.aries.service.secframe.getSecStaticData,'codeType=50001',function(data){
+	if(data&&data.length!=0){
+		$.setPrivateData("_Attributive_City",data);
+		$("#regionCode").aeCombo('reload',data);  
+		}
+ 	},function(code,info){	
+ 		
+	});
+});	
+
+
+//查询
+function search(){
+	var roleName=$('#secRoleSearchForm').aeForm('getValueByField','roleName');
+	roleName=$.trim(roleName);
+	var roleType=$('#roleType').aeCombo('getValue');
+	var regionCode=$('#regionCode').aeCombo('getValue');
+	
+	//var cond = "roleName=" + roleId + "&roleType=" + roleName + "&regionCode=" + regionCode;
+	var cond = "".appendParam("roleName",roleName).appendParam("roleType",roleType).appendParam("regionCode",regionCode);
+	$("#secRoleSearchResultTable").aeGrid('reload',$.aries.service.secframe.refreshRoleByOper,cond);
+	//$("#secRoleSearchForm").aeForm('setEditSts',true);
+} 
+
+//查询已关联 
+function searchExclud(){debugger;
+	var roleName=$('#secRoleExcludSearchForm').aeForm('getValueByField','roleName');
+	roleName = $.trim(roleName); //去空格
+	var selRows=$("#secRoleSearchResultTable").aeGrid('getSelections',true);
+	if(selRows.length > 0){
+		var selRoleId = selRows[0].roleId;
+		selRoleId = selRoleId.toString();
+		var cond = "".appendParam("roleName",roleName).appendParam("roleId",selRoleId);
+		 $("#roleNotExcludeTable").aeGrid('reload',$.aries.service.secframe.refreshNotExcludRoles,cond); 
+	}
+	
+} 
+
+
+
+function onFuncSetRowClick(rowIndex,rowData){
+	var selRoleId = rowData.roleId;
+	loadRoleMessage(selRoleId);
+}
+
+//加载角色信息
+function loadRoleMessage(selRoleId)
+{   
+    if(!selRoleId)
+    	return;
+    var cond = "".appendParam("roleId",selRoleId);
+    //刷新父页面
+     $.ajaxPost($.aries.service.secframe.getSecRoleExcludeByRoleId,cond,function(data){
+		if(data){
+			$("#roleExcludeTable").aeGrid('reload',data);
+		}
+	});  
+}
+  
+function add(){
+	var selRows=$("#secRoleSearchResultTable").aeGrid('getSelections',true);
+	if(selRows.length <= 0){
+		$.message.alert("","please select one Available Function Set");
+		return;
+	}
+	$("#secRoleExcludSearchForm").aeForm('clear');
+ 	/* $.aries.popup.openDiv('roleNotExclude','','1000','',
+ 			{"initAfterAction":"initpopupDiv()","draggable":true,"resizable":true}); */
+	$.openPopupDiv('roleNotExclude','roleNotExclude','','',{"onConfirm":"save()","draggable":true,"resizable":true});		
+ }
+
+
+
+//删除
+	function del(){
+	    var addRoleIds = [];
+		var delRoleIds = [];
+		//var selRow = $("#secRoleSearchResultTable").aeGrid('getSelections');
+		//var selRows1 = $("#roleExcludeTable").aeGrid('getSelections');
+		var selRecords = $("#secRoleSearchResultTable").aeGrid('getSelections',true);
+		var selRecords1 = $("#roleExcludeTable").aeGrid('getSelections',true);
+		var roleId = "";
+		if(selRecords.length > 0){
+			roleId= selRecords[0].roleId;
+		}
+	    
+	    for(var i =0;i < selRecords1.length;i++){
+	    	var id = selRecords1[i].relatRoleId;
+	    	delRoleIds[i] = id;
+	    }
+
+	    var cond = "".appendParam("roleId",roleId).appendParam("addRelatRoles",[]).appendParam("delRelatRoles",delRoleIds);
+	    var newData = $.aries.common.setSaveDataState(cond,true);
+
+	    var selRow=$("#roleExcludeTable").aeGrid('getSelections');
+	    if(selRow == null || selRow == ""){
+	    	$.message.alert("",$.i18n('sec_role_sel_one_role'));
+	    }else{
+		    $.ajaxPost($.aries.service.secframe.saveAddDelRoleExclude,newData,function(data){
+		    	$.message.success("",$.i18n('sec_del_ok'));
+		    	//var selRecords = $("#secRoleSearchResultTable").aeGrid('getSelections',true);
+		    	if(selRecords && selRecords.length){
+		    		//var selectItemId = selRecords[0].roleId;
+		    		//loadRoleMessage(selectItemId);
+		    		loadRoleMessage(roleId);
+		    	}
+			  },function(code,info){
+					$.message.error("",$.i18n('sec_del_fail'));
+					
+				
+			});	
+	    }
+	}
+//弹出页面中的保存调整
+function save(){
+	var addRoleIds = [];
+	var delRoleIds = [];
+	//var selRow = $("#secRoleSearchResultTable").aeGrid('getSelections');
+	//var selRows2 = $("#roleNotExcludeTable").aeGrid('getSelections');
+	var selRecords = $("#secRoleSearchResultTable").aeGrid('getSelections',true);
+	var selRecords1 = $("#roleExcludeTable").aeGrid('getSelections',true);
+	var roleId = "";
+	if(selRecords && selRecords.length >0){
+		roleId= selRecords[0].roleId;
+	}
+    
+    for(var i =0;i < selRecords1.length;i++){
+    	var id = selRecords1[i].roleId;
+    	addRoleIds[i] = id;
+    }
+    var cond = "".appendParam("roleId",roleId).appendParam("addRelatRoles",addRoleIds).appendParam("delRelatRoles",[]);
+    var newData = $.aries.common.setSaveDataState(cond,true);
+
+    //判断是否选择一条记录
+    var selRow=$("#roleNotExcludeTable").aeGrid('getSelections');
+    if(selRow == null || selRow == ""){
+    	$.message.alert("",$.i18n('sec_role_sel_one_role'));
+    }else{
+	    $.ajaxPost($.aries.service.secframe.saveAddDelRoleExclude,newData,function(data){
+	    	$.message.success("",$.i18n('sec_save_ok'));
+	    	cancel();	
+	    	//var selectedRow = $("#secRoleSearchResultTable").aeGrid('getSelections',true);
+	    	if(selRecords && selRecords.length){
+	    		//var selectItemId = selectedRow[0].roleId;
+	    		//loadRoleMessage(selectItemId);
+	    		loadRoleMessage(roleId);
+	    		$.closePopupDiv();
+	    	}
+		  },function(code,info){
+				$.message.error("",$.i18n('sec_save_fail'));
+				
+			
+		});
+    }
+}
+
+function roleTypeRenderer(colValue, rowData, rowIndex){
+	var text = "";
+	if(colValue){
+		var _function_set_type = $.getPrivateData("_function_set_type");
+		if(_function_set_type && $.isArray(_function_set_type) && _function_set_type.length){
+			for(var i = 0;i < _function_set_type.length;i++){
+				if(_function_set_type[i] && colValue == _function_set_type[i].codeId){
+					text = _function_set_type[i].codeName;
+					break;
+				}
+			}
+		}
+		/* var _function_set_type = $.getPrivateData("_function_set_type");
+		if(_function_set_type && $.isArray(_function_set_type) && _function_set_type.length){
+			var result = filterStringInArray(colValue+"",_function_set_type,'codeId');
+			if(result && $.isArray(result) && result.length){
+				text = result[0].codeName;
+			}
+			console.log(text);
+		} */
+	}
+	return text;
+}
+
+function roleCityRenderer(colValue, rowData, rowIndex){
+	var text1 = "";
+	if(colValue){
+		var _Attributive_City = $.getPrivateData("_Attributive_City");
+		if(_Attributive_City && $.isArray(_Attributive_City) && _Attributive_City.length){
+			for(var i = 0;i < _Attributive_City.length;i++){
+				if(_Attributive_City[i] && colValue == _Attributive_City[i].codeId){
+					text = _Attributive_City[i].codeName;
+					break;
+				}
+			}
+		}
+		/* var _function_set_type = $.getPrivateData("_function_set_type");
+		if(_function_set_type && $.isArray(_function_set_type) && _function_set_type.length){
+			var result = filterStringInArray(colValue+"",_function_set_type,'codeId');
+			if(result && $.isArray(result) && result.length){
+				text = result[0].codeName;
+			}
+			console.log(text);
+		} */
+	}
+	return text1;
+}
+
+
+</script>
+</html>

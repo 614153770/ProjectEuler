@@ -1,0 +1,363 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<link href="/ARIESRES/assets/aries/css/base/aries-base.css"rel="stylesheet" type="text/css" />
+<link href="/ARIESRES/assets/appEngine/css/common.css" rel="stylesheet" type="text/css" />
+<link href="/ARIESRES/assets/appEngine/css/signIn.css" rel="stylesheet" type="text/css" />
+<link href="/ARIESRES/assets/appEngine/css/main.css" rel="stylesheet" type="text/css" />
+<link href="/ARIESRES/assets/appEngine/css/font.css" rel="stylesheet" type="text/css" />
+<link href="/ARIESRES/assets/appEngine/css/font-md.css" rel="stylesheet" type="text/css" />
+<script src="/ARIESRES/assets/aries/lib/jquery.js"></script>
+<script src="/ARIESRES/assets/aries/main/sea.js"></script>
+<title>Register</title>
+</head>
+<body>
+<div id="global_loading1" class="modal fade in fx-loadingPage" style="display:none;">
+    <div class="modal-backdrop fade in" style="height: 100%">
+        <img src="/ARIESRES/assets/appEngine/img/loading-page.svg" class="loading-page" alt="">
+    </div>
+</div>
+<div class="col-xs-8">
+     <div id="svnInfo" aeType="aeForm" aeInit="true" class="form-horizontal">
+				<div class="form-group">
+					<label class="col-xs-4 control-label">ProjectCode</label>
+					<div class="col-xs-4">
+						<span aeType="aeTextfield" id="projectCode" dataField="projectCode" aeInit="true" emptyText="-Please input project code!-" width="300" showClear="true"></span>
+					</div>
+					<div class="col-xs-4">
+						<span aeType="aeTextfield" id="orderId" dataField="orderId" aeInit="true" visible="false"></span>						
+					</div>
+					
+				</div>
+				<div class="form-group">
+					<label class="col-xs-4 control-label">SVN Admin Password</label>
+					<div class="col-xs-4">
+						<span aeType="aeTextfield" id="svnAdminPwd" dataField="svnAdminPwd" password="true" aeInit="true" emptyText="-Please input svn admin password!-" width="300" showClear="true"></span> 
+					</div>
+				</div>
+ 	  </div>
+</div>
+<div class="col-xs-4"  style="margin-top:25px;">
+     <div class="col-xs-12 text-left">
+			<button class="btn btn-primary" id="createRepo" type="button" onclick="createRepo()">Create Repository</button>
+ 	 </div>
+</div>
+<div class="col-xs-12"  style="border:1px solid #ccc;margin-top: 10px"></div>
+<div class="col-xs-8" style="margin-top:10px;">
+       <div id="webHubRedisInfo" aeType="aeForm" aeInit="true" class="form-horizontal">
+				<div class="form-group">
+					<label class="col-xs-4 control-label">WEB/HUB/REDIS</label>
+					<div class="col-xs-4">
+						<span aeType="aeTextfield" id="webHubRedisIp" dataField="webHubRedisIp" aeInit="true" emptyText="-Please input web/hub/redis IP!-" width="300" showClear="true"></span> 
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="col-xs-4 control-label">USERNAME</label>
+					<div class="col-xs-4">
+						<span aeType="aeTextfield" id="webHubRedisUsername" dataField="webHubRedisUsername" aeInit="true" emptyText="-Please input web/hub/redis server username!-" width="300" showClear="true"></span> 
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="col-xs-4 control-label">PASSWORD</label>
+					<div class="col-xs-4">
+						<span aeType="aeTextfield" id="webHubRedisPassword" dataField="webHubRedisPassword" password="true" aeInit="true" emptyText="-Please input web/hub/redis server password!-" width="300" showClear="true"></span> 
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="col-xs-4 control-label">PORT</label>
+					<div class="col-xs-4">
+						<span aeType="aeTextfield" id="webHubRedisPort" dataField="webHubRedisPort"  aeInit="true" emptyText="-Please input web/hub/redis server port!-" width="300" showClear="true"></span> 
+					</div>
+				</div>
+	   </div>
+</div>
+<div class="col-xs-4"  style="margin-top:75px;">
+     <div class="col-xs-12 text-left">
+			<button class="btn btn-primary" id="initWebHubRedisServ" type="button" onclick="initServ('webHubRedis')">Init WebHubRedis Server</button>
+ 	 </div>
+</div>
+    
+<div class="col-xs-12"  style="border:1px solid #ccc;margin-top: 10px"></div>
+<div class="col-xs-8" style="margin-top:10px;">
+       <div id="appInfo" aeType="aeForm" aeInit="true" class="form-horizontal">
+				<div class="form-group">
+					<label class="col-xs-4 control-label">APP</label>
+					<div class="col-xs-4">
+						<span aeType="aeTextfield" id="appIp" dataField="appIp" aeInit="true" emptyText="-Please input app IP!-" width="300" showClear="true"></span> 
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="col-xs-4 control-label">USERNAME</label>
+					<div class="col-xs-4">
+						<span aeType="aeTextfield" id="appUsername" dataField="appUsername" aeInit="true" emptyText="-Please input app server username!-" width="300" showClear="true"></span> 
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="col-xs-4 control-label">PASSWORD</label>
+					<div class="col-xs-4">
+						<span aeType="aeTextfield" id="appPassword" dataField="appPassword" aeInit="true" password="true" emptyText="-Please input app server password!-" width="300" showClear="true"></span> 
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="col-xs-4 control-label">PORT</label>
+					<div class="col-xs-4">
+						<span aeType="aeTextfield" id="appPort" dataField="appPort"  aeInit="true" emptyText="-Please input app server port!-" width="300" showClear="true"></span> 
+					</div>
+				</div>
+	   </div>
+</div>
+<div class="col-xs-4"  style="margin-top:75px;">
+     <div class="col-xs-12 text-left">
+			<button class="btn btn-primary" id="initAppServ" type="button" onclick="initServ('app')">Init App Server</button>
+ 	 </div>
+</div>    
+
+<div class="col-xs-12"  style="border:1px solid #ccc;margin-top: 10px"></div>
+<div class="col-xs-8" style="margin-top:10px;">
+       <div id="dbInfo" aeType="aeForm" aeInit="true" class="form-horizontal">
+				<div class="form-group">
+					<label class="col-xs-4 control-label">DB</label>
+					<div class="col-xs-4">
+						<span aeType="aeTextfield" id="dbIp" dataField="dbIp" aeInit="true" emptyText="-Please input db IP!-" width="300" showClear="true"></span> 
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="col-xs-4 control-label">USERNAME</label>
+					<div class="col-xs-4">
+						<span aeType="aeTextfield" id="dbUsername" dataField="dbUsername" aeInit="true" emptyText="-Please input db server username!-" width="300" showClear="true"></span> 
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="col-xs-4 control-label">PASSWORD</label>
+					<div class="col-xs-4">
+						<span aeType="aeTextfield" id="dbPassword" dataField="dbPassword" aeInit="true" password="true" emptyText="-Please input db server password!-" width="300" showClear="true"></span> 
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="col-xs-4 control-label">PORT</label>
+					<div class="col-xs-4">
+						<span aeType="aeTextfield" id="dbPort" dataField="dbPort"  aeInit="true" emptyText="-Please input db server port!-" width="300" showClear="true"></span> 
+					</div>
+				</div>
+	   </div>
+</div>
+<div class="col-xs-4"  style="margin-top:75px;">
+     <div class="col-xs-12 text-left">
+			<button class="btn btn-primary" id="initDbServ" type="button" onclick="initServ('db')">Init DB Server</button>
+ 	 </div>
+</div>
+
+</body>
+<script type="text/javascript">
+seajs.use('aries-main',function(){
+	var custLoginId = $.cookie("login_customer_id");
+	//$.getPopupParam的用法
+	var order;
+	var popupParam = $.getPopupParam();
+	if(popupParam){
+		order = JSON.parse(popupParam.get("order"));
+	}
+	var envOrder = order.envOrder;
+	debugger;
+	$('#orderId').aeTextfield('setValue',order.orderId);
+	if(null != envOrder.svnAdminAcct&&"" != envOrder.svnAdminAcct){
+		$('#projectCode').aeTextfield('setValue',envOrder.projectCode);
+		$('#projectCode').aeTextfield('editable',false);
+		$('#svnAdminPwd').aeTextfield('setValue',envOrder.svnAdminPassword);
+		$('#svnAdminPwd').aeTextfield('editable',false);
+		$("#createRepo").attr("disabled", true); 
+	}
+	if(null != envOrder.webHubRedisIp&&"" != envOrder.webHubRedisIp){
+		$('#webHubRedisIp').aeTextfield('setValue',envOrder.webHubRedisIp);
+		$('#webHubRedisIp').aeTextfield('editable',false);
+		$('#webHubRedisUsername').aeTextfield('setValue',envOrder.webHubRedisUsername);
+		$('#webHubRedisUsername').aeTextfield('editable',false);
+		$('#webHubRedisPassword').aeTextfield('setValue',envOrder.webHubRedisPassword);
+		$('#webHubRedisPassword').aeTextfield('editable',false);
+		$('#webHubRedisPort').aeTextfield('setValue',envOrder.webHubRedisPort);
+		$('#webHubRedisPort').aeTextfield('editable',false);
+		$("#initWebHubRedisServ").attr("disabled", true); 
+	}
+	
+	if(null != envOrder.appIp&&"" != envOrder.appIp){
+		$('#appIp').aeTextfield('setValue',envOrder.appIp);
+		$('#appIp').aeTextfield('editable',false);
+		$('#appUsername').aeTextfield('setValue',envOrder.appUsername);
+		$('#appUsername').aeTextfield('editable',false);
+		$('#appPassword').aeTextfield('setValue',envOrder.appPassword);
+		$('#appPassword').aeTextfield('editable',false);
+		$('#appPort').aeTextfield('setValue',envOrder.appPort);
+		$('#appPort').aeTextfield('editable',false);
+		$("#initAppServ").attr("disabled", true); 
+	}
+	
+	if(null != envOrder.dbIp&&"" != envOrder.dbIp){
+		$('#dbIp').aeTextfield('setValue',envOrder.dbIp);
+		$('#dbIp').aeTextfield('editable',false);
+		$('#dbUsername').aeTextfield('setValue',envOrder.dbUsername);
+		$('#dbUsername').aeTextfield('editable',false);
+		$('#dbPassword').aeTextfield('setValue',envOrder.dbPassword);
+		$('#dbPassword').aeTextfield('editable',false);
+		$('#dbPort').aeTextfield('setValue',envOrder.dbPort);
+		$('#dbPort').aeTextfield('editable',false);
+		$("#initDbServ").attr("disabled", true); 
+	}
+	
+	
+	
+});
+
+function createRepo(){
+	var projectCode =  $("#svnInfo").aeForm('getValueByField','projectCode');
+	var svnAdminPwd =  $("#svnInfo").aeForm('getValueByField','svnAdminPwd');
+	var tempOrderId =  $("#svnInfo").aeForm('getValueByField','orderId');
+	if(undefined==projectCode||""==projectCode){
+        $.message.error("","Please input projectCode!");
+        return;
+	 }
+	if(undefined==svnAdminPwd||""==svnAdminPwd){
+        $.message.error("","Please input svnAdminPwd!");
+        return;
+	 }
+	var cond = "orderId="+tempOrderId+"&projectCode="+projectCode+"&svnAdminPwd="+svnAdminPwd;
+	$("#global_loading1").show();
+	$.aries.ajax.post($.aries.service.aso.installDevEnv, cond, function(data) {
+		$("#global_loading1").hide();
+		 $.message.success("","",function(){
+			 $.closeTextPopup();
+			 qryOrderByOfferType();
+		 },function(code,info){
+		    $.message.error("","Operation fail，info:"+info.hub_value[0].code);
+    });
+	}, function(code, info) {
+
+		$("#global_loading1").hide();
+		if(undefined==info.hub_value[0]){
+             $.message.error("","Operation failed!");
+		 }else if("AISEC0002"==info.hub_value[0].code){
+		     $.message.error("","No service permission,please log in!");
+		 }else if("AISEC0003"==info.hub_value[0].code){
+		     $.message.error("","No service permission!");
+		 }else{
+             $.message.error("","Operation failed,code:"+info.hub_value[0].code+",info:"+info.hub_value[0].value);
+		 }
+	
+	});
+}
+
+function initServ(flag){
+	
+	var projectCode =  $("#svnInfo").aeForm('getValueByField','projectCode');
+	if(undefined==projectCode||""==projectCode){
+		 $.message.alert("","Please first create svn respository!");
+		 return;
+	}
+	
+	var tempOrderId =  $("#svnInfo").aeForm('getValueByField','orderId');
+	if("webHubRedis" == flag){
+		var webHubRedisIp =  $("#webHubRedisInfo").aeForm('getValueByField','webHubRedisIp');
+		var webHubRedisUsername =  $("#webHubRedisInfo").aeForm('getValueByField','webHubRedisUsername');
+		var webHubRedisPassword =  $("#webHubRedisInfo").aeForm('getValueByField','webHubRedisPassword');
+		var webHubRedisPort =  $("#webHubRedisInfo").aeForm('getValueByField','webHubRedisPort');
+		if(undefined==webHubRedisIp||""==webHubRedisIp){
+	        $.message.error("","Please input webHubRedis Ip!");
+	        return;
+		 }
+		if(undefined==webHubRedisUsername||""==webHubRedisUsername){
+	        $.message.error("","Please input webHubRedis username!");
+	        return;
+		 }
+		if(undefined==webHubRedisPassword||""==webHubRedisPassword){
+	        $.message.error("","Please input webHubRedis password!");
+	        return;
+		 }
+		if(undefined==webHubRedisPort||""==webHubRedisPort){
+	        $.message.error("","Please input webHubRedis port!");
+	        return;
+		 }
+		var cond = "orderId="+tempOrderId+"&webHubRedisIp="+webHubRedisIp+"&serverUsername="+webHubRedisUsername+"&serverPwd="+webHubRedisPassword+"&serverPort="+webHubRedisPort;
+		init(cond);
+	}else if("app" == flag){
+		var appIp =  $("#appInfo").aeForm('getValueByField','appIp');
+		var appUsername =  $("#appInfo").aeForm('getValueByField','appUsername');
+		var appPassword =  $("#appInfo").aeForm('getValueByField','appPassword');
+		var appPort =  $("#appInfo").aeForm('getValueByField','appPort');
+		if(undefined==appIp||""==appIp){
+	        $.message.error("","Please input appIp!");
+	        return;
+		 }
+		if(undefined==appUsername||""==appUsername){
+	        $.message.error("","Please input app username!");
+	        return;
+		 }
+		if(undefined==appPassword||""==appPassword){
+	        $.message.error("","Please input app password!");
+	        return;
+		 }
+		if(undefined==appPort||""==appPort){
+	        $.message.error("","Please input app port!");
+	        return;
+		 }
+		var cond = "orderId="+tempOrderId+"&appIp="+appIp+"&serverUsername="+appUsername+"&serverPwd="+appPassword+"&serverPort="+appPort;
+		init(cond);
+	}else if("db" == flag){
+		
+		var webHubRedisIp =  $("#webHubRedisInfo").aeForm('getValueByField','webHubRedisIp');
+		if(undefined==webHubRedisIp||""==webHubRedisIp){
+			 $.message.alert("","Please first init webHubRedis!");
+			 return;
+		}
+		
+		var dbIp =  $("#dbInfo").aeForm('getValueByField','dbIp');
+		var dbUsername =  $("#dbInfo").aeForm('getValueByField','dbUsername');
+		var dbPassword =  $("#dbInfo").aeForm('getValueByField','dbPassword');
+		var dbPort =  $("#dbInfo").aeForm('getValueByField','dbPort');
+		if(undefined==dbIp||""==dbIp){
+	        $.message.error("","Please input db Ip!");
+	        return;
+		 }
+		if(undefined==dbUsername||""==dbUsername){
+	        $.message.error("","Please input db username!");
+	        return;
+		 }
+		if(undefined==dbPassword||""==dbPassword){
+	        $.message.error("","Please input db password!");
+	        return;
+		 }
+		if(undefined==dbPort||""==dbPort){
+	        $.message.error("","Please input db port!");
+	        return;
+		 }
+		var cond = "orderId="+tempOrderId+"&dbIp="+dbIp+"&serverUsername="+dbUsername+"&serverPwd="+dbPassword+"&serverPort="+dbPort;
+		init(cond);
+	}
+}
+
+function init(cond){
+	$("#global_loading1").show();
+	$.aries.ajax.post($.aries.service.aso.installDevEnv, cond, function(data) {
+		$("#global_loading1").hide();
+		 $.message.success("","",function(){
+			 qryOrderByOfferType();
+			 $.closeTextPopup();
+		 },function(code,info){
+		    $.message.error("","Operation fail，info:"+info.hub_value[0].code);
+    });
+	}, function(code, info) {
+
+		$("#global_loading1").hide();
+		if(undefined==info.hub_value[0]){
+             $.message.error("","Operation failed!Please check your input params!");
+		 }else if("AISEC0002"==info.hub_value[0].code){
+		     $.message.error("","No service permission,please log in!");
+		 }else if("AISEC0003"==info.hub_value[0].code){
+		     $.message.error("","No service permission!");
+		 }else{
+             $.message.error("","Operation failed,code:"+info.hub_value[0].code+",info:"+info.hub_value[0].value);
+		 }
+	
+	});
+}
+</script>
+</html>

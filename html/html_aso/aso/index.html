@@ -1,0 +1,393 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <link href="/ARIESRES/assets/appEngine/img/Appengine_logo.png" mce_href="/ARIESRES/assets/appEngine/img/Appengine_logo.png" rel="shortcut icon"/>
+    <link href="/ARIESRES/assets/aries/css/base/aries-base.css" rel="stylesheet" type="text/css"/>
+    <link href="/ARIESRES/assets/appEngine/css/common.css" rel="stylesheet" type="text/css"/>
+    <link href="/ARIESRES/assets/appEngine/css/main.css" rel="stylesheet" type="text/css"/>
+    <link href="/ARIESRES/assets/appEngine/css/font.css" rel="stylesheet" type="text/css"/>
+    <link href="/ARIESRES/assets/appEngine/css/font-md-new.css" rel="stylesheet" type="text/css"/>
+    <script src="/ARIESRES/assets/aries/lib/jquery.js"></script>
+    <script src="/ARIESRES/assets/aries/main/sea.js"></script>
+    <script src="/ARIESRES/assets/appEngine/js/index.js"></script>
+    <title>ASO</title>
+</head>
+<body >
+<div id="global_loading" class="modal fade in fx-loadingPage" style="display:none;">
+    <div class="modal-backdrop fade in" style="height: 100%">
+        <img src="/ARIESRES/assets/appEngine/img/loading-page.svg" class="loading-page" alt="">
+    </div>
+</div>
+<div class="header-back clearfix">
+    <div class="container">
+        <div class="header">
+            <img class="signin-logo-img" src="../assets/appEngine/img/Appengine_logo1.png">
+            <div class="user-name">
+                <!--<span>Welcome,</span><span id="currentUser"></span>-->
+                <div><span class="icon-account-circle"></span><div class="user-name-info" id="currentUser"></div><span class="icon-select1"></span></div>
+                <ul style="display: none">
+                     <li><a href="/aso/profile.html">MyProfile</a></li>
+                    <li>Logout</li>
+                </ul>
+                <button class="btn product-signIn-btn" onclick="signIn()" style="display: none">Sign in</button>
+            </div>
+            <div class="header-info">
+                <ul>
+                    <li src="#ide"   ><a class="active">Product</a></li>
+                    <li src="#image" ><a href="/aso/helpInfo.html">Help Center</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="appEngine-banner-info col-sm-8">
+            <h1>Multi-tenant business architeture</h1>
+            <p class="col-xs-11">E2E Standard Operator Process Base On AppEngine</p>
+            <button class="btn appEngine-banner-info-btn" onclick="applyImageCc('IMAGE_Veris7.5_CC')">Apply Veris 7.5 CC now</button>
+        </div>
+    </div>
+</div>
+<div class="appEngine-product-filter-box">
+    <div class="appEngine-product-filter">
+        <ul class="container ">
+            <li id="ide" tab-type="ide" class="active"><a>IDE</a></li>
+            <li id="image" tab-type="image" ><a>SUPER</a></li>
+            <li id="saas" tab-type="saas"><a>SaaS</a></li>
+        </ul>
+    </div>
+</div>
+<div class="container">
+    <div class="appEngine-ide-container" id="ideContainer" >
+        <div class="row container-box">
+            <div class="col-xs-6 ide-discripation">
+                <div class="col-xs-4">
+                    <span class="appEngine-paasIde first-ide"><img class="img-responsive" src="/assets/appEngine/img/Appengine_ide_1.png"></span>
+                </div>
+                <div class="col-xs-7">
+                    <h1 type="standard">Hope - Paas ide<span class="standard">STANDARD</span></h1>
+                    <div class="description">
+                        <p>Goal: As a professional and powerful D&D platform for the  large enterprise apps.</p>
+                        <p>Ability:Business Component, ABO, Service Package, Service Process, Workflow, Message collector ect.</p>
+                    </div>
+<!--
+                    <button type="button" class="btn appEngine-image-btn disabled" onclick="downLoadPaasStandardIde()"><span class="icon-download"></span>Download</button>
+-->
+                    <!-- <button type="button" class="btn learn-btn" onclick="learnMore('standard')"><span class="md md-trending-flat"></span>Learn more</button> -->
+                    <a  class="appEngine-image-btn" href="tools/IDE-Hope-STANDARD-V4.2-x64.rar"><span class="icon-download"></span>Download 64-bit</a>
+                    <a  class="appEngine-image-btn disabled"	><span class="icon-download"></span>Download 32-bit</a>
+                </div>
+            </div>
+            <div class="col-xs-6 ide-discripation">
+                <div class="col-xs-4">
+                    <span class="appEngine-paasIde second-ide"><img  class="img-responsive" src="/assets/appEngine/img/Appengine_ide_1.png"></span>
+                </div>
+                <div class="col-xs-7">
+                    <h1 type="mini">Hope - Paas ide<span class="mini">MINI</span></h1>
+                    <div class="description">
+                        <p> Goal: As a free and open D&D platform for consumers and publics.</p>
+                        <p> Ability:Only provide Business Component, ABO, Service Package.</p>
+                    </div>
+
+<!--                     <button type="button" class="btn appEngine-image-btn" onclick="downLoadIde('')">-->
+                        <!-- <button type="button" class="btn learn-btn" onclick="learnMore('mini')"><span class="md md-trending-flat"></span>Learn more</button> -->
+                    	<a  class="appEngine-image-btn" href="tools/IDE-Hope-MINI.zip"><span class="icon-download"></span>Download 64-bit</a>
+                  		<a  class="appEngine-image-btn disabled" ><span class="icon-download"></span>Download 32-bit</a>
+                </div>
+            </div>
+        </div>
+        <div class="row container-box">
+            <div class="col-xs-6 ide-discripation">
+                <div class="col-xs-4">
+                    <span class="appEngine-paasIde third-ide"><img class="img-responsive" src="/assets/appEngine/img/Appengine_ide_2.png"></span>
+                </div>
+                <div class="col-xs-7">
+                    <h1>Hope - Saas ide</h1>
+                    <div class="description">
+                        <p>Goal: As a platform to design end to end business flow.</p>
+                        <p>Ability:Business Flow</p>
+                    </div>
+<!--
+                    <button type="button" class="btn appEngine-image-btn disabled" onclick="downLoadSaasIde()"><span class="icon-download"></span>Download</button>
+-->
+                   <!--  <button type="button" class="btn learn-btn" ><span class="md md-trending-flat"></span>Learn more</button> -->
+                     <a  class="appEngine-image-btn disabled" ><span class="icon-download"></span>Download 64-bit</a>
+                     <a  class="appEngine-image-btn disabled" ><span class="icon-download"></span>Download 32-bit</a>
+                </div>
+            </div>
+            <div class="col-xs-6 ide-discripation">
+                <div class="col-xs-4">
+                    <span class="appEngine-paasIde fourth-ide"><img class="img-responsive" src="/assets/appEngine/img/Appengine_ide_3.png"></span>
+                </div>
+                <div class="col-xs-7">
+                    <h1>Front - ide</h1>
+                    <div class="description">
+                        <p> Goal: As a page design platform which provid a variety of page components with a simple and flexible guide.</p>
+                        <p> Ability: Provid a variety of page components, css, js, images.</p>
+                    </div>
+<!--
+                    <button type="button" class="btn appEngine-image-btn disabled" onclick="downLoadFrontIde()"><span class="icon-download"></span>Download</button>
+-->
+                    <!-- <button type="button" class="btn learn-btn"><span class="md md-trending-flat"></span>Learn more</button> -->
+                    <a  class="appEngine-image-btn disabled" ><span class="icon-download"></span>Download 64-bit</a>
+                    <a  class="appEngine-image-btn disabled" ><span class="icon-download"></span>Download 32-bit</a>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="appEngine-image-container" id="imageContainer" style="display:none;">
+        <div class="row container-box">
+            <div class="col-xs-6 ide-discripation">
+                <img src="../assets/appEngine/img/Appengine_image_1.png">
+            </div>
+            <div class="col-xs-5 ide-discripation">
+                <h1>Veris7.5 CC</h1>
+                <div class="imageCon-discripation">
+                    <p>Based on Multi-tenant business architeture with one application and database.</p>
+                    <p>Include appservers(flyingserver),web servers(nginx), saashub,paashub whith apps
+                        deployed and mysql with reference data initialized and cache server(redis) based
+                        on Veris Suit V7.5.</p>
+                    <p>Business capabilities: customer, order, product, resource,
+                        compaign, dunning, settlement, Asset&Payment, upc, o2p, rti and etc.</p>
+                </div>
+<!--
+                <button type="button" class="btn appEngine-image-btn" onclick="applyImageCc('IMAGE_Veris7.5_CC')"><i class="fa fa-long-arrow-right"></i>Apply Now</button>
+-->
+                <button type="button" class="btn learn-btn" onclick="cclearnMore()"><span class="md md-trending-flat"></span>Learn more</button>
+                <a  class="appEngine-image-apply-btn" onclick="applyImageCc('IMAGE_Veris7.5_CC')"><span class="md md-trending-flat"></span>Apply Now</a>
+            </div>
+        </div>
+        <div class="row container-box">
+            <div class="col-xs-6 ide-discripation">
+                <img src="../assets/appEngine/img/Appengine_image_1.png">
+            </div>
+            <div class="col-xs-5 ide-discripation">
+                <h1>Veris7.5 AC</h1>
+                <div class="imageCon-discripation">
+                    <p>Based on Multi-tenant business architeture with one tenant one system.</p>
+                    <p>Include appservers(flyingserver),web servers(nginx), saashub,paashub
+                        with apps deployed and mysql with reference data initialized and
+                        cache server(redis) based on Veris Suit V7.5.</p>
+                    <p>Business capabilities:customer, order, product, resource, compaign,
+                        dunning, settlement,Asset&Payment, upc, o2p, rti and etc.</p>
+                </div>
+<!--
+                <button type="button" class="btn appEngine-image-btn" onclick="applyImageAc('IMAGE_Veris7.5_AC')"><i class="fa fa-long-arrow-right"></i>Apply Now</button>
+-->
+                <button type="button" class="btn learn-btn" onclick=""><span class="md md-trending-flat"></span>Learn more</button>
+                <a  class="appEngine-image-apply-btn" onclick="applyImageAc('IMAGE_Veris7.5_AC')"><span class="md md-trending-flat"></span>Apply Now</a>
+            </div>
+        </div>
+        
+        <div class="row container-box">
+            <div class="col-xs-6 ide-discripation">
+                <img src="../assets/appEngine/img/Appengine_image_1.png">
+            </div>
+            <div class="col-xs-5 ide-discripation">
+                <h1>EBOSS1.0 AC</h1>
+                <div class="imageCon-discripation">
+                    <p>Base On Split By FrontEnd and BckEnd Application Architeture</p>
+                    <p>Include appservers(flyingserver),web servers(nginx), saashub,paashub
+                        with apps deployed and mysql with reference data initialized and
+                        cache server(redis) based on Veris Suite V7.</p>
+                    <p>Business capabilities:customer, order, product, resource, compaign,
+                        dunning, settlement,Asset&Payment, upc, o2p, rti and etc.</p>
+                </div>
+<!--
+                <button type="button" class="btn appEngine-image-btn" onclick="applyImageAc('IMAGE_Veris7.5_AC')"><i class="fa fa-long-arrow-right"></i>Apply Now</button>
+-->
+                <button type="button" class="btn learn-btn" onclick=""><span class="md md-trending-flat"></span>Learn more</button>
+                <a  class="appEngine-image-apply-btn" onclick="applyImageAc('IMAGE_EBOSS1.0_AC')"><span class="md md-trending-flat"></span>Apply Now</a>
+            </div>
+        </div>
+    </div>
+    <div class="appEngine-saas-container" id="saasContainer" style="display: none">
+        <div class="row container-box">
+            <div class="col-xs-4 ide-discripation">
+                <div class="testCat clearfix">
+                    <div class="backImg"><img src="/assets/appEngine/img/saas_1.png"></div>
+                    <div class="testCat-con">
+                        <h3>TestCat</h3>
+                        <p>Test Management for the API which provide test case design, excuting and result reporting.</p>
+<!--
+                        <button type="button" class="btn appEngine-image-btn" onclick="downLoadTestCat()"><span class="icon-download"></span>Download</button>
+-->
+                        <a  class="appEngine-image-btn" ><span class="icon-download"></span>Download</a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-xs-4 ide-discripation">
+                <div class="testCat clearfix">
+                    <div class="backImg"><img src="/assets/appEngine/img/saas_2.png"></div>
+                    <div class="testCat-con">
+                        <h3>Sonar</h3>
+                        <p>An OSS be used  for quality guarantee  of the source code and provide the check report.</p>
+<!--
+                        <button type="button" class="btn appEngine-image-btn" onclick="downLoadSnar()"><span class="icon-download"></span>Download</button>
+-->
+                        <a  class="appEngine-image-btn" ><span class="icon-download"></span>Download</a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-xs-4 ide-discripation">
+                <div class="testCat clearfix">
+                    <div class="backImg"><img src="/assets/appEngine/img/saas_3.png"></div>
+                    <div class="testCat-con">
+                        <h3>Code Repository</h3>
+                        <p>The release management(eg. SVN server)  for the source code.</p>
+<!--
+                        <button type="button" class="btn appEngine-image-btn" onclick="downLoadCode()"><span class="icon-download"></span>Download</button>
+-->
+                        <a onclick="fillEnvInfo('svn')"  class="appEngine-image-apply-btn" ><span class="md md-trending-flat"></span>Apply</a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-xs-4 ide-discripation">
+                <div class="testCat clearfix">
+                    <div class="backImg"><img src="/assets/appEngine/img/saas_4.png"></div>
+                    <div class="testCat-con">
+                        <h3>AppEngine Development Env</h3>
+                        <p>A set of standard AppEngine architectural environment for J2EE development.</p>
+<!--
+                        <button type="button" class="btn appEngine-image-btn" onclick="downLoadCode()"><span class="icon-download"></span>Download</button>
+-->
+                        <a onclick="fillEnvInfo('dev')"  class="appEngine-image-apply-btn" ><span class="md md-trending-flat"></span>Apply</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div aeType="aeForm" id="envInfo" aeInit="true" class="form-horizontal" style="display:none;">
+	<div class="form-group">
+		<label class="col-xs-2 control-label">Platform Version</label>
+		<div class="col-xs-4">
+			<span aeType="aeCombo" id="platformVersion" aeInit="true" emptyText="-Please select platform version!-"></span>
+		</div>
+		<label class="col-xs-2 control-label">Architecture</label>
+		<div class="col-xs-4">
+			<span aeType="aeCombo" id="architecture" aeInit="true" emptyText="-Please select architecture!-"></span>
+		</div>
+	</div>
+</div>
+
+<div aeType="aeForm" id="svnInfo" aeInit="true" class="form-horizontal" style="display:none;">
+	<div class="form-group">
+		<label class="col-xs-4 control-label">Project Code</label>
+		<div class="col-xs-6">
+			<span aeType="aeTextfield" id="projectCode" aeInit="true" emptyText="-Please input project code!-"></span>
+		</div>
+	</div>
+</div>
+<div class="footer"> 2016 Asiainfo, Inc. All Rights Reserved</div>
+</body>
+
+<script type="text/javascript">
+    seajs.use('aries-main',function(){
+		 $.cookie($.aries.config.sec.SEC_AUTH_ROLETYPE_KEY, "Customer", {path : '/'});
+         var currentUser =  $.cookie("login_customer_id");
+         if(currentUser){
+             $('#currentUser').html(currentUser);
+         }else{
+              $('.product-signIn-btn').show();
+              $('.user-name').find('span').hide();
+              $('.user-name').find('#currentUser').hide();
+         }
+
+        var platformVersion  = '[{"text":"AppEngine V4.1","value":"4.1"},{"text":"AppEngine V4.2","value":"4.2"}]';
+     	$("#platformVersion").aeCombo('reload',$.parseJSON(platformVersion)); 
+     	
+     	var architecture  = '[{"text":"EBOSS","value":"EBOSS"},{"text":"TBOSS","value":"TBOSS"}]';
+      	$("#architecture").aeCombo('reload',$.parseJSON(architecture)); 
+    });
+    $(".ide-discripation").on('click','h1',function(){
+    	var type= $(this).attr('type');
+        if("mini" == type){
+            window.location = '/aso/mini.html';
+        }else if("standard" == type){
+            window.location = '/aso/standard.html';
+        }
+    });
+    function cclearnMore(){
+        window.location = '/aso/ccDetail.html';
+    }
+    
+    function fillEnvInfo(type){
+    	if("dev" == type){
+    		$.openPopupDiv('envInfo','Environment Architectural Info','900','50',{"initAfterAction":"initpopupEnvInfoDiv()","afterAction":"doAfterActionForEnvInfoDiv()","onConfirm":"doConfirmForEnvInfoDiv()","draggable":true,"resizable":true});
+    	}
+    	if("svn" == type){
+    		$.openPopupDiv('svnInfo','Svn Info','600','50',{"initAfterAction":"initpopupSvnInfoDiv()","afterAction":"doAfterActionForSvnInfoDiv()","onConfirm":"doConfirmForSvnInfoDiv()","draggable":true,"resizable":true});
+    	}
+    }
+    
+    function doConfirmForSvnInfoDiv(){
+    	var projectCode = $('#projectCode').aeTextfield('getValue');
+    	var custLoginId = $.cookie("login_customer_id");
+    	if(undefined==custLoginId){
+			$.message.alert("","Please log in!");
+			return;
+		}
+    	$("#global_loading").show();
+		var cond =  "".appendParam('projectCode',projectCode);
+		$.aries.ajax.post($.aries.service.aso.installSvn, cond, function(data) {
+			$("#global_loading").hide();
+			 $.message.success("","",function(){
+				 $.closePopupDiv();
+			 },function(code,info){
+			    $.message.error("","Operation fail，info:"+info.hub_value[0].code);
+	    });
+		}, function(code, info) {
+
+			$("#global_loading").hide();
+			if(undefined==info.hub_value[0]){
+	             $.message.error("","Operation failed!");
+			 }else if("AISEC0002"==info.hub_value[0].code){
+			     $.message.error("","No service permission,please log in!");
+			 }else if("AISEC0003"==info.hub_value[0].code){
+			     $.message.error("","No service permission!");
+			 }else{
+	             $.message.error("","Operation failed,code:"+info.hub_value[0].code+",info:"+info.hub_value[0].value);
+			 }
+		
+		});
+		$("#global_loading").show();
+		
+    }
+    
+    function doConfirmForEnvInfoDiv(){
+    	var platformVersion = $('#platformVersion').aeCombo('getValue');
+    	var architecture = $('#architecture').aeCombo('getValue');
+    	var custLoginId = $.cookie("login_customer_id");
+    	if(undefined==custLoginId){
+			$.message.alert("","Please log in!");
+			return;
+		}
+    	$("#global_loading").show();
+		var cond =  "".appendParam('prodOfferCode','APPENGINE_DEV_ENV').appendParam('custLoginId',custLoginId).appendParam('orderType','anonymous').appendParam('platformVersion',platformVersion).appendParam('architecture',architecture);
+		$.aries.ajax.post($.aries.service.aso.addOrder, cond, function(data) {
+			$("#global_loading").hide();
+			 $.message.success("","",function(){
+				 $.closePopupDiv();
+			 },function(code,info){
+			    $.message.error("","Operation fail，info:"+info.hub_value[0].code);
+	    });
+		}, function(code, info) {
+
+			$("#global_loading").hide();
+			if(undefined==info.hub_value[0]){
+	             $.message.error("","Operation failed!");
+			 }else if("AISEC0002"==info.hub_value[0].code){
+			     $.message.error("","No service permission,please log in!");
+			 }else if("AISEC0003"==info.hub_value[0].code){
+			     $.message.error("","No service permission!");
+			 }else{
+	             $.message.error("","Operation failed,code:"+info.hub_value[0].code+",info:"+info.hub_value[0].value);
+			 }
+		
+		});
+		$("#global_loading").show();
+		
+    }
+
+</script>
+ <script src="/ARIESRES/assets/appEngine/js/common.js"></script>
+</html>

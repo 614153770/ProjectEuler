@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <link href="/ARIESRES/assets/appEngine/img/Appengine_logo.png" mce_href="/ARIESRES/assets/appEngine/img/Appengine_logo.png" rel="shortcut icon"/>
+    <link href="/ARIESRES/assets/aries/css/base/aries-base.css" rel="stylesheet" type="text/css"/>
+    <link href="/ARIESRES/assets/appEngine/css/common.css" rel="stylesheet" type="text/css"/>
+    <link href="/ARIESRES/assets/appEngine/css/main.css" rel="stylesheet" type="text/css"/>
+    <link href="/ARIESRES/assets/appEngine/css/font.css" rel="stylesheet" type="text/css"/>
+    <link href="/ARIESRES/assets/appEngine/css/font-md.css" rel="stylesheet" type="text/css"/>
+    <script src="/ARIESRES/assets/aries/lib/jquery.js"></script>
+    <script src="/ARIESRES/assets/aries/main/sea.js"></script>
+    <script src="/ARIESRES/assets/appEngine/js/index.js"></script>
+    <title>ASO</title>
+</head>
+<body >
+<div id="global_loading" class="modal fade in fx-loadingPage" style="display:none;">
+    <div class="modal-backdrop fade in" style="height: 100%">
+        <img src="/ARIESRES/assets/appEngine/img/loading-page.svg" class="loading-page" alt="">
+    </div>
+</div>
+<div class="mini-header-back clearfix">
+    <div class="container">
+        <div class="header">
+            <img class="signin-logo-img" src="../assets/appEngine/img/Appengine_logo1.png">
+            <div class="user-name">
+                <div><span class="icon-account-circle"></span><div class="user-name-info" id="currentUser"></div><span class="icon-select1"></span></div>
+                <ul style="display: none">
+                    <li>MyProfile</li>
+                    <li>Logout</li>
+                </ul>
+                <button class="btn product-signIn-btn" onclick="signIn()" style="display: none">Sign in</button>
+            </div>
+            <div class="header-info">
+                <ul>
+                    <li src="#ide"   ><a class="active">Product</a></li>
+                    <li src="#image" ><a href="/aso/helpInfo.html">Help Center</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="appEngine-banner-info col-xs-6">
+            <h1>Hope-Paas ide-Standard</h1>
+            <div class="col-xs-10 ">
+                <p class="mini-banner-info">Hope - Pass ide Mini is a mini ide for paas layer which provide a unified and extended design
+                 and develop platform for the enterprise based on the J2EE.</p>
+                <p class="mini-banner-info">It regulate the development mode, raise the code quality,
+                    reduce code complexity and improve the reusability by this platform.</p>
+                <p class="mini-banner-info">Provide visual business component configuration and management tools for the business object and service.</p>
+              </div>
+            <button class="btn appEngine-banner-info-btn" onclick="downLoad()"><span class="icon-download"></span>Document</button>
+            </div>
+        <div class="appEngine-banner-info col-xs-6">
+            <img src="../assets/appEngine/img/mini_banner.png">
+        </div>
+    </div>
+</div>
+</div>
+<div class="container">
+    <div class="appEngine-image-container" >
+        <div class="row container-box">
+            <div class="col-xs-6 ide-discripation">
+                <img src="../assets/appEngine/img/mini1.png">
+            </div>
+            <div class="col-xs-5 ide-discripation mini-discripation">
+                <h1>Cmpt</h1>
+                <div class="imageCon-discripation">
+                    <p>Business component is a reusable software unit which can achieve the specific business needs.
+                        It can be deployed and run independently.</p>
+                    <h4>Capabilities:</h4>
+                    <p>Designed by the cmpt which divided by the SID standard can maximize the decouple logically.</p>
+                    <p>Business areas can be deployed independently and kept transaction consistent in one area. </p>
+                    <p>The System is constructed by one saas domain and many paas domains. Transaction consistent in the cross-domain can be kept finally </p>
+                </div>
+            </div>
+        </div>
+        <div class="container border"></div>
+        <div class="row container-box">
+            <div class="col-xs-6 ide-discripation mini-discripation">
+                <h1>ABO</h1>
+                <div class="imageCon-discripation">
+                    <p>ABO stand for Aggregated Business Object is based on the Object-Oriented ideology.
+                        It defines the business object in the process of the designing and developing. </p>
+                    <p>The constructure is based on the service-appearance and business object supporting.
+                        It establishes an union aggregated mode of business object. It is the base of the
+                        multiplex and extension in the software. </p>
+                    <h4>Capabilities:</h4>
+                    <p>Types: General ABO, Specific ABO, Query ABO and Transmission ABO.</p>
+                    <p>Support to create the ABO visually and import the existed ABO or by BO into the ABO designer. </p>
+                    <p>Generate the wrapper class, the engine class, the interface class and the OR-Mapping meta file automatically.</p>
+                    <p>Support to config the aggregated or associated relationship between ABOs.</p>
+                </div>
+            </div>
+            <div class="col-xs-6 ide-discripation text-right">
+                <img src="../assets/appEngine/img/mini2.png">
+            </div>
+        </div>
+        <div class="container border"></div>
+        <div class="row container-box">
+            <div class="col-xs-6 ide-discripation">
+                <img src="../assets/appEngine/img/mini3.png">
+            </div>
+            <div class="col-xs-5 ide-discripation mini-discripation">
+                <h1>Svpkg</h1>
+                <div class="imageCon-discripation">
+                    <p>Service package is constructed by a set of services. It is the designer of the business services.</p>
+                    <h4>Capabilities:</h4>
+                    <p>Service Package Types: Business, Query, Log, Integrated.</p>
+                    <p>Service Types: Single, Combined, Workflow</p>
+                    <p>Support to design service visually.</p>
+                    <p>Support copy and paste the service internal or external.</p>
+                    <p>Generate the service class and DAO class automatically.</p>
+                    <p>Support to define the combined service by the service flow designer.</p>
+                    <p>Support order the services and query the service by service code.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+<div id="docList" style="display:none;">
+	<span aeType="aeCheckbox" id="docs" aeInit="true" labelField="codeName" valueField="codeValue" isHorizontal="true"></span>
+		
+</div>
+ 		<a class="col-cl-8 control-label" href = "docs/APPEngineV4.2 Operation Guide.docx" style="visibility: hidden;"><span id="Operation_Guide">Operation_Guide</span></a>
+		<a class="col-cl-8 control-label" href = "docs/APPEngineV4.2 Update Guide.docx" style="visibility: hidden;"><span id="Operation_Guide">Update_Guide</span></a>
+		<a class="col-cl-8 control-label" href = "docs/APPEngineV4.2 Operation Guide_Security Authentication Volume.docx" style="visibility: hidden;"><span id="Operation_Guide">Guide_Security</span></a>
+		<a class="col-cl-8 control-label" href = "docs/APPEngineV4.2 Operation Guide_Backstage Volume.docx" style="visibility: hidden;"><span id="Operation_Guide">Guide_Backstage</span></a>
+		<a class="col-cl-8 control-label" href = "docs/APPEngineV4.2 Operation Guide_Mutil-tenant Volume.docx" style="visibility: hidden;"><span id="Operation_Guide">Guide_Mutil-tenant</span></a>
+		<a class="col-cl-8 control-label" href = "docs/APPEngineV4.2 Operation Guide_Secframe Volume.docx" style="visibility: hidden;"><span id="Operation_Guide">Guide_Secframe</span></a>
+		<a class="col-cl-8 control-label" href = "docs/APPEngineV4.2 Operation Guide_ConfigCenter Volume.docx" style="visibility: hidden;"><span id="Operation_Guide">Guide_ConfigCenter</span></a>
+		<a class="col-cl-8 control-label" href = "docs/APPEngineV4.2 Operation Guide_Exeframe Volume.docx" style="visibility: hidden;"><span id="Operation_Guide">Guide_Exeframe</span></a>
+		<a class="col-cl-8 control-label" href = "docs/APPEngineV4.2 Operation Guide_Hub Volume.docx" style="visibility: hidden;"><span id="Operation_Guide">Guide_Hub</span></a>
+		<a class="col-xs-8 control-label" href = "docs/APPEngineV4.2 Operation Guide_SSO Volume.docx" style="visibility: hidden;"><span id="Operation_Guide">Guide_SSO</span></a>
+		<a class="col-xs-8 control-label" href = "docs/APPEngineV4.2 Operation Guide_Workflow Volume.docx" style="visibility: hidden;"><span id="Operation_Guide">Guide_Workflow</span></a>
+		<a class="col-xs-8 control-label" href = "docs/APPEngineV4.2 Operation Guide_Cache Volume.docx" style="visibility: hidden;"><span id="Operation_Guide">Guide_Cache</span></a>
+</div>
+
+</div>
+<div class="footer"> 2016 Asiainfo, Inc. All Rights Reserved</div>
+</body>
+
+<script type="text/javascript">
+    seajs.use('aries-main',function(){
+		 $.cookie($.aries.config.sec.SEC_AUTH_ROLETYPE_KEY, "Customer", {path : '/'});
+         var currentUser =  $.cookie("login_customer_id");
+         if(currentUser){
+             $('#currentUser').html(currentUser);
+         }else{
+              $('.product-signIn-btn').show();
+             $('.user-name').find('span').hide();
+             $('.user-name').find('#currentUser').hide();
+         }
+		
+         var docsData = '[{"codeName":"APPEngineV4.2 Operation Guide.docx","codeValue":"Operation_Guide"},'+
+         '{"codeName":"APPEngineV4.2 Update Guide.docx","codeValue":"Update_Guide"},'+
+         '{"codeName":"APPEngineV4.2 Operation Guide_Security Authentication Volume.docx","codeValue":"Guide_Security"},'+
+         '{"codeName":"APPEngineV4.2 Operation Guide_Backstage Volume.docx","codeValue":"Guide_Backstage"},'+
+         '{"codeName":"APPEngineV4.2 Operation Guide_Mutil-tenant Volume.docx","codeValue":"Guide_Mutil-tenant"},'+
+         '{"codeName":"APPEngineV4.2 Operation Guide_Secframe Volume.docx","codeValue":"Guide_Secframe"},'+
+         '{"codeName":"APPEngineV4.2 Operation Guide_ConfigCenter Volume.docx","codeValue":"Guide_ConfigCenter"},'+
+         '{"codeName":"APPEngineV4.2 Operation Guide_Exeframe Volume.docx","codeValue":"Guide_Exeframe"},'+
+         '{"codeName":"APPEngineV4.2 Operation Guide_Hub Volume.docx","codeValue":"Guide_Hub"},'+
+         '{"codeName":"APPEngineV4.2 Operation Guide_SSO Volume.docx","codeValue":"Guide_SSO"},'+
+         '{"codeName":"APPEngineV4.2 Operation Guide_Workflow Volume.docx","codeValue":"Guide_Workflow"},'+
+         '{"codeName":"APPEngineV4.2 Operation Guide_Cache Volume.docx","codeValue":"Guide_Cache"}]';
+		$("#docs").aeCheckbox('reload',$.parseJSON(docsData));
+    });
+
+    function downLoad(){
+   		$.openPopupDiv('docList','AppEngine Document','600','',{"afterAction":"doAfterSelectDocs()","onConfirm":"doConfirmDocs()","draggable":true,"resizable":true});
+    };
+    
+    function doConfirmDocs(){
+    	var docs = $('#docs').aeCheckbox('getValue').split(",");
+    	$.closePopupDiv(docs);
+    };
+    
+    function doAfterSelectDocs(docs){
+    	debugger;
+    	for(var i=0;i<docs.length;i++){
+    		$("#"+docs[i]).click();
+    	}
+    };
+</script>
+ <script src="/ARIESRES/assets/appEngine/js/common.js"></script>
+</html>

@@ -1,0 +1,154 @@
+@charset "utf-8";
+/*signUp.html by tangll 2016-6-23*/
+.appEngine-container{height: 90px;line-height:90px;color: #333;}
+.appEngine-container span{
+    transition:All 0.3s ease-in-out;
+    -webkit-transition:All 0.3s ease-in-out;
+    -moz-transition:All 0.3s ease-in-out;
+    -o-transition:All 0.3s ease-in-out;
+    color: #333;
+    font-size: 36px;
+    float: right;
+    margin-right: 45px;
+    height: 90px;
+    line-height: 90px;
+    cursor: pointer;}
+.appEngine-container span:hover{
+    transform:rotate(180deg);
+    -webkit-transform:rotate(180deg);
+    -moz-transform:rotate(180deg);
+    -o-transform:rotate(180deg);
+    -ms-transform:rotate(180deg);
+}
+.signin-logo-img{
+   margin-left: 45px;
+}
+.username{
+    margin-bottom: -14px;
+    display: block;
+    color: #a1a1a1;
+}
+.signin-content{
+    position:absolute;
+    top:50%;
+    left:50%;
+    margin-left:-250px;
+    margin-top:-272px;
+    border-radius: 5px;
+    width:500px;
+    background-color:#fff;
+    padding:15px 40px 40px;
+}
+.signin-title{
+    margin-bottom:20px;
+    text-align: center;
+}
+.signin-title p{font-size: 24px;color:#333; font-family: robotolight;}
+.signin-title p a{color: #ffa800;margin-left: 5px;}
+/*.signin-title p a:hover{text-decoration: underline;}*/
+.signin-logotext{
+    color: #545454;
+    font-family: "robotolight";
+    font-size: 72px;
+}
+.signup-login-text{color:#ffa800;}
+.signin-content .content-input .form-control {
+    border-radius: 0;
+    box-shadow: none;
+    height: 50px;
+    margin-top:10px;
+    border: none;
+    padding: 0;
+}
+.signin-content .loginType .col-xs-12{padding:0;}
+.signin-content .loginType label{font-size:16px;color:#545454;}
+.sign-input-bor {
+    position: relative;
+}
+.re-checkbox{
+    margin-top:15px;
+    margin-bottom:-25px;
+}
+.re-checkbox span{float: right;}
+.re-checkbox span a{color: #333;}
+.re-checkbox span a:hover{color: #ffa800;text-decoration: underline;}
+.ckbox label:before{
+    border: 1px solid #e5e5e5;
+    background: #e5e5e5;
+}
+.ckbox label:after{
+    font-family: 'FontAwesome';
+    content: "\F00C";
+    position: absolute;
+    top: 3px;
+    left: 2px;
+    display: inline-block;
+    font-size: 11px;
+    width: 16px;
+    height: 16px;
+    color: #fff;
+    text-align: center;
+}
+.ckbox label.checked:after {
+    font-family: 'FontAwesome';
+    content: "\F00C";
+    position: absolute;
+    top: 3px;
+    left: 2px;
+    display: inline-block;
+    font-size: 11px;
+    width: 16px;
+    height: 16px;
+    color: #fff;
+    text-align: center;
+}
+.ckbox-default label.checked:before {
+    border-color: #ffa800;
+    background-color: #ffa800;
+}
+.signin-content .signin .btn{
+    margin-top: 45px;
+    background-color: #fff;
+    height: 48px;
+    font-size: 18px;
+    border: 1px solid #ffa800;
+    color: #ffa800;
+    border-radius: 24px;
+}
+
+.signin-content .signin .btn:hover{
+    color: #fff;
+    background-color: #ffa800;
+}
+
+.sign-input{height:30px;border:0 none;border-bottom:1px solid #ccc; background: transparent;  width: 100%;}
+.signin-input{position: relative;color: #545454; padding-top: 30px;}
+.signin-input label{position: absolute;bottom:5px;left:0;font-size: 24px;font-family: robotolight;}
+.control-line:after{
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 45%;
+    height: 2px;
+    width: 10px;
+    visibility: hidden;
+    background-color: #ffa800;
+    -webkit-transition: 0.2s ease all;
+    -o-transition: 0.2s ease all;
+    transition: 0.2s ease all;}
+.sign-input:focus~.control-line:after{
+    visibility: visible;
+    width: 100%;
+    left: 0;
+}
+.sign-input:focus+label,.sign-input.active+label{bottom:25px;font-size: 14px; transition: bottom ease 0.3s;color:#a1a1a1;}
+
+
+
+
+
+
+
+
+
+

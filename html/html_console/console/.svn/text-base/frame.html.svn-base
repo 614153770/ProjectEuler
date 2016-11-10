@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title>ASO Admin Home</title>
+    <link href="/ARIESRES/assets/appEngine/img/Appengine_logo.png" mce_href="/ARIESRES/assets/appEngine/img/Appengine_logo.png" rel="shortcut icon"/>
+    <link href="/ARIESRES/assets/aries/css/base/aries-base.css" rel="stylesheet" type="text/css">
+    <link href="css/extend.min.css" rel="stylesheet" type="text/css">
+    <link href="css/agent-view-frame.css" rel="stylesheet" type="text/css">
+    <link href="css/dlmenu.css" rel="stylesheet" type="text/css">
+    <script src="js/frame.js"></script>
+	
+    <!--[if lt IE 9]>
+    <link href="/ARIESRES/crm-bj/agentview/css/ie8-tricks.css" rel="stylesheet" type="text/css">
+    <script src="/ARIESRES/crm-bj/fe-common/vendor/html5shiv.js"></script>
+    <![endif]-->
+
+</head>
+<body>
+<!-- nav start -->
+<div class="top-nav-bar navbar navbar-md bg-white no-radius">
+    <div class="container-fluid">
+        <!-- /navbar-toggle  -->
+        <div class="navbar-header" >
+            <a href="#" class="navbar-brand text-dark m-r-md m-l-md" data-toggle="tooltip" data-placement="bottom" data-delay="300" title="Homepage" data-container="body">
+                <img src="../assets/appEngine/img/Appengine_logo2.png" class="inline-block m-r-xs"/>
+            </a>
+        </div>
+        <!-- /navbar-brand -->
+       <!--  <ul class="nav pull-right">
+            <li class="nav-item hidden-sm hidden-xs" id="note-btn" data-drop-container="note-drop" >
+                <a href="#" data-toggle="tooltip" data-placement="bottom" data-delay="300" title="Notes & Todo" data-container="body">
+                    <i class="md-pencil-box-outline"></i>
+                    <em class="badge up badge-xs badge-danger b b-2x b-white none"> </em>
+                </a>
+            </li>
+            <li class="nav-item hidden-sm hidden-xs" id="announce-btn" data-drop-container="announce-drop"  >
+                <a href="#" data-toggle="tooltip" data-placement="bottom" data-delay="300" title="Bulletin" data-container="body">
+                <span class="have-new-notice">
+                  <i class="md-bullhorn"></i>
+                  <em class="badge up badge-xs badge-danger b b-2x b-white none"> </em>
+                </span>
+                </a>
+            </li>
+            <li class="nav-item hidden-sm hidden-xs" id="notifications-btn" data-drop-container="notifications-drop"  >
+                <a href="#" data-toggle="tooltip" data-placement="bottom" data-delay="300" title="Message" data-container="body">
+                  <span class="have-new-notice">
+                      <i class="md-notifications-none"></i>
+                      <em class="badge up badge-xs badge-danger b b-2x b-white none"> </em>
+                  </span>
+                </a>
+            </li>
+            <li class="nav-item user-info" id="user-info-btn" data-drop-container="user-info-drop" >
+                <a href="#" class="w-auto text-ellipsis" id="agentview-user-avatar" data-toggle="tooltip" data-placement="bottom" data-delay="300" title="User Profiles" data-container="body" >
+                    <span class="avatar thumb-sm pull-left"><img src="../fe-common/images/avatar/female.png" alt="..."></span>
+                    <b class="m-l-xs m-r"></b>
+                    <span class="caret"></span>
+
+                    <span class="thumbnail-circle thumbnail-circle-md thumbnail-circle-greendk"></span>
+                    <span class="caret"></span>
+                </a>
+            </li>
+            <li class="nav-item ows-item hidden-sm hidden-xs" data-drop-container="agentview-ows-container" >
+                <a href="#" id="agentview-ows-btn" data-toggle="tooltip" data-placement="bottom" data-delay="300" title="Online Support" data-container="body">
+                <span class="have-new-notice">
+                  <i class="md-headset-mic"></i>
+                  <em class="badge up badge-xs badge-danger b b-2x b-white"> </em>
+                </span>
+                    <span class="caret"></span>
+                </a>
+            </li>
+        </ul> -->
+        <!-- user-info end -->
+        <div class="navbar-collapse" id="navbar-4">
+            <ul class="nav">
+             <li class="nav-item">
+                    <a href="#" onclick="login()" id="agent-view-dl-menu-trigger" class="m-n" data-toggle="tooltip" data-delay="300" data-placement="bottom"  data-container="body">Login</a>
+                    <!-- /dl-menuwrapper -->
+                </li>
+                <li class="nav-item" id="agent-view-recent-menu-btn" data-drop-container="agent-view-recent-menu-drop">
+                    <a href="#" onclick="wechat()" data-toggle="tooltip" data-placement="bottom"  data-delay="300" data-container="body">Wechat</a>
+                    <!-- /dl-menuwrapper -->
+                </li><li class="nav-item" id="agent-view-recent-menu-btn" data-drop-container="agent-view-recent-menu-drop">
+                    <a href="#" onclick="initEnv()" data-toggle="tooltip" data-placement="bottom"  data-delay="300" data-container="body">Init</a>
+                    <!-- /dl-menuwrapper -->
+                </li>
+                <li class="nav-item" id="agent-view-recent-menu-btn" data-drop-container="agent-view-recent-menu-drop" >
+                    <a href="#" onclick="queryCustomerOrders()" data-toggle="tooltip" data-placement="bottom"  data-delay="300" data-container="body">Orders
+					</a>
+                </li>
+                <li class="nav-item" id="agent-view-recent-menu-btn" data-drop-container="agent-view-recent-menu-drop" >
+                    <a href="#" onclick="permission()" data-toggle="tooltip" data-placement="bottom"  data-delay="300" data-container="body">Permission
+					</a>
+                </li>
+                
+                <li class="nav-item global-search m-l-sm hidden-xs" id="agentview-global-search" >
+                </li>
+            </ul>
+        </div>
+        <!-- /collapse  -->
+    </div>
+    <!-- /container-fluid  -->
+    
+    
+    <div class="" id="aso_qrCode_login" style="display:none">
+                <div class="loader-main" id="loaderOrganize-main">
+                        <span></span>
+                        <span></span>
+                        <span></span>
+                        <span></span>
+                        <span></span>
+                </div>
+                <img  class="qrCode-img" src="">
+    </div>
+</div>
+<!-- /navbar  -->
+<!-- main container  -->
+<div class="agent-view-main-container frame-tab-bar">
+    <div id="agent-view-main-tabs" aeType="aeTabs" class="agent-view-main-tabs" aeInit="true" theme="2">
+        <div id="agent_view_home">
+            <div class="mainframe" id="menuId">
+                
+            </div>
+        </div>
+    </div>
+</div>
+<!-- /main container  -->
+<!-- cust360view container  -->
+<div id="agentview-cust360view-container" class="thin-scroll">
+</div>
+<div id="agentview-cust360view-min-container">
+</div>
+<!-- /cust360view container  -->
+<!-- user-info-drop start -->
+<div class="user-info-drop box-shadow-xl r-xs" data-trigger="user-info-btn">
+    <ul>
+        <li class="bg-light lt user-name">
+            <div class="thumb-horizontal">
+                <div class="thumb-img">
+                    <span class="thumbnail-circle thumbnail-circle-md thumbnail-circle-greendk"></span>
+                </div>
+                <div class="thumb-caption">
+                    <p style="margin-bottom: 0" ><span class="font-medium">Jennifer</span></p>
+                    <small>Administrator</small>
+                </div>
+             </div>
+        </li>
+        <!-- <li>
+            <i class="md-person"></i><span id="agv-user-name"></span>
+        </li> -->
+        <li class="none"><a href="#" id="agentview-a-settings"><i class="md-settings text-lg"></i>Option</a></li>
+        <li><a href="#" id="agentview-a-logout"><i class="md-power-settings-new text-lg"></i>Logout</a></li>
+    </ul>
+</div>
+<div class="new-bo-drop box-shadow-xl r-xs" data-trigger="new-bo-btn">
+    <ul>
+        <li>
+            <a href="javascript:void(0)" data-name="New Individual Customer" data-url="http://web.crm.veris7.ai:8082/veris/?tid=&channel=10004&opId=" >
+                <i class="md-account-circle"></i> 
+                <p class="text-sm">New Individual Customer</p>
+            </a>
+        </li>
+        <li>
+            <a href="javascript:void(0)" data-name="New Corporate Customer" data-url="http://web.crm.veris7.ai:8082/ARIESRES/veris/customer/addOrganization.html?tid=&channel=10004&opId=" >
+                <i class="md-domain"></i> 
+                <p class="text-sm">New Corporate Customer</p>
+            </a>
+        </li>
+    </ul>
+</div>
+<!-- /uer-info-drop  -->
+<!-- recent menu start -->
+<div class="agent-view-recent-menu-drop box-shadow-xl r-xs" data-trigger="agent-view-recent-menu-btn">
+    <ul id="agent-view-recent-menu">
+    </ul>
+</div>
+<!-- /recent menu  -->
+<!-- note&to-do  -->
+<div class="note-drop box-shadow-xl" data-trigger="note-btn">
+</div>
+<!-- /note&to-do  -->
+<!-- notifications -->
+<div class="notifications-drop box-shadow-xl" data-trigger="notifications-btn"></div>
+<!-- /notifications -->
+<!-- announcement -->
+<div class="announce-drop" data-trigger="announce-btn"></div>
+<!-- /announcement -->
+<!-- personal -->
+<div class="personal-drop bg-light ltest">
+    <div class="full-w">
+        <span class="pull-right m-r-lg  m-t-md"><i class="md-close text-2x  cursor-pointer" id="personal-setting-close"></i></span>
+<!--
+        <div class="wrapper-sm bg-light ltest b-b">
+            <h4 class="m-l">Setting</h4>
+        </div>-->
+    </div>
+    <div id="personal-setting-content" class="thin-scroll w-full padder-v" style="height:100%;overflow-y: auto"></div>
+</div>
+<!-- /personal -->
+<!-- customer search result -->
+<div class="customer-result-drop bg-light ltest thin-scroll" data-trigger="">
+    <div class="container m-t-md">
+        <div class="m-b bg-light ltest clear">
+            <h4 class="padder-xs h4 font-normal v-middle inline-block">Search Result</h4>
+            <span class="pull-right inline-block"><i class="md-close text-2x cursor-pointer" id="customer-result-close"></i></span>
+        </div>
+    </div>
+    <div id="customer-result-content" class="thin-scroll w-full" style="height:100%;overflow-y: auto"></div>
+</div>
+<!-- /customer search result -->
+<!--agentview-ows-container-->
+<div id="agentview-ows-container" class="none">
+</div>
+<!--/agentview-ows-container-->
+<!--loader modal-->
+
+<!--/loader modal-->
+<script src="/ARIESRES/assets/aries/lib/jquery.js" type="text/javascript"></script>
+<script src="/ARIESRES/assets/aries/main/sea.js" type="text/javascript"></script>
+<!--message server-->
+<!--/message server-->
+<script type="text/javascript">
+seajs.use('aries-main',function(){
+	 $.cookie($.aries.config.sec.SEC_AUTH_ROLETYPE_KEY, "Operator", {path : '/'});
+});
+     function queryCustomerOrders(){
+	    var url = menu_urls['Orders'];
+	    $("#menuId").html("<iframe src='"+ url +"'></iframe>");
+	 }
+	 
+	 function initEnv(){
+	    var url = menu_urls['Init'];
+	    $("#menuId").html("<iframe src='"+ url +"'></iframe>");
+	 }
+	 
+	 function permission(){
+		    var url = menu_urls['Permission'];
+		    $("#menuId").html("<iframe src='"+ url +"'></iframe>");
+		 }
+	 
+	 function login(){
+		//清cookie
+	    	$.removeCookie($.aries.config.sec.SEC_AUTH_TOKEN_KEY, {path : '/'});
+	     var tid = $.cookie($.aries.config.sec.SEC_AUTH_TENANT_KEY);
+	     if(tid == null){
+	         tid = "21";
+	     }
+		 window.location = '/console/login.html?tid='+tid;
+	}
+	 
+function wechat(){
+	 $.openPopupDiv('aso_qrCode_login','WeChat SignUp','470','',{"showButton":false});
+	   
+	    $.ajaxPost($.aries.service.aso.genQr,'senceIdPrefix=20',function(data){
+	        if(data && data.sceneId){
+	        	 $('#loaderOrganize-main').hide();
+	             $('#aso_qrCode_login').find('img.qrCode-img').attr('src',data.url);
+	        }
+	    },function(code,info){
+	    	if(undefined==info.hub_value[0]){
+	            $.message.error("","Login failed!");
+			 }else{
+	            $.message.error("","login failed,code:"+info.hub_value[0].code+",info:"+info.hub_value[0].value);
+			 }
+	    });
+}
+</script>
+</body>
+</html>

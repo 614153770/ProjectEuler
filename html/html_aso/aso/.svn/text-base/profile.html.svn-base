@@ -1,0 +1,329 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <link href="/ARIESRES/assets/appEngine/img/Appengine_logo.png" mce_href="/ARIESRES/assets/appEngine/img/Appengine_logo.png" rel="shortcut icon"/>
+    <link href="../assets/aries/css/base/aries-base.css" rel="stylesheet" type="text/css"/>
+    <link href="../assets/appEngine/css/common.css" rel="stylesheet" type="text/css"/>
+    <link href="../assets/appEngine/css/main.css" rel="stylesheet" type="text/css"/>
+    <link href="../assets/appEngine/css/font.css" rel="stylesheet" type="text/css"/>
+    <link href="/ARIESRES/assets/appEngine/css/font-md-new.css" rel="stylesheet" type="text/css"/>
+    <script src="/ARIESRES/assets/aries/lib/jquery.js"></script>
+    <script src="/ARIESRES/assets/aries/main/sea.js"></script>
+    <script src="/ARIESRES/assets/appEngine/js/index.js"></script>
+    <title>ASO</title>
+    <meta name="robots" content="noindex,follow" />
+</head>
+<body>
+<div id="global_loading" class="modal fade in fx-loadingPage" style="display:none;">
+    <div class="modal-backdrop fade in" style="height: 100%">
+        <img src="/ARIESRES/assets/appEngine/img/loading-page.svg" class="loading-page" alt="">
+    </div>
+</div>
+<div class="profile-top-banner-bg">
+    <div class="container profile-container">
+        <div class="header">
+            <img class="signin-logo-img" src="../assets/appEngine/img/Appengine_logo1.png">
+            <div class="user-name">
+                <div class="active"><span class="icon-account-circle"></span><div class="user-name-info" id="currentUser"></div><span class="icon-select1"></span></div>
+                <ul style="display: none">
+                    <li>MyProfile</li>
+                    <li>Logout</li>
+                </ul>
+                <button class="btn product-signIn-btn" onclick="signIn()" style="display: none">Sign in</button>
+            </div>
+            <div class="header-info">
+                <ul>
+                    <li src="#ide"><a href="/aso/index.html">Product</a></li>
+                    <li src="#image"><a href ="/aso/helpInfo.html">Help Center</a></li>
+                </ul>
+            </div>
+        </div>
+
+    </div>
+</div>
+<div class="container">
+    <div class="title">
+        <span class="title-inner">My Profile</span>
+    </div>
+    <div aeType="aeForm" id="searchDetail" aeInit="true"
+		class="form-horizontal">
+		<div class="form-group">
+			<label class="col-xs-2 control-label">Offer Type</label>
+			<div class="col-xs-3">
+				<span aeType="aeCombo" id="offerType" aeInit="true"
+					dataField="offerType" showClear="true" onValueChange="getOfferTypeChange"  value='super'></span>
+			</div>
+			<label id='secOfferTypeLabel' class="col-xs-1 control-label" style="display:none;">Saas Type</label>
+			<div id='secOfferTypeDiv' class="col-xs-3" style="display:none;">
+        		<span aeType="aeCombo" dataField="secondOfferType" showClear="true" emptyText="-Please select saas type!-" id="secondOfferType" aeInit="true"></span>
+      		</div>
+			<div class="col-xs-1 text-right">
+				<button class="btn btn-primary" type="button"
+					onclick="qryOrderByCustIdAndOfferType()">Search</button>
+			</div>
+		</div>
+	</div>
+   <!--  <table class="veris-list-table">
+        <thead>
+        <tr>
+            <th width="15%">ID</th>
+            <th width="20%">offerCode</th>
+            <th width="30%">Web_URL</th>
+            <th width="10%">Language</th>
+            <th width="15%">TimeZone</th>
+            <th>State</th>
+        </tr>
+        </thead>
+    </table> -->
+        <div id="order-list">
+        
+        </div>
+        
+        <div id="envorder-list">
+        
+        </div>
+</div>
+<div class="footer">2016 Asiainfo, Inc. All Rights Reserved</div>
+<script type="text/x-handlebars-template" id="orderListTpl">  
+<table class="veris-list-table">
+        <thead>
+        <tr>
+            <th width="15%">ID</th>
+            <th width="20%">Offer Code</th>
+            <th width="30%">Web_URL</th>
+            <th width="10%">Language</th>
+            <th width="15%">TimeZone</th>
+            <th>State</th>
+        </tr>
+        </thead>
+        <tbody>
+        {{#each this}}
+        <tr>
+            <td><p>{{orderId}}</p></td>
+            <td><p>{{offerCode}}</p></td>
+            <td><p class="webUrl"><a href={{webUrl}} target="_Blank">{{webUrl}}</a><p></td>
+            <td><p>{{preLanguage}}</p></td>
+            <td><p>{{timezone}}</p></td>
+             {{#if_eq state compare="U"}}
+            <td><span class="label veris-label-successed">Successed</span></td>
+            {{/if_eq}}
+             {{#if_eq state compare="E"}}
+            <td><span class="label veris-label-invalid">Invalid</span></td>
+            {{/if_eq}}
+             {{#if_eq state compare="F"}}
+            <td><span class="label veris-label-completed">Completed</span></td>
+            {{/if_eq}}
+        </tr>  
+         {{/each}} 
+        </tbody>
+    </table>       
+</script>
+
+<script type="text/x-handlebars-template" id="envorderListTpl">  
+<table class="veris-list-table">
+		<thead>
+        <tr>
+            <th width="15%">ID</th>
+            <th width="15%">Offer Code</th>
+            <th width="12%">Platform Version</th>
+			<th width="8%">Architecture</th>
+			<th width="20%">SVN URL</th>
+            <th width="10%">SVN ACCOUNT</th>
+            <th width="10%">Open State</th>
+            <th>Operation</th>
+        </tr>
+        </thead>
+        <tbody>
+        {{#each this}}
+        <tr>
+            <td><p>{{orderId}}</p></td>
+            <td><p>{{offerCode}}</p></td>
+            <td><p>{{envOrder.platformVersion}}</p></td>
+            <td><p>{{envOrder.architecture}}</p></td>
+            <td><p class="webUrl"><a href="http://10.1.241.59:8080/svnadmin/login.jsp" target="_Blank">{{envOrder.svnUrl}}</a><p></td>
+			<td><p>{{envOrder.svnAdminAcct}}</p></td>
+             {{#if_eq openState compare="Y"}}
+            <td><span class="label veris-label-successed">Successed</span></td>
+            {{/if_eq}}
+             {{#if_eq openState compare="N"}}
+            <td><span class="label veris-label-invalid">Invalid</span></td>
+            {{/if_eq}}
+            <td><p class="webUrl"><a onclick="build('{{orderId}}','{{openState}}')">Build</a>&nbsp;&nbsp;&nbsp;<a onclick="release('{{orderId}}','{{openState}}')">Release</a><p></td>
+        </tr>  
+         {{/each}} 
+        </tbody>
+    </table>       
+</script>
+<script>
+    var custLoginId;
+    seajs.use('aries-main',function() {
+    	var offerType  = '[{"text":"IDE","value":"ide"},{"text":"SUPER","value":"super"},{"text":"Saas","value":"saas"}]';
+		$("#offerType").aeCombo('reload',$.parseJSON(offerType)); 
+		$('#offerType').aeCombo('setDefault','super');
+    	
+         var token = $.cookie($.aries.config.sec.SEC_AUTH_TOKEN_KEY);
+    	 $.cookie($.aries.config.sec.SEC_AUTH_ROLETYPE_KEY, "Customer", {path : '/'});
+         var currentUser =  $.cookie("login_customer_id");
+         if(token){
+            if(currentUser){
+                $('#currentUser').html(currentUser);
+            }else{
+                $('.product-signIn-btn').show();
+                $('.user-name').find('span').hide();
+                $('.user-name').find('#currentUser').hide();
+            }
+        }else{
+             $('.product-signIn-btn').show();
+             $('.user-name').find('span').hide();
+             $('.user-name').find('#currentUser').hide();
+         }
+    	custLoginId = $.cookie("login_customer_id");
+    	qryOrderByCustIdAndOfferType();
+    })
+function qryOrderByCustIdAndOfferType(){
+	 $("#global_loading").show();
+	 var offerType = $("#searchDetail").aeForm('getValueByField','offerType');
+	    var secondOfferType = $("#searchDetail").aeForm('getValueByField','secondOfferType');
+	    var param = "custLoginId="+custLoginId+"&offerType=" + offerType+"&secondOfferType="+secondOfferType;
+		$.ajaxPost($.aries.service.aso.qryOrderByCustIdAndOfferType,param,function(data){
+			$("#global_loading").hide();
+	        if(data){
+	        	if("saas" == offerType){
+	        		$('#envorder-list').show();
+	        		$('#order-list').hide();
+		            var html = $('#envorderListTpl').html();
+		            var template = Handlebars.compile(html);
+		            $('#envorder-list').html(template(data));
+	        	}else if("super" == offerType){
+	        		$('#order-list').show();
+	        		$('#envorder-list').hide();
+	        		//$("#demo-tpl").aeTpl('reload',data);
+		        	//$.setPrivateData('versionControlListInformation',data.versionControlSpecificationDisplayExtensionList);
+		            var html = $('#orderListTpl').html();
+		            var template = Handlebars.compile(html);
+		            $('#order-list').html(template(data));
+		             for(i=0;i<data.length;i++){
+		        		if(data[i].state == "E"){
+		        			$('.veris-list-table').find("tr:eq("+(i+1)+")").addClass('disabled');
+		        			$('.veris-list-table').find("tr:eq("+(i+1)+")").find('a').on("click",function(event){
+		        				event.preventDefault();
+		        			});
+			        	}
+		        	}
+	        	}
+	        }
+	    },function(code,info){
+	    	$("#global_loading").hide();
+	    	if(undefined==info.hub_value[0]){
+	            $.message.error("","Operation failed!");
+			 }else{
+	            $.message.error("","Operation failed,code:"+info.hub_value[0].code+",info:"+info.hub_value[0].value);
+			 } 
+	    });
+}
+    
+  //offerType值改变促发事件
+    function getOfferTypeChange(target, newValue, oldValue, event){
+    	var offerType = $('#offerType').aeCombo('getValue');
+    	
+    	if(offerType == "saas"){
+    		$('#secOfferTypeLabel').show();
+    		$('#secOfferTypeDiv').show();
+    		//$('#secondOfferType').aeCombo('visible',true);
+    		var secondOfferTypeData = '[{"text":"DevEnv","value":"devenv"},{"text":"TestCat","value":"testcat"},{"text":"Svn","value":"svn"},{"text":"Sonar","value":"sonar"}]';
+    		$('#secondOfferType').aeCombo('clear').aeCombo('reload',$.parseJSON(secondOfferTypeData));
+    		$('#secondOfferType').aeCombo('setValue','devenv');
+    	}else{
+    		$('#secondOfferType').aeCombo('clear');
+    		//$('#secondOfferType').aeCombo('visible',false);
+    		$('#secOfferTypeLabel').hide();
+    		$('#secOfferTypeDiv').hide();
+    	}
+    };
+    
+    function build(orderId,openState){
+    	//var order = JSON.parse(order);
+    	if("Y" != openState){
+    		$.message.error("","Sorry, the development env has not been installed!");
+    		return;
+    	}
+    	var cond = "orderId="+orderId;
+    	$("#global_loading").show();
+    	$.aries.ajax.post($.aries.service.aso.buildDevEnv, cond, function(data) {
+    		$("#global_loading").hide();
+    		buildResult = data;
+    		var str = [];
+    		for(var i=0;i<buildResult.length;i++){
+    			 if(buildResult[i] == "don't checkout any codes!"||buildResult[i] == "project build failed! pls review the log"){
+    				 $.message.alert("",buildResult[i]);
+    				 qryOrderByCustIdAndOfferType();
+    				 return;
+    			 }
+    			 
+    			 if(buildResult[i] == "BUILD FAILED"){
+    				 $.message.alert("",JSON.stringify(buildResult));
+    				 qryOrderByCustIdAndOfferType();
+    				 return;
+    			 }
+    		}
+    		
+    		 $.message.success("",buildResult,function(){
+    			 qryOrderByCustIdAndOfferType();
+    			 //$.closeTextPopup();
+    		 },function(code,info){
+    		    $.message.error("","Operation fail，info:"+info.hub_value[0].code);
+        	});
+    	}, function(code, info) {
+
+    		$("#global_loading").hide();
+    		if(undefined==info.hub_value[0]){
+                 $.message.error("","Operation failed!");
+    		 }else if("AISEC0002"==info.hub_value[0].code){
+    		     $.message.error("","No service permission,please log in!");
+    		 }else if("AISEC0003"==info.hub_value[0].code){
+    		     $.message.error("","No service permission!");
+    		 }else{
+                 $.message.error("","Operation failed,code:"+info.hub_value[0].code+",info:"+info.hub_value[0].value);
+    		 }
+    	
+    	});
+    };
+
+    function release(orderId,openState){
+    	//var order = JSON.parse(order);
+    	if("Y" != openState){
+    		$.message.error("","Sorry, the development env has not been installed!");
+    		return;
+    	}
+    	var cond = "orderId="+orderId;
+    	$("#global_loading").show();
+    	$.aries.ajax.post($.aries.service.aso.releaseDevEnv, cond, function(data) {
+    		$("#global_loading").hide();
+    		 $.message.success("","",function(){
+    			 qryOrderByCustIdAndOfferType();
+    			 //$.closeTextPopup();
+    		 },function(code,info){
+    		    $.message.error("","Operation fail，info:"+info.hub_value[0].code);
+        });
+    	}, function(code, info) {
+
+    		$("#global_loading").hide();
+    		if(undefined==info.hub_value[0]){
+                 $.message.error("","Operation failed!");
+    		 }else if("AISEC0002"==info.hub_value[0].code){
+    		     $.message.error("","No service permission,please log in!");
+    		 }else if("AISEC0003"==info.hub_value[0].code){
+    		     $.message.error("","No service permission!");
+    		 }else{
+                 $.message.error("","Operation failed,code:"+info.hub_value[0].code+",info:"+info.hub_value[0].value);
+    		 }
+    	
+    	});
+    }
+
+</script>
+
+<script src="/ARIESRES/assets/appEngine/js/common.js"></script>
+</body>
+</html>

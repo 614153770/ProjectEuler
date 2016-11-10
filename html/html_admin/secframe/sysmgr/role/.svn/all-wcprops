@@ -1,0 +1,59 @@
+K 25
+svn:wc:ra_dav:version-url
+V 85
+/svn/AppEngine/!svn/ver/35382/ASO/trunk/saas/web/html/html_admin/secframe/sysmgr/role
+END
+RoleManager.html
+K 25
+svn:wc:ra_dav:version-url
+V 102
+/svn/AppEngine/!svn/ver/35382/ASO/trunk/saas/web/html/html_admin/secframe/sysmgr/role/RoleManager.html
+END
+RoleEntity.html
+K 25
+svn:wc:ra_dav:version-url
+V 101
+/svn/AppEngine/!svn/ver/35382/ASO/trunk/saas/web/html/html_admin/secframe/sysmgr/role/RoleEntity.html
+END
+RoleSelect.html
+K 25
+svn:wc:ra_dav:version-url
+V 101
+/svn/AppEngine/!svn/ver/35382/ASO/trunk/saas/web/html/html_admin/secframe/sysmgr/role/RoleSelect.html
+END
+SelectRoleTypeDialog.html
+K 25
+svn:wc:ra_dav:version-url
+V 111
+/svn/AppEngine/!svn/ver/35382/ASO/trunk/saas/web/html/html_admin/secframe/sysmgr/role/SelectRoleTypeDialog.html
+END
+NotContainRoleFunction.html
+K 25
+svn:wc:ra_dav:version-url
+V 113
+/svn/AppEngine/!svn/ver/35382/ASO/trunk/saas/web/html/html_admin/secframe/sysmgr/role/NotContainRoleFunction.html
+END
+RoleFunction.html
+K 25
+svn:wc:ra_dav:version-url
+V 103
+/svn/AppEngine/!svn/ver/35382/ASO/trunk/saas/web/html/html_admin/secframe/sysmgr/role/RoleFunction.html
+END
+RoleExtend.html
+K 25
+svn:wc:ra_dav:version-url
+V 101
+/svn/AppEngine/!svn/ver/35382/ASO/trunk/saas/web/html/html_admin/secframe/sysmgr/role/RoleExtend.html
+END
+NotContainRoleEntity.html
+K 25
+svn:wc:ra_dav:version-url
+V 111
+/svn/AppEngine/!svn/ver/35382/ASO/trunk/saas/web/html/html_admin/secframe/sysmgr/role/NotContainRoleEntity.html
+END
+RoleExclude.html
+K 25
+svn:wc:ra_dav:version-url
+V 102
+/svn/AppEngine/!svn/ver/35382/ASO/trunk/saas/web/html/html_admin/secframe/sysmgr/role/RoleExclude.html
+END

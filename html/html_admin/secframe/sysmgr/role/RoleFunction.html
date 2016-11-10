@@ -1,0 +1,340 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Role Function</title>
+    <link href="/ARIESRES/assets/aries/css/base/aries-base.css" rel="stylesheet" type="text/css"/>
+    <script src="/ARIESRES/assets/aries/lib/jquery.js"></script>
+    <script src="/ARIESRES/assets/aries/main/sea.js"></script>
+</head>
+<body>
+<div id="searchPanel" aeType="aePanel" aeInit="true" level="4" title="Function Set Search">
+	<div aeType="aeForm" id="secRoleSearchForm" aeInit="true" class="form-horizontal">
+	 	<div class="form-group">
+			<label class="col-xs-2 control-label">ID</label>
+			<div class="col-xs-4">
+				<span aeType="aeTextfield" id="roleId" aeInit="true" dataField="roleId"  ></span>
+			</div>
+			<label class="col-xs-2 control-label">Function Set Name</label>
+			<div class="col-xs-4">				
+				<span aeType="aeTextfield" id="roleName" aeInit="true" dataField="roleName"  ></span>
+			</div>			
+		</div>
+		<div class="form-group">
+			<label class="col-xs-2 control-label">Function Set Type</label>
+			<div class="col-xs-4">
+				<span aeType="aeCombo" id="roleType" aeInit="true" dataField="roleType"  valueField="codeId" optionField="codeName" ></span>
+			</div>
+			<div class="col-xs-6 text-right">
+				<button class="btn btn-primary" type="button" onclick="searchRole()" ><span class="i18n">sec_query</span></button>
+		 	</div>			
+		</div>
+		<div class="form-group">
+		  	<div class="col-xs-12">
+				<span aeType="aeCombo" id="regionCode" aeInit="true" dataField="regionCode" valueField="codeId" optionField="codeName" visible="false"></span>
+			</div>
+		</div>		
+	</div>
+</div>
+<div id="listPanel" aeType="aePanel" aeInit="true" level="4" title="Available Function Set List">
+	<div id="secRoleSearchResultGrid" aeType="aeGrid" aeInit="true"
+		datafield="" isPaging="true" pagingSize="5"
+		pagingAlign="right" height="200px" showIndex="false"
+		singleSelect="false"   singleRowClass="false" emptyMsg="no results!">
+		<span datafield="roleId" title="$.i18n('sec_role_id')" i18n="true" width="100"></span>
+		<span datafield="roleName" title="$.i18n('sec_role_name')" i18n="true" width="100" ></span> 
+		<span datafield="roleType" title="$.i18n('sec_role_type')" i18n="true" width="100" renderer="roleTypeRenderer"></span>
+	</div>
+	<div class="col-xs-12 text-center">
+		<button class="btn btn-primary" type="button" onclick="search()" ><span class="i18n">sec_query_entity</span></button>
+	</div>
+</div>
+<div id="menuPanel" aeType="aePanel" aeInit="true" level="4" title="Associated Menu Search">
+	<div aeType="aeForm" id="roleFuncForm" aeInit="true" class="form-horizontal">
+	 	<div class="form-group">
+			<label class="col-xs-2 control-label">Menu Name</label>
+			<div class="col-xs-4">
+				<span aeType="aeTextfield" id="name" aeInit="true" dataField="name"  ></span>
+			</div>
+			<label class="col-xs-2 control-label">Menu ID</label>
+			<div class="col-xs-4">				
+				<span aeType="aeTextfield" id="funcId" aeInit="true" dataField="funcId"  ></span>
+			</div>			
+		</div>
+		<div class="col-xs-12 text-right">
+			<button class="btn btn-primary" type="button" onclick="searchAuthored()" ><span class="i18n">sec_query</span></button>
+		</div>
+	</div>
+</div>
+<div id="menuListPanel" aeType="aePanel" aeInit="true" level="4" title="Associated Menu List">
+	<div id="roleFuncGrid" aeType="aeGrid" aeInit="true"
+		datafield="" isPaging="false" 
+		pagingAlign="right" height="200PX" showIndex="false"
+		singleSelect="false"  treeColumn = "name" treeIdField="entId" treePidField="parentFuncId"
+		treeSortField="parentFuncId" >
+		<span datafield="name" title="$.i18n('sec_func_name')" i18n="true" width="100"></span>
+		<span datafield="entId" title="$.i18n('sec_func_id')" i18n="true"  width="100"></span> 
+		<span datafield="roleName" title="$.i18n('sec_role_name')" i18n="true" width="100" ></span> 
+		<span datafield="entValidDate" title="$.i18n('sec_validdate')" i18n="true"  width="100"></span> 
+		<span datafield="entExpireDate" title="$.i18n('sec_expiredate')" i18n="true" width="100"></span> 
+		<span datafield="roleId" title="$.i18n('sec_role_id')" i18n="true"  visible="false" width="100"></span>
+	</div>
+	<div class="col-xs-12 text-center">			
+		<button class="btn btn-primary" type="button" onclick="addRoleFuncRelat()" ><span class="i18n">sec_role_add</span></button>
+		<button class="btn btn-primary" type="button" onclick="delFunc()" ><span class="i18n">sec_role_del</span></button>
+		<button class="btn btn-primary" type="button" onclick="modifyDate()" ><span class="i18n">sec_modify_date</span></button>
+		<button class="btn btn-primary" type="button" onclick="exportRelate()"><span class="i18n">sec_export_relatefunc</span></button>
+		<button class="btn btn-primary" type="button" onclick="exportAll()" ><span class="i18n">sec_export_allfunc</span></button>
+	</div>
+</div>
+
+
+	
+	
+<!-- popup div -->
+<div id="dateDiv" style="display: none" >
+	<div aeType="aeForm" id="DateForm" aeInit="true" class="form-horizontal">
+	 	<div class="form-group">
+			<label class="col-xs-2 control-label"><span class="i18n">sec_validdate</span></label>
+			<div class="col-xs-4">
+				<span aeType="aeCalendar" id="entValidDate" aeInit="true" dataField="entValidDate" showClear="true" ></span>
+			</div>
+			<label class="col-xs-2 control-label"><span class="i18n">sec_expiredate</span></label>
+			<div class="col-xs-4">				
+				<span aeType="aeCalendar" id="entExpireDate" aeInit="true" dataField="entExpireDate"  showClear="true"></span>
+			</div>			
+		</div>
+		<div class="form-group">
+		  	<div class="col-xs-12">
+				<span aeType="aeTextfield" id="entId" aeInit="true" dataField="entId" visible="false"></span>
+				<span aeType="aeTextfield" id="privId" aeInit="true" dataField="privId" visible="false"></span>
+				<span aeType="aeTextfield" id="roleId" aeInit="true" dataField="roleId" visible="false"></span>
+				<span aeType="aeTextfield" id="roleGrantId" aeInit="true" dataField="roleGrantId" visible="false"></span>
+			</div>
+		</div>	
+	</div>
+</div>
+
+</body>
+<script type="text/javascript">
+var condition = "";
+var selRoleId = [];
+var date="10";
+
+seajs.use('aries-main',function(){
+	  $.ajaxPost($.aries.service.secframe.getSecStaticData,'codeType=201309',function(data){
+      if(data&&data.length!=0){
+    	$.setPrivateData("_role_type",data);
+      	$("#roleType").aeCombo('reload',data); 
+      }
+	 },function(code,info){
+		 
+	 });
+	 //regionCode
+	 /*  var regionCodeComb =  $("#secRoleSearchForm").aeForm('getField','regionCode');
+	  $.ajaxPost($.aries.service.secframe.getSecStaticData,'codeType=50001',function(data){
+      if(data&&data.length!=0){
+      	regionCodeComb.aeCombo('reload',data); 
+      }
+	 },function(code,info){
+		 
+	 }); */
+	 
+});
+
+function roleTypeRenderer(colValue, rowData, rowIndex){
+	var text = "";
+	if(colValue){
+		var _role_type = $.getPrivateData("_role_type");
+		if(_role_type && $.isArray(_role_type) && _role_type.length){
+			for(var i = 0;i < _role_type.length;i++){
+				if(_role_type[i] && colValue == _role_type[i].codeId){
+					text = _role_type[i].codeName;
+					break;
+				}
+			}
+		}
+	}
+	return text;
+}
+
+
+function searchRole(){
+	var roleId = $("#secRoleSearchForm").aeForm('getValueByField','roleId');
+	var roleName =  $("#secRoleSearchForm").aeForm('getValueByField','roleName');
+	var roleType = $("#roleType").aeCombo('getValue');
+	var regionCode = $("#regionCode").aeCombo('getValue');
+	var cond = "".appendParam("roleName", roleName).appendParam("roleType", roleType)
+				 .appendParam("regionCode", regionCode).appendParam("roleId", roleId);	
+	/**
+	$.ajaxPost($.aries.service.secframe.refreshRoleByOper,null,function(data){
+		if(data){
+			 $('#secRoleSearchResultGrid').aeGrid('reload',data);
+		}
+	  },function(code,info){
+	     $.message.error("","load data fail,code:"+code+",info:"+info);
+	  }); 
+	*/
+	$('#secRoleSearchResultGrid').aeGrid('reload',$.aries.service.secframe.refreshRoleByOper,cond);
+}
+
+function search(){
+	    var selRows = $("#secRoleSearchResultGrid").aeGrid('getSelections',true);
+		if (null === selRows||selRows.length<=0)
+		{
+			$.message.alert("",$.i18n("sec_roleselect_select"));
+		    return;
+		}
+		var roleId = [];
+		for(var i=0;i<selRows.length;i++)
+		{
+			roleId[i] =selRows[i].roleId;
+			roleId[i] = roleId[i];
+			selRoleId[i] = roleId[i];
+		}
+		
+	    var cond = "".appendParam("roleId", roleId);
+	    $('#roleFuncGrid').aeGrid('reload',$.aries.service.secframe.refreshTree,cond);
+}
+
+
+function searchAuthored(){
+	    var selRows = $("#secRoleSearchResultGrid").aeGrid('getSelections',true);
+		if (null === selRows||selRows.length<=0)
+		{
+	    	$.message.alert("",$.i18n("sec_roleselect_select"));
+		    return;
+		}
+		var roleId = [];
+		for(var i=0;i<selRows.length;i++)
+		{
+			roleId[i] =selRows[i].roleId;
+			roleId[i] = roleId[i];
+			selRoleId[i] = roleId[i];
+		}
+		
+		var funcId = $("#roleFuncForm").aeForm('getValueByField','funcId');
+		var name =  $("#roleFuncForm").aeForm('getValueByField','name');
+		var param = "".appendParam("name", name).appendParam("roleId", roleId).appendParam("funcId", funcId);
+	
+	/**
+	//$.ajaxPost($.aries.service.secframe.refreshRoleEntitys,param,function(data){
+	$.ajaxPost($.aries.service.secframe.refreshTree,null,function(data){
+		if(data){
+			 $('#roleEntityGrid').aeGrid('reload',data);
+		}
+	  },function(code,info){
+	     $.message.error("","load data fail,code:"+code+",info:"+info);
+	  }); 
+	*/
+	
+	 $('#roleFuncGrid').aeGrid('reload',$.aries.service.secframe.searchTree,param);
+}
+
+function addRoleFuncRelat(){
+	var title = $.i18n('sec_authorablefunc_list'); 
+	var selRows = $("#secRoleSearchResultGrid").aeGrid('getSelections',true);
+	if (null == selRows||selRows.length<=0)
+	{
+    	$.message.alert("",$.i18n("sec_roleselect_select"));
+	    return;
+	}
+	var roleId = [];
+	for(var i=0;i<selRows.length;i++)
+	{
+		roleId[i] =selRows[i].roleId;
+		selRoleId[i] = roleId[i];
+	}
+	//$.aries.popup.openPage('/ARIESRES/secframe/sysmgr/role/NotContainRoleFunction.html',title,'800','600',{"draggable":true,"resizable":true});
+	$.openPopupPage("/ARIESRES/secframe/sysmgr/role/notContainRoleFunction.html",null,title,"","",{"draggable":true,"resizable":true});
+}
+
+function delFunc(){
+	var selRows =  $("#roleFuncGrid").aeGrid('getSelections',true);
+	if (null == selRows||selRows.length<=0){
+      	$.message.alert("",$.i18n("sec_authoredentity_select"));
+	    return;
+	}
+	
+	 var funcId = selRows[0].entId;
+	 var roleId= selRows[0].roleId;
+	 var param="".appendParam("roleId", roleId).appendParam("funcId", funcId);
+	 	$.message.confirm("",$.i18n.sec_confirm_delete,function(){
+				$.ajaxPost($.aries.service.secframe.delRoleFuncionAndChild,param,function(data){
+					$.message.success("",$.i18n("sec_delete_success"));
+					search();
+		 		},function(code,info){
+		 				$.message.error("",$.i18n('sec_del_fail'));
+		 			
+		 		});
+		 			
+		 	});
+			
+}	    
+
+function modifyDate(){
+	var selRows = $("#roleFuncGrid").aeGrid('getSelections',true);
+	var title = $.i18n('sec_modify_date');
+	if (null === selRows||selRows.length<=0)
+	{
+    	$.message.alert("",$.i18n("sec_modifyfunc_select"));
+	    return;
+	}
+	
+	var entId = selRows[0].entId;
+    var roleId = selRows[0].roleId;
+	var param ="".appendParam("roleId", roleId).appendParam("entId", entId);
+	
+	$.ajaxPost($.aries.service.secframe.getSecFuncByRole,param,function(data){
+	    	if(data){
+				 $('#DateForm').aeForm('reload',data);
+			}
+	    }); 
+	
+	//$.aries.popup.openDiv('dateDiv',title,'800','');
+	$.openPopupDiv('dateDiv',title,'','',{"onConfirm":"saveDate()","draggable":true,"resizable":true});		
+}
+
+function saveDate(){
+	var dateData = $("#DateForm").aeForm('getData');
+	var validDate = $("#DateForm").aeForm('getValueByField',"entValidDate");
+	var expireDate = $("#DateForm").aeForm('getValueByField',"entExpireDate");
+	
+	if(dateData===""||dateData===null){
+	   	 $.message.alert("",$.i18n('sec_role_nochange'));
+	   	 return;
+    }
+	
+	if(validDate>expireDate){
+		$.message.alert("",$.i18n("sec_date_confirm"));
+		return;
+	}
+	
+	var newdata = $.aries.common.setSaveDataState(dateData,false);
+    var savedata = [];
+    savedata.push($.parseJSON(newdata));
+
+    var param = "".appendParam("values", savedata);
+    
+    $.ajaxPost($.aries.service.secframe.saveLimit,param,function(data){
+		 $.message.success("",$.i18n("sec_save_ok"));
+		 searchAuthored();
+		 $.closePopupDiv();
+	 },function(code,info){
+				$.message.error("",$.i18n("sec_function_save_fail"));
+			
+		 
+ 		});
+}
+
+
+
+function exportRelate(){
+	$.message.alert("","导出关联菜单");
+}
+
+function exportAll(){
+	$.message.alert("","导出全量菜单");
+}
+</script>
+</html>

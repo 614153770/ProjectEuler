@@ -1,0 +1,215 @@
+/*index.html  by tangll 2016-5-20*/
+body{background-color: #fff;font-family:robotoregular;}
+/* .header img{margin-top: 35px;} */
+.header-info{float: right;}
+.header-info ul li.active{border-top: 3px solid #ffa800;}
+.header-info ul li{float: left;padding:0 25px;color: #fff;font-size: 18px; }
+.header-info ul li.active a{color: #ffa800;margin-top:-3px;display:block;}
+
+.header-info ul li a{color:#fff;}
+.header-back{
+    background: url("../img/Appengine_banner_1.png") right no-repeat #2a438f;
+    height: 545px;}
+.container{
+    width: 1190px;
+    margin:0 auto;
+}
+.container .appEngine-banner-info{margin-top: 40px;}
+.container .appEngine-banner-info h1{
+    font-size: 48px;
+    font-weight: bold;
+    color: #fff;}
+.container .appEngine-banner-info p{
+    font-family: robotolight;
+    font-size: 48px;
+    line-height: 1.2;
+    font-weight: normal;
+    color: #fff;
+}
+.appEngine-banner-info-btn{
+    height: 38px;
+    border-radius: 19px;
+    padding: 5px 25px;
+    color: #fff;
+    background: transparent;
+    border: 1px solid #fff;
+    margin-top: 30px;
+}
+.appEngine-banner-info-btn:hover,.appEngine-banner-info-btn:focus{
+    color: #fff;
+    background-color: #ffa800;
+    border-color:#ffa800 ;
+}
+.appEngine-product-filter-box{width: 100%;}
+.appEngine-product-filter {
+    height: 70px;
+    background-color: #f8f8f8;
+    line-height: 70px;
+}
+
+.appEngine-product-filter ul li {
+    float: left;
+    font-size: 24px;
+    height: 70px;
+    width: 33%;
+    text-align: center;
+    cursor: pointer;
+}
+.appEngine-product-filter ul li a{color:#333;}
+.appEngine-product-filter li.active a{ color: #ffa800;}
+.appEngine-product-filter li.active{border-bottom: 3px solid #ffa800;}
+.appEngine-product-filter .container{width: 50%;}
+.appEngine-paasIde{display:inline-block;height:150px;width: 150px;border-radius: 50%;margin: 30px 0;}
+.appEngine-paasIde img{
+    margin-top:25px;}
+.first-ide{background-color: #1891d6;}
+.second-ide{background-color: #31be52;}
+.third-ide{background-color: #07a1ab;}
+.fourth-ide{background-color: #9b6ed9;}
+
+
+/*image*/
+.appEngine-image-btn{background-color:#ffa800;height: 40px;border-radius: 25px;padding: 5px 20px;color: #fff; }
+.appEngine-image-btn:hover,.appEngine-image-btn:focus{
+    color: #fff;
+    background-color: #ffa800;
+    border-color:#ffa800 ;
+}
+.appEngine-image-btn i,.appEngine-image-btn span{color: #fff;margin-right: 5px;}
+.appEngine-image-container p{font-size: 16px;color: #666;}
+.appEngine-image-container,.appEngine-ide-container,.appEngine-saas-container{margin: 35px 0;}
+.appEngine-image-container p{line-height:1.1;}
+/* .appEngine-image-container .form-horizontal .form-group{ white-space: normal;margin-bottom:20px;}
+.appEngine-ide-container .form-horizontal .form-group{ white-space: normal;margin-bottom:20px;} */
+.col-xs-7 h1{font-size: 30px;}
+.col-xs-7 h1 span{height: 20px;font-size: 12px;margin-left: 20px;color: #fff;padding: 0 5px;border-radius: 2px;position: relative;bottom: 5px;font-family: robotobold;}
+.container-box{margin: 30px -30px;}
+.ide-discripation{padding: 0 30px;overflow: hidden}
+.appEngine-saas-container .container-box{margin:30px -20px;}
+.appEngine-saas-container .ide-discripation{padding:0 20px;}
+.standard{background-color: #0589c0;}
+.mini{background-color: #00af3a;}
+.description{min-height:100px;}
+.footer{height: 60px;border-top: 1px solid #ddd;text-align: center;line-height: 60px;font-size: 12px;color: #666;}
+.testCat{
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    box-shadow: 1px 2px 2px -1px #ddd;}
+ .testCat .backImg{
+     display:block;
+     height: 183px;
+     text-align: center;
+     background:url("../img/backImg.png") right top repeat #48b0d7;
+ }
+.testCat .backImg img{margin-top: 25px;}
+ .testCat-con{padding:15px 35px 35px; }
+ .testCat-con p{height:50px;color: #666;}
+.testCat-con h3{margin: 0 0 10px;font-size: 20px;}
+.testCat-con .btn{margin-top: 15px;}
+/*help*/
+.help-top-banner-bg{
+    height:410px;
+    background:#0f1415 url("../img/help-bg.jpg") no-repeat center;
+}
+.top-banner-info{
+    margin-top: 60px;
+    color: #fff;
+}
+.top-banner-info h1{
+    font-size:48px;
+    font-family:robotoregular;
+}
+.top-banner-info h2{
+    font-size:48px;
+    font-family: robotolight;
+
+}
+.top-banner-info p{
+    font-size: 18px;
+    padding:5px 0;
+}
+.top-banner-info p span{margin-right: 5px}
+.title{
+    margin-top:20px;
+    border-bottom:1px solid #ffa800;
+}
+.title-inner{
+    display:inline-block;
+    height:60px;
+    line-height:60px;
+    font-size:30px;
+    border-bottom:4px solid #ffa800;
+}
+.help-doc{
+
+}
+.help-doc-item{
+    margin:15px 0;
+    height:60px;
+}
+.help-doc-item .font-gray{
+    font-size:12px;
+}
+.help-doc-item-tit{
+    width:80%;
+    font-size:18px;
+    line-height: 1.6;
+}
+.help-doc-item-tit .downLoad-text{color:#ffa800;font-size:14px;}
+.font-gray{
+    color:#999;
+}
+.help-doc{margin-top:5px}
+.help-doc-item {
+    position: relative;
+    float: left;
+}
+.help-doc-item-info{
+    margin-left:70px
+}
+.help-doc-item-info .downLoad-text span{
+    margin-right: 5px;
+    margin-top: 4px;
+    display: inline-block;
+}
+.help-doc-item .a-link{
+    font-size: 14px;
+    margin-top:2px
+}
+.a-link:link,.a-link:visited,.a-link:hover,.a-link:active{
+    color: #ffa800;
+}
+.a-link:hover{
+    text-decoration: underline;
+}
+.img-box-bg{
+    position: absolute;
+    left:0;
+    display: inline-block;
+    width:60px;
+    height:60px;
+    border-radius: 50px;
+    background: #ffa800;
+}
+.img-box-bg span{
+    display: block;
+    font-size: 30px;
+    color: #fff;
+    margin: 15px 17px;
+}
+.video-box{
+    margin:30px -30px;
+}
+.video-file{
+    overflow: hidden;
+    padding-left: 30px;
+    padding-right: 30px;
+    height:190px;
+}
+.margin-40px{margin-right:40px}
+.product-signIn-btn{border-radius: 19px;height: 38px;padding: 0 25px;border: 1px solid #fff;background-color: transparent;color: #fff}
+.product-signIn-btn:hover,.product-signIn-btn:focus,.product-signIn-btn:visited{color: #fff;}
+.user-name{float: right;margin-left: 60px;color:#fff;}
+.user-name span {margin-right: 3px;}
+.header{height: 70px;line-height: 70px;}
+.header img{margin-top:25px;}

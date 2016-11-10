@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<link href="/ARIESRES/assets/aries/css/base/aries-base.css"rel="stylesheet" type="text/css" />
+<link href="/ARIESRES/assets/appEngine/css/common.css" rel="stylesheet" type="text/css" />
+<link href="/ARIESRES/assets/appEngine/css/signIn.css" rel="stylesheet" type="text/css" />
+<link href="/ARIESRES/assets/appEngine/css/main.css" rel="stylesheet" type="text/css" />
+<link href="/ARIESRES/assets/appEngine/css/font.css" rel="stylesheet" type="text/css" />
+<link href="/ARIESRES/assets/appEngine/css/font-md.css" rel="stylesheet" type="text/css" />
+<script src="/ARIESRES/assets/aries/lib/jquery.js"></script>
+<script src="/ARIESRES/assets/aries/main/sea.js"></script>
+<title>Register</title>
+</head>
+<body>
+<div id="global_loading1" class="modal fade in fx-loadingPage" style="display:none;">
+    <div class="modal-backdrop fade in" style="height: 100%">
+        <img src="/ARIESRES/assets/appEngine/img/loading-page.svg" class="loading-page" alt="">
+    </div>
+</div>
+<div aeType="aeForm" aeInit="true" class="form-horizontal">
+    <div class="sign-up-title">
+        <h3>Create a tenant </h3>
+    </div>
+    <div class="col-xs-10 d-center-vis" aeType="aeForm" id="userForm" aeInit="true">
+    	<div class="form-group">
+            <label class="col-xs-3 control-label"><span class="require">*</span>Tenant Name</label>
+            <div class="col-xs-4">
+               <span aeType="aeTextfield" id="customerName" aeInit="true"  datafield="tenantName" aeValidate="true" rules="{required:true}" isValidate="true" 
+               		showClear="true" emptyText="Please enter the tenant name" ></span>
+            </div>
+            <label class="col-xs-2 control-label">Currency</label>
+            <div class="col-xs-3">
+                  <span aeType="aeCombo" aeInit="true" showClear="true" datafield="currency"
+                  	 emptyText="Please select a currency" id="el_currency" value="USD"
+                  	 dataSource='[{"text":"USD","value":"$"},{"text":"RMB","value":"￥"}]'></span>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-xs-3 control-label">Language</label>
+            <div class="col-xs-4">
+                  <span aeType="aeCombo" aeInit="true" id="lang" showClear="true" datafield="lang"
+                  	 emptyText="Please select a language" value="en_US"
+                  	 dataSource='[{"text":"English","value":"en_US"},{"text":"Chinese","value":"zh_CN"}]'></span>
+            </div>
+            <label class="col-xs-2 control-label"><span class="require">*</span>Timezone</label>
+            <div class="col-xs-3">
+                  <span id="el_timezone" aeType="aeCombo" aeInit="true" showClear="true" datafield="timeZone"
+                  	 emptyText="Please select a timezone" value="%252B0000" aeValidate="true" rules="{required:true}"  isValidate="true"
+                  	 dataSource='[{"text":"Asia/Shanghai","value":"-0800"},{"text":"Europe/London","value":"%252B0000"}]'></span>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-xs-3 control-label"><span class="require">*</span>Logo</label>
+            <div class="col-xs-4">
+                <span aeType="aeCombo" aeInit="true" id="logo" showClear="true" datafield="logo" value="logo.png"
+                  	 emptyText="Please select a currency" aeValidate="true" rules="{required:true}" isValidate="true"
+                  	 dataSource='[{"text":"logo.png","value":"logo.png"},{"text":"cms-logo.png","value":"cms-logo.png"}]'></span>
+            </div>
+        </div>
+    </div>
+    
+</div>
+
+</body>
+<script type="text/javascript">
+seajs.use('aries-main',function(){
+	
+	$.popupConfirmEvent=function(event){
+		var custLoginId = $.cookie("login_customer_id");
+		var tenantId;
+		var tenant = $('#userForm').aeForm('getData'),cond,param;
+		tenant.timeOffset = $("#el_timezone").aeCombo('getDisplayText');
+		tenant.loginType = '3';
+		tenant.credentialType = 'password';
+		var obj = {
+				tenantName:tenant.tenantName,
+				currencyCode:tenant.currency,
+				preLanguage:tenant.lang,
+				timezone:tenant.timeOffset,
+				logo:tenant.logo	
+		};
+		
+		//非空校验
+		var validate = $("#userForm").validate();
+		if(!validate){
+			$.message.alert("",'please fill in the blanks which are necessary!');
+			return;	
+		}
+		var cond =  "".appendParam('prodOfferCode','IMAGE_Veris7.5_CC').appendParam('custLoginId',custLoginId).appendParam('orderType','anonymous').appendParam('tenant',obj);
+		$.aries.ajax.post($.aries.service.aso.addOrder, cond, function(data) {
+			$("#global_loading1").hide();
+			 $.message.success("","",function(){
+				 $.closeTextPopup();
+			 },function(code,info){
+			    $.message.error("","Operation fail，info:"+info.hub_value[0].code);
+	    });
+		}, function(code, info) {
+
+			$("#global_loading1").hide();
+			if(undefined==info.hub_value[0]){
+	             $.message.error("","Operation failed!");
+			 }else if("AISEC0002"==info.hub_value[0].code){
+			     $.message.error("","No service permission,please log in!");
+			 }else if("AISEC0003"==info.hub_value[0].code){
+			     $.message.error("","No service permission!");
+			 }else{
+	             $.message.error("","Operation failed,code:"+info.hub_value[0].code+",info:"+info.hub_value[0].value);
+			 }
+		
+		});
+		$("#global_loading1").show();
+		
+	};
+	
+});
+
+
+</script>
+</html>

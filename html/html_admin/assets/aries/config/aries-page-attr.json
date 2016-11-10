@@ -1,0 +1,26 @@
+{"pageAttr" : {
+	"veris7/Index.html" : {
+		"event" :
+			[{"value" : "product_btn", "type" : "onclick", "event" : "selectDevice", "desc" : "selectDevice"},
+			{"value" : "offering_btn", "type" : "onclick", "event" : "selectOffer", "desc" : "selectOffer"}],
+		"data" :
+			[{"io" : "out", "value" : "offering", "type" : "dom", "desc" : ""},
+		     {"io" : "out", "value" : "product", "type" : "js", "desc" : ""}]
+	},
+	"veris7/newsubscription/OneTimeFee.html" : {
+		"event" :
+			[{"value" : "confirmBtn", "type" : "onclick", "event" : "comfirm", "desc" : "comfirm"}],
+		"data" :
+			[{"io" : "out", "value" : "custOrderId", "type" : "dom", "desc" : ""},
+		     {"io" : "out", "value" : "payType", "type" : "js", "desc" : ""}]
+	},
+	"veris7/customer/queryOrganization.html" : {
+		"event" :
+			[{"value" : "product_btn", "type" : "onclick", "event" : "selectDevice", "desc" : "selectDevice"},
+			{"value" : "offering_btn", "type" : "onclick", "event" : "selectOffer", "desc" : "selectOffer"}],
+		"data" :
+			[{"io" : "out", "value" : "offering", "type" : "dom", "desc" : ""},
+		     {"io" : "out", "value" : "product", "type" : "js", "desc" : ""}]
+	}
+ }
+}

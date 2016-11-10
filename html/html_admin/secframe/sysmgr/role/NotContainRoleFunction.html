@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Not Contain Role Function</title>
+    <link href="/ARIESRES/assets/aries/css/base/aries-base.css" rel="stylesheet" type="text/css"/>
+    <script src="/ARIESRES/assets/aries/lib/jquery.js"></script>
+    <script src="/ARIESRES/assets/aries/main/sea.js"></script>
+</head>
+<body>
+<div id="associablePanel" aeType="aePanel" aeInit="true" level="4" title="Associable Menu Search">
+	<div aeType="aeForm" id="notContainRoleFuncForm" aeInit="true" class="form-horizontal">
+	 	<div class="form-group">
+			<label class="col-xs-2 control-label">Menu Name</label>
+			<div class="col-xs-4">
+				<span aeType="aeTextfield" id="nameMenu" aeInit="true" dataField="name"  ></span>
+			</div>
+			<label class="col-xs-2 control-label">Menu ID</label>
+			<div class="col-xs-4">				
+				<span aeType="aeTextfield" id="funcIdMenu" aeInit="true" dataField="funcId"  ></span>
+			</div>			
+		</div>
+		<div class="col-xs-12 text-right">
+			<button class="btn btn-primary" type="button" onclick="searchAuthorable()" ><span class="i18n">sec_query</span></button>
+		</div>
+	</div>
+</div>
+<div id="associableListPanel" aeType="aePanel" aeInit="true" level="4" title="Associable Menu List">
+	<div id="notContainRoleFuncGrid" aeType="aeGrid" aeInit="true"
+		datafield="" isPaging="false" 
+		pagingAlign="right" height="300px" showIndex="false"
+		singleSelect="false" singleRowClass="false"
+		treeTable = "true" treeColumn = "name" treeIdField="funcId" treePidField="parentId"	treeShowCheck = "true">
+		<span datafield="name" title="$.i18n('sec_func_name')" i18n="true"  width="100"></span> 
+		<span datafield="funcId" title="$.i18n('sec_func_id')" i18n="true" width="100" ></span> 
+		<span datafield="entValidDate" title="$.i18n('sec_validdate')" i18n="true" width="100"></span> 
+		<span datafield="entExpireDate" title="$.i18n('sec_expiredate')" i18n="true" width="100" ></span> 
+		<span datafield="entClassId" title="" i18n="true"  width="100"></span>
+		
+		<span datafield="roleId" title=""  i18n="true"  visible="false"></span>
+		<span datafield="roleType" title="" i18n="true"  visible="false"></span>
+		<span datafield="authorType" title="" i18n="true"  visible="false"></span>
+		<span datafield="state" title="" i18n="true"  visible="false"></span>
+		<span datafield="authorValidDate" title="" i18n="true"  visible="false"></span>
+		<span datafield="authorExpireDate" title="" i18n="true"  visible="false"></span>
+		<span datafield="notes"  i18n="true" title="" visible="false"></span>
+		<span datafield="domainId"  i18n="true" title="" visible="false"></span>
+	</div>
+</div>
+
+
+
+</body>
+<script type="text/javascript">
+seajs.use('aries-main',function(){
+	
+});
+
+function searchAuthorable(){
+	var funcId = $("#notContainRoleFuncForm").aeForm('getValueByField','funcId');
+	var name =  $("#notContainRoleFuncForm").aeForm('getValueByField','name');
+	var param = "".appendParam("name", name).appendParam("ids", selRoleId)
+				  .appendParam("funcId", funcId).appendParam("date", date);
+
+		/**
+	    $.aries.ajax.post($.aries.service.secframe.refreshRoleEntitys,param,function(data){
+			if(data){
+				 $('#notContainRoleFuncGrid').aeGrid('reload',data);
+			}
+		  },function(code,info){
+		     $.message.error("","load data fail,code:"+code+",info:"+info);
+		  }); 
+		*/
+ 	 $('#notContainRoleFuncGrid').aeGrid('reload',$.aries.service.secframe.searchAuthorTree,param);
+}
+
+$.popupConfirmEvent=function(event){
+	var selRows = $("#notContainRoleFuncGrid").aeGrid('getSelections',true);
+	if (null === selRows||selRows.length<=0)
+  	{
+      	$.message.alert("",$.i18n.sec_author_function);
+	    return;
+	}
+	
+    for (var i = 0 ;i<selRows.length;i++)
+    {
+    	var validDate = selRows[i].entValidDate;
+		var expireDate = selRows[i].entExpireDate;
+		if(validDate>expireDate){
+			$.message.alert("",$.i18n("sec_date_confirm"));
+			return;
+		}
+		//$("#notContainRoleFuncGrid")。aeGrid("setValue",selRows[i], "entClassId", "-1");
+    }
+    
+    var newdata = $.aries.common.setSaveDataState(selRows,true);
+    var param = "".appendParam("roleId", selRoleId).appendParam("voValues", newdata);
+    $.ajaxPost($.aries.service.secframe.addAuthor,param,function(){
+   		   $.message.success("",$.i18n("sec_save_ok"));
+   			search();
+   			searchAuthorable();
+   			$.closePopupPage();
+   		},function(code,info){
+   				$.message.error("",$.i18n('sec_save_fail'));
+   			
+   			
+   		});
+	
+};
+
+</script>
+</html>

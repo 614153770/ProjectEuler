@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Role Manager</title>
+    <link href="/ARIESRES/assets/aries/css/base/aries-base.css" rel="stylesheet" type="text/css"/>
+    <script src="/ARIESRES/assets/aries/lib/jquery.js"></script>
+    <script src="/ARIESRES/assets/aries/main/sea.js"></script>
+</head>
+<body>
+<div id="searchPanel" aeType="aePanel" aeInit="true" level="4" title="Function Set Search">
+	<div aeType="aeForm" id="secRoleSearchForm" aeInit="true" class="form-horizontal">
+	 	<div class="form-group">
+			<label class="col-xs-2 control-label">ID</label>
+			<div class="col-xs-4">
+				<span aeType="aeTextfield" id="roleId" aeInit="true" dataField="roleId"  ></span>
+			</div>
+			<label class="col-xs-2 control-label">Function Set Name</label>
+			<div class="col-xs-4">				
+				<span aeType="aeTextfield" id="roleName" aeInit="true" dataField="roleName"  ></span>
+			</div>			
+		</div>
+		<div class="form-group">
+			<label class="col-xs-2 control-label">Function Set Type</label>
+			<div class="col-xs-4">
+				<span aeType="aeCombo" id="roleType" aeInit="true" dataField="roleType"  valueField="codeId" optionField="codeName" ></span>
+			</div>
+			<label class="col-xs-2 control-label">Attribution City</label>
+			<div class="col-xs-4">				
+				<span aeType="aeCombo" id="regionCode" aeInit="true" dataField="regionCode" valueField="codeId" optionField="codeName" ></span>
+			</div>			
+		</div>
+		<div class="col-xs-12 text-right">
+			<button class="btn btn-primary" type="button" onclick="search()" ><span class="i18n">sec_query</span></button>
+		 </div>
+	</div>
+</div>
+<div id="listPanel" aeType="aePanel" aeInit="true" level="4" title="Available Function Set List">
+	<div id="secRoleSearchResultGrid" aeType="aeGrid" aeInit="true"
+		datafield="" isPaging="true" pagingSize="5"
+		height="300px" pagingAlign="right" showIndex="false"
+		singleSelect="true"  singleRowClass="false" singleRowClass="false" onRowClick="loadRoleDetail">
+		<span datafield="roleId" title="$.i18n('sec_role_id')"  i18n="true" width="100" align="center" ></span>
+		<span datafield="roleName" title="$.i18n('sec_role_name')" i18n="true" width="100" align="center" ></span> 
+		<span datafield="roleType" title="$.i18n('sec_role_type')" i18n="true" width="100" align="center"  renderer="roleTypeRenderer"></span>
+		<span datafield="regionCode" title="$.i18n('sec_role_district')" i18n="true" width="100" align="center"  renderer="regionCodeRenderer"></span>
+	</div>
+</div>
+<div id="detailPanel" aeType="aePanel" aeInit="true" level="4" title="Function Set Detail">
+	<div aeType="aeForm" id="secRoleDetilForm" aeInit="true" class="form-horizontal">
+	 	<div class="form-group">
+			<label class="col-xs-2 control-label"><span class="require">*</span>Function Set Name</label>
+			<div class="col-xs-4">				
+				<span aeType="aeTextfield" id="roleNameDetail" aeInit="true" dataField="roleName"  
+				aeValidate="true" rules="{required:true,messages:{required:'Please Input the Function Set Name'}}"></span>
+			</div>
+			<label class="col-xs-2 control-label"><span class="require">*</span>Function Set Type</label>
+			<div class="col-xs-4">
+				<span aeType="aeCombo" id="roleTypeDetail" aeInit="true" dataField="roleType"  valueField="codeId" optionField="codeName" 
+				aeValidate="true" rules="{required:true,messages:{required:'Please Select the Function Set Type'}}"></span>
+			</div>			
+		</div>
+		<div class="form-group">
+		  	<div class="col-xs-6">
+				<span aeType="aeTextfield" id="domainIdDetail" aeInit="true" dataField="domainId" visible="false"></span>
+				<span aeType="aeTextfield" id="roleIdDetail" aeInit="true" dataField="roleId" visible="false"></span>
+				<span aeType="aeCombo" id="regionCodeDetail" aeInit="true" dataField="regionCode" valueField="codeId" optionField="codeName" visible="false"></span>
+			</div>
+		</div>
+		<div class="col-xs-12 text-center">			
+			<button class="btn btn-primary" type="button" onclick="addRole()" id="addBtn"><span class="i18n">sec_role_add</span></button>
+			<button class="btn btn-primary" type="button" onclick="updateRole()" id="updateBtn"><span class="i18n">sec_role_update</span></button>
+			<button class="btn btn-primary" type="button" onclick="saveRole()" id="saveBtn"><span class="i18n">sec_role_save</span></button>
+			<button class="btn btn-primary" type="button" onclick="delRole()" id="delBtn"><span class="i18n">sec_role_del</span></button>
+			<button class="btn btn-primary" type="button" onclick="copyRole()" id="copyRoleBtn"><span class="i18n">sec_copyPrivilege</span></button>
+		</div>
+	</div>
+</div>
+
+
+</body>
+<script type="text/javascript">
+var destRoleIdAndEntType;
+var flag;
+
+seajs.use('aries-main',function(){	
+	  //roleType
+	  $.ajaxPost($.aries.service.secframe.getSecStaticData,'codeType=201309',function(data){
+       if(data&&data.length!=0){
+    	   $.removePrivateData("_role_type");
+    	   $.setPrivateData("_role_type",data);
+    	   $("#roleType").aeCombo('reload',data); 
+    	   $("#roleTypeDetail").aeCombo('reload',data); 
+       }
+	 },function(code,info){
+		 
+	 });
+	  
+	 //regionCode
+	  $.ajaxPost($.aries.service.secframe.getSecStaticData,'codeType=50001',function(data){
+       if(data&&data.length!=0){
+    	   $.removePrivateData("_region_code");
+    	   $.setPrivateData("_region_code",data);
+    	   $("#regionCode").aeCombo('reload',data); 
+    	   $("#regionCodeDetail").aeCombo('reload',data); 
+       }
+	 },function(code,info){
+		 
+	 });
+	  $("#secRoleDetilForm").aeForm('reload',[]);
+	$("#secRoleDetilForm").aeForm('setEditSts',false);
+	initButton();
+});
+
+function roleTypeRenderer(colValue, rowData, rowIndex){
+	var text = "";
+	if(colValue){
+		var _role_type = $.getPrivateData("_role_type");
+		if(_role_type && $.isArray(_role_type) && _role_type.length){
+			for(var i = 0;i < _role_type.length;i++){
+				if(_role_type[i] && colValue == _role_type[i].codeId){
+					text = _role_type[i].codeName;
+					break;
+				}
+			}
+		}
+	}
+	return text;
+}
+
+
+function regionCodeRenderer(colValue, rowData, rowIndex){
+	var text = "";
+	if(colValue){
+		var _region_code = $.getPrivateData("_region_code");
+		if(_region_code && $.isArray(_region_code) && _region_code.length){
+			for(var i = 0;i < _region_code.length;i++){
+				if(_region_code[i] && colValue == _region_code[i].codeId){
+					text = _region_code[i].codeName;
+					break;
+				}
+			}
+		}
+	}
+	return text;
+}
+
+//初始化按钮
+function initButton(){
+	$.disabledButton("updateBtn",true);
+	$.disabledButton("addBtn",false);
+	$.disabledButton("saveBtn",true);
+	$.disabledButton("delBtn",true);
+	$.disabledButton("copyRoleBtn",true);
+}
+
+
+
+function search(){
+	var roleId = $("#secRoleSearchForm").aeForm('getValueByField','roleId');
+	var roleName =  $("#secRoleSearchForm").aeForm('getValueByField','roleName');
+	var roleType = $("#roleType").aeCombo('getValue');
+	var regionCode = $("#regionCode").aeCombo('getValue');
+	
+	var cond = "".appendParam("roleName", roleName).appendParam("roleType", roleType)
+				 .appendParam("regionCode", regionCode).appendParam("roleId", roleId);
+	
+	 /* $.ajaxPost($.aries.service.secframe.refreshRoleByOper,cond,function(data){
+		if(data){
+			 $('#secRoleSearchResultGrid').aeGrid('reload',data);
+		}
+	  },function(code,info){
+	     $.message.error("","load data fail,code:"+code+",info:"+info);
+	  }); */ 
+	
+	 $('#secRoleSearchResultGrid').aeGrid('reload',$.aries.service.secframe.refreshRoleByOper,cond);
+}
+
+function loadRoleDetail(rowIndex,rowData,event){
+		$.disabledButton("updateBtn",false);
+		$.disabledButton("addBtn",false);
+		$.disabledButton("saveBtn",false);
+		$.disabledButton("delBtn",false);
+		$.disabledButton("copyRoleBtn",false);
+	    var selRoleId = rowData.roleId;
+	    if (null === selRoleId || selRoleId ==="")
+	    {
+	      $.message.alert("",$.i18n("sec_role_sel_one_role"));
+	       return;
+	    }
+	   var cond = "".appendParam("roleId",selRoleId);
+	   $.ajaxPost($.aries.service.secframe.querySecRoleById,cond,function(data){
+	    	if(data){
+				 $('#secRoleDetilForm').aeForm('reload',data);
+			}
+	    }); 
+		$("#secRoleDetilForm").aeForm('setEditSts',false);	
+}
+
+
+
+function addRole(){
+	flag =true;
+	$.disabledButton("updateBtn",true);
+	$.disabledButton("addBtn",true);
+	$.disabledButton("saveBtn",false);
+	$.disabledButton("delBtn",true);
+	$.disabledButton("copyRoleBtn",true);
+		
+	$("#secRoleDetilForm").aeForm('setEditSts',true);
+	$("#secRoleDetilForm").aeForm('setValueByField','roleId','-1');
+	$("#secRoleDetilForm").aeForm('setValueByField','roleName','');
+	$("#secRoleDetilForm").aeForm('setValueByField','roleType','');
+	$("#secRoleDetilForm").aeForm('setValueByField','regionCode','');
+	$("#secRoleDetilForm").aeForm('setValueByField','domainId','0');
+	//$("#secRoleDetilForm").aeForm('clear');
+}
+
+function updateRole(){
+	flag = false;
+	$.disabledButton("addBtn",true);
+	$.disabledButton("saveBtn",false);
+	$.disabledButton("delBtn",true);
+	$("#secRoleDetilForm").aeForm('setEditSts',true);
+}
+
+
+function saveRole(){
+	
+	//var roleName =  $("#secRoleDetilForm").aeForm('getValueByField','roleName');
+	//var roleType = $("#roleTypeDetail").aeCombo("getValue");
+	/* if(roleName === "" || roleName === null){
+		$.message.alert("",$.i18n("sec_rolename_notnull"));
+		return;
+	}
+	
+	if(roleType === "" || roleType === null){
+		$.message.alert("",$.i18n("sec_roletype_notnull"));
+		return;
+	} */
+	
+	var roleData=$("#secRoleDetilForm").aeForm('getData');
+    if(roleData===""||roleData==null){
+	   	 $.message.alert("",$.i18n('sec_role_nochange'));
+	   	 return;
+    } 
+    
+    var validate = $("#secRoleDetilForm").validate();
+    if(!validate){
+    	return;
+    }
+    var newdata = $.aries.common.setSaveDataState(roleData,flag);
+    var savedata = [];
+    savedata.push($.parseJSON(newdata));
+
+   var param = "".appendParam("roleValue", savedata);
+   $.ajaxPost($.aries.service.secframe.saveRole,param,function(data){
+		 $.message.success("",$.i18n("sec_role_save_ok"));
+		    $("#secRoleDetilForm").aeForm('setEditSts',false);
+			$("#secRoleDetilForm").aeForm('clear');
+			$.disabledButton("addBtn",false);
+		    search();
+		},function(code,info){
+				$.message.error("",$.i18n('sec_save_fail'));
+			
+			
+			//$.disabledButton("addBtn",false);
+		});
+	
+}
+
+
+function delRole(){
+		var delRoleId =  $("#secRoleDetilForm").aeForm('getValueByField','roleId');
+		var param = "".appendParam("delRoleId", Number(delRoleId)); 
+		 $.ajaxPost($.aries.service.secframe.delRole,param,function(){
+			    $.message.success("",$.i18n("sec_role_del_ok"));
+			    $("#secRoleDetilForm").aeForm('setEditSts',false);
+				$("#secRoleDetilForm").aeForm('clear');
+				$("#secRoleDetilForm").aeForm('reload');
+			    search();
+			},function(code,info){
+					$.message.error("",$.i18n('sec_del_fail'));
+				
+				
+			});
+}
+
+function copyRole(){
+	destRoleIdAndEntType =  $("#secRoleDetilForm").aeForm('getValueByField','roleId');
+	var title = $.i18n("sec_roleselect_title");
+	if(destRoleIdAndEntType === null || "" === destRoleIdAndEntType){
+		$.message.alert("",$.i18n("sec_role_sel_one_role"));
+    	return;
+	}else{
+		$.openPopupPage("/ARIESRES/secframe/sysmgr/role/roleSelect.html",null,title,"","",{"draggable":true,"resizable":true});
+	}
+}
+
+
+
+
+</script>
+</html>

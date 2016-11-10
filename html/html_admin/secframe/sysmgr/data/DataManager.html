@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Data Permission Manager</title>
+    <link href="/ARIESRES/assets/aries/css/base/aries-base.css" rel="stylesheet" type="text/css"/>
+    <script src="/ARIESRES/assets/aries/lib/jquery.js"></script>
+    <script src="/ARIESRES/assets/aries/main/sea.js"></script>
+</head>
+<body>
+<div id="searchPanel" aeType="aePanel" aeInit="true" level="4" title="Search Condition">
+	<div aeType="aeForm" id="secDataSearchForm" aeInit="true" class="form-horizontal">
+	 	<div class="form-group">
+			<label class="col-xs-2 control-label">ABO Code</label>
+			<div class="col-xs-4">
+				<span aeType="aeTextfield" id="aboCode" aeInit="true" dataField="aboCode"  ></span>
+			</div>
+			<label class="col-xs-2 control-label">Attribute Code</label>
+			<div class="col-xs-4">				
+				<span aeType="aeTextfield" id="attrCode" aeInit="true" dataField="attrCode"  ></span>
+			</div>			
+		</div>
+		<div class="form-group">
+			<label class="col-xs-2 control-label">Data Control Type</label>
+			<div class="col-xs-4">
+				<span aeType="aeCombo" id="controlType" aeInit="true" dataField="controlType" ></span>
+			</div>
+			<div class="col-xs-6 text-right">
+				<button class="btn btn-primary" type="button" onclick="search()" ><span class="i18n">sec_query</span></button>
+		 	</div>			
+		</div>		
+	</div>
+</div>
+<div id="listPanel" aeType="aePanel" aeInit="true" level="4" title="Result List">
+	<div id="secDataSearchResultTable" aeType="aeGrid" aeInit="true"
+	    datafield="" isPaging="false"   editable="false"
+	    width="100%" height="300" pagingAlign="right"
+	    showIndex="false" singleSelect="true" 
+	    i18n="true"     singleRowClass="false"  onRowClick="loadDataDetail">
+	    <span dataField="attrId" title="$.i18n('sec_data_attrid')" i18n="true" width="50" align="center"></span>
+	    <span dataField="controlType" title="$.i18n('sec_data_controltype')" i18n="true" width="100" align="center" renderer="controlTypeRenderer"></span>
+	    <span dataField="attrCode" title="$.i18n('sec_data_attrcode')" i18n="true"  width="80" align="center"></span>
+	    <span dataField="attrName" title="$.i18n('sec_data_attrname')" i18n="true" width="80" align="center"></span>
+	    <span dataField="aboCode" title="$.i18n('sec_data_abocode')" i18n="true" width="200" align="center"></span>
+	    <span dataField="controlValue" title="$.i18n('sec_data_controlvalue')" i18n="true" width="80" align="center"></span>
+	    <span dataField="dataId" title="$.i18n('sec_data_dataid')" i18n="true"  visible="false"></span>
+	</div>
+</div>
+<div id="detailPanel" aeType="aePanel" aeInit="true" level="4" title="Owner Permission Detail">
+	<div aeType="aeForm" id="dataDetailForm" aeInit="true" class="form-horizontal">
+	 	<div class="form-group">
+			<label class="col-xs-2 control-label"><span class="require">*</span>Data Control Type</label>
+			<div class="col-xs-4">
+				<span aeType="aeCombo" id="controlTypeDetail" aeInit="true" dataField="controlType" 
+				aeValidate="true" rules="{required:true,messages:{required:'Please select controlType!'}}" isValidate="true"></span>
+			</div>			
+		</div>
+	 	<div class="form-group">
+			<label class="col-xs-2 control-label"><span class="require">*</span>ABO Code</label>
+			<div class="col-xs-4">
+				<span aeType="aeTextfield" id="aboCodeDetail" aeInit="true" dataField="aboCode" 
+				aeValidate="true" rules="{required:true,messages:{required:'Please enter aboCode!'}}" isValidate="true" ></span>
+			</div>
+			<label class="col-xs-2 control-label"><span class="require">*</span>Attribute Code</label>
+			<div class="col-xs-4">				
+				<span aeType="aeTextfield" id="attrCodeDetail" aeInit="true" dataField="attrCode" 
+				aeValidate="true" rules="{required:true,messages:{required:'Please enter attrCode!'}}" isValidate="true" ></span>
+			</div>			
+		</div>
+		<div class="form-group">
+			<label class="col-xs-2 control-label">Attribute Name</label>
+			<div class="col-xs-4">
+				<span aeType="aeTextfield" id="attrNameDetail" aeInit="true" dataField="attrName"  ></span>
+			</div>
+			<label class="col-xs-2 control-label">Data Control Value</label>
+			<div class="col-xs-4">				
+				<span aeType="aeTextfield" id="controlValueDetail" aeInit="true" dataField="controlValue"  ></span>
+			</div>			
+		</div>
+		<div class="form-group">
+			<div class="col-xs-4">
+				<span aeType="aeTextfield" id="dataIdDetail" aeInit="true" dataField="dataId" visible="false" ></span>
+				<span aeType="aeTextfield" id="attrIdDetail" aeInit="true" dataField="attrId"  visible="false"></span>
+				<span aeType="aeTextfield" id="controlValueIdDetail" aeInit="true" dataField="controlValueId" visible="false" ></span>
+			</div>
+		</div>
+		<div class="col-xs-12 text-center">
+			<button class="btn btn-primary" type="button" onclick="updateData()" id="updateBtn"><span class="i18n">sec_role_update</span></button>
+			<button class="btn btn-primary" type="button" onclick="addData()" id="addBtn"><span class="i18n">sec_role_add</span></button>
+			<button class="btn btn-primary" type="button" onclick="saveData()" id="saveBtn"><span class="i18n">sec_role_save</span></button>
+			<button class="btn btn-primary" type="button" onclick="delData()" id="delBtn"><span class="i18n">sec_role_del</span></button>
+		</div>		
+	</div>
+</div>
+
+	
+</body>
+<script type="text/javascript">
+seajs.use('aries-main',function(){
+	//初始化下拉选项
+	var controlType = '[{"value":"R","text":"Row Authorization"},{"value":"C","text":"Column Authorization"},{"value":"W","text":"Write Authorization"}]';
+	$("#controlType").aeCombo('reload',$.parseJSON(controlType));
+	$("#controlTypeDetail").aeCombo('reload',$.parseJSON(controlType));
+	
+	var flag = true;
+	var controlType_1 = $("#controlType").aeCombo('getValue');
+	var controlType_2 = $("#controlTypeDetail").aeCombo('getValue');
+	//初始化按钮
+	$("#dataDetailForm").aeForm('reload',[]);
+	$("#dataDetailForm").aeForm('setEditSts',false);
+	initButton();
+});
+
+function initButton(){
+	$.disabledButton("updateBtn",true);
+	$.disabledButton("addBtn",false);
+	$.disabledButton("saveBtn",true);
+	$.disabledButton("delBtn",true);
+}
+
+
+function controlTypeRenderer(colValue, rowData, rowIndex){
+	switch(colValue){
+	case "R": return "Row Authorization";break;
+	
+	case "C": return "Column Authorization";break;
+	
+	case "W": return "Write Authorization";break;
+	
+	default: break;
+	
+	}
+	
+}
+
+function search(){
+	var attrCode = $('#secDataSearchForm').aeForm('getValueByField','attrCode');
+	attrCode=$.trim(attrCode);
+	var aboCode = $('#secDataSearchForm').aeForm('getValueByField','aboCode');
+	var controlType = $('#controlType').aeCombo('getValue');
+    var cond = "".appendParam("attrCode",attrCode).appendParam("aboCode",aboCode).appendParam("controlType",controlType);
+    $.ajaxPost($.aries.service.secframe.refreshData,cond,function(data){
+		if(data){
+			$("#secDataSearchResultTable").aeGrid('reload',data);
+		}
+	  },function(code,info){
+			$.message.error("",$.i18n('sec_search_fail')); 
+			
+		  
+	});   
+} 
+
+function loadDataDetail(rowIndex, rowData, event){
+	$.disabledButton("updateBtn",false);
+	$.disabledButton("addBtn",false);
+	$.disabledButton("saveBtn",true);
+	$.disabledButton("delBtn",false);
+	var dataId=rowData.dataId;
+	var cond = "".appendParam("dataId",dataId);
+	if (null == dataId || dataId =="")
+    {
+       $.message.alert("",$.i18n('sec_data_sel_one_data'));
+       return;
+    }
+	$.ajaxPost($.aries.service.secframe.getDataABOValueByDataId,cond,function(data){
+		if(data){
+			$("#dataDetailForm").aeForm('reload',data);
+		}
+	  },function(code,info){
+			$.message.error("",$.i18n('sec_search_fail'));
+			
+		  
+	});
+	$("#dataDetailForm").aeForm('setEditSts',false);
+	
+}
+
+function updateData(){
+	flag = false;
+	$.disabledButton("updateBtn",true);
+	$.disabledButton("addBtn",true);
+	$.disabledButton("saveBtn",false);
+	$.disabledButton("delBtn",true);
+	$("#dataDetailForm").aeForm('setEditSts',true);
+	
+}
+
+function addData(){
+	flag = true;
+	$.disabledButton("updateBtn",true);
+	$.disabledButton("addBtn",true);
+	$.disabledButton("saveBtn",false);
+	$.disabledButton("delBtn",true);
+	$("#dataDetailForm").aeForm('setEditSts',true);
+	$("#dataDetailForm").aeForm('setValueByField','dataId','-1');
+	$("#dataDetailForm").aeForm('setValueByField','attrName','');
+	$("#dataDetailForm").aeForm('setValueByField','attrCode','');
+	$("#dataDetailForm").aeForm('setValueByField','controlType','');
+	$("#dataDetailForm").aeForm('setValueByField','aboCode','');
+	$("#dataDetailForm").aeForm('setValueByField','controlValue','');
+	
+}
+
+function saveData(){
+	 var validate = $("#dataDetailForm").validate();
+     if(!validate){
+    	 return;
+     }
+     var param=$("#dataDetailForm").aeForm('getData');
+     if(param==""||param==null){
+    	 $.message.alert("",$.i18n('sec_role_nochange'));
+    	 return;
+     }
+     var newdata = $.aries.common.setSaveDataState(param,flag);
+     var voValue = "".appendParam("voValue",newdata);
+     $.ajaxPost($.aries.service.secframe.saveData,voValue,function(data){
+ 			$.message.success("",$.i18n('sec_save_ok'));
+ 			$("#dataDetailForm").aeForm('setEditSts',false);
+ 			$("#dataDetailForm").aeForm('clear');
+ 			initButton();
+ 			search();
+ 		
+ 	  },function(code,info){
+			 $.message.error("",$.i18n('sec_save_fail'));
+		 
+ 	});
+
+    
+	 
+}
+
+function delData(){	
+	$("#dataDetailForm").aeForm('setValueByField','attrName','0');
+	var param=$("#dataDetailForm").aeForm('getData');
+	var newdata = $.aries.common.setSaveDataState(param);
+	var voValue = "".appendParam("voValue",newdata);
+	$.ajaxPost($.aries.service.secframe.delData,voValue,function(){
+
+			$.message.success("",$.i18n('sec_del_ok'));
+			$("#dataDetailForm").aeForm('setEditSts',false);
+			$("#dataDetailForm").aeForm('clear');
+			$("#dataDetailForm").aeForm('reload');
+			search();
+			initButton();
+		
+	  },function(code,info){
+			$.message.error("",$.i18n('sec_delete_fail'));
+			
+		
+		
+	});
+   
+	
+}
+
+
+
+</script>
+</html>

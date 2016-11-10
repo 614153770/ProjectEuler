@@ -1,0 +1,1 @@
+var menu_urls = {'Init':'http://10.1.242.88:30162/admin/envControl.html', 'Orders':'http://10.1.242.88:30162/admin/order.html','Permission':'http://10.1.242.88:30162/secframe/AuthMain.html'}

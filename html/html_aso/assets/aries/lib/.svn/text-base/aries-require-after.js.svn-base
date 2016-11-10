@@ -1,0 +1,1 @@
+define(function(require,exports,modules){require("./aries-base");require("./aries-ui");$.aries.common.globalInit();});

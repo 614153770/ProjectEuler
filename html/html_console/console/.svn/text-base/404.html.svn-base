@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title>404</title>
+    <link href="/ARIESRES/assets/aries/css/base/aries-base.css" rel="stylesheet" type="text/css">
+    <link href="/ARIESRES/crm-bj/fe-common/css/extend.min.css" rel="stylesheet" type="text/css">
+    <link href="/ARIESRES/crm-bj/agentview/css/agent-view-frame.css" rel="stylesheet" type="text/css">
+</head>  
+	<body>
+		<div class="wrap-404">
+			<p class="text-404">404</p>
+			<p class="not-found-text">Sorry this page isn't avaliable</p>
+			<p class="not-found-reason">The link you followed may be broken,or the page may have been removed</p>
+			<button class="btn btn-primary btn-lg" type="button">BACK TO LAST PAGE</button>
+		</div>
+	</body>
+</html>	

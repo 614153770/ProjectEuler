@@ -1,0 +1,83 @@
+K 25
+svn:wc:ra_dav:version-url
+V 81
+/svn/AppEngine/!svn/ver/35329/ASO/trunk/saas/web/html/html_admin/assets/aries/lib
+END
+aries-core.js
+K 25
+svn:wc:ra_dav:version-url
+V 95
+/svn/AppEngine/!svn/ver/35329/ASO/trunk/saas/web/html/html_admin/assets/aries/lib/aries-core.js
+END
+webuploader.js
+K 25
+svn:wc:ra_dav:version-url
+V 96
+/svn/AppEngine/!svn/ver/35329/ASO/trunk/saas/web/html/html_admin/assets/aries/lib/webuploader.js
+END
+aries-base.js
+K 25
+svn:wc:ra_dav:version-url
+V 95
+/svn/AppEngine/!svn/ver/35329/ASO/trunk/saas/web/html/html_admin/assets/aries/lib/aries-base.js
+END
+jquery-scroll.js
+K 25
+svn:wc:ra_dav:version-url
+V 98
+/svn/AppEngine/!svn/ver/35329/ASO/trunk/saas/web/html/html_admin/assets/aries/lib/jquery-scroll.js
+END
+aries-require-after.js
+K 25
+svn:wc:ra_dav:version-url
+V 104
+/svn/AppEngine/!svn/ver/35329/ASO/trunk/saas/web/html/html_admin/assets/aries/lib/aries-require-after.js
+END
+aries-require-before.js
+K 25
+svn:wc:ra_dav:version-url
+V 105
+/svn/AppEngine/!svn/ver/35329/ASO/trunk/saas/web/html/html_admin/assets/aries/lib/aries-require-before.js
+END
+jquery-metadata.js
+K 25
+svn:wc:ra_dav:version-url
+V 100
+/svn/AppEngine/!svn/ver/35329/ASO/trunk/saas/web/html/html_admin/assets/aries/lib/jquery-metadata.js
+END
+aries-ui.js
+K 25
+svn:wc:ra_dav:version-url
+V 93
+/svn/AppEngine/!svn/ver/35329/ASO/trunk/saas/web/html/html_admin/assets/aries/lib/aries-ui.js
+END
+echarts-all.js
+K 25
+svn:wc:ra_dav:version-url
+V 96
+/svn/AppEngine/!svn/ver/35329/ASO/trunk/saas/web/html/html_admin/assets/aries/lib/echarts-all.js
+END
+jquery.js
+K 25
+svn:wc:ra_dav:version-url
+V 91
+/svn/AppEngine/!svn/ver/35329/ASO/trunk/saas/web/html/html_admin/assets/aries/lib/jquery.js
+END
+aries-load.js
+K 25
+svn:wc:ra_dav:version-url
+V 95
+/svn/AppEngine/!svn/ver/35329/ASO/trunk/saas/web/html/html_admin/assets/aries/lib/aries-load.js
+END
+handlebars-helpers.js
+K 25
+svn:wc:ra_dav:version-url
+V 103
+/svn/AppEngine/!svn/ver/35329/ASO/trunk/saas/web/html/html_admin/assets/aries/lib/handlebars-helpers.js
+END
+handlebars.js
+K 25
+svn:wc:ra_dav:version-url
+V 95
+/svn/AppEngine/!svn/ver/35329/ASO/trunk/saas/web/html/html_admin/assets/aries/lib/handlebars.js
+END

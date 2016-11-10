@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>System Privilege Action Management</title>
+    <link href="/ARIESRES/assets/aries/css/base/aries-base.css" rel="stylesheet" type="text/css"/>
+    <script src="/ARIESRES/assets/aries/lib/jquery.js"></script>
+    <script src="/ARIESRES/assets/aries/main/sea.js"></script>
+</head>
+<body>
+<div id="privilegeSearchPanel" aeType="aePanel" aeInit="true" level="4" title="Privilege Action Search">
+	<div aeType="aeForm" id="secPrivEntityClassSearchForm" aeInit="true" class="form-horizontal">
+	 	<div class="form-group">
+			<label class="col-xs-2 control-label">Operation ID</label>
+			<div class="col-xs-4">
+				<span aeType="aeTextfield" id="privId" aeInit="true" dataField="privId"  
+				aeValidate="true" rules="{isPrivId:true}" onAddRules="isPrivId()" isValidate="true"></span>
+			</div>
+			<label class="col-xs-2 control-label">Operation Action Name</label>
+			<div class="col-xs-4">				
+				<span aeType="aeTextfield" id="privName" aeInit="true" dataField="privName"  ></span>
+			</div>			
+		</div>
+		<div class="form-group">
+			<label class="col-xs-2 control-label">Privilege Entity Category Name</label>
+			<div class="col-xs-4">
+				<span aeType="aeTextpopup" id="name" aeInit="true" dataField="name"  popupSource="/ARIESRES/secframe/sysmgr/entity/selectEntityClassDialog.html"
+				 popupType="page" popupTitle="Privilege Entity Category List" popupHeight="350" draggable="true" showButton="true" showClear="true" afterAction="selectEntityClass(json)"></span>
+			</div>	
+			<div class="col-xs-6 text-right">
+				<button class="btn btn-primary" type="button" onclick="search()" id="searchBtn">Query</button>
+		 	</div>	
+		</div>
+		<div class="form-group">
+		  	<div class="col-xs-6">
+				<span aeType="aeTextfield" id="entClassId" aeInit="true" dataField="entClassId" visible="false"></span>
+			</div>
+		</div>
+	</div>
+</div>
+<div id="privilegeListPanel" aeType="aePanel" aeInit="true" level="4" title="Privilege Action List">
+	<div id="secPrivEntityClassSearchResultTable" aeType="aeGrid" aeInit="true" datafield=""
+		isPaging="true" pagingSize="5" width="100%" height="300px"
+		pagingAlign="right" showIndex="false" singleSelect="true" singleRowClass="false" onRowClick="loadPrivEntityClassDetailMsg()">
+		<span datafield="entClassId" title="" visible="false"></span> 
+		<span datafield="privId" title="Operation ID" width="100" align="center"></span> 
+		<span datafield="privName" title="Operation Action Name" width="100" align="center"></span> 
+		<span datafield="name" title="Privilege Entity Category Name" width="100" align="center" ></span>
+		<span datafield="privDesc" title="Operation Remarks" width="100" align="center"></span>
+	</div>
+</div>
+<div id="privilegeDetailPanel" aeType="aePanel" aeInit="true" level="4" title="Privilege Action Detail">
+	<div aeType="aeForm" id="secPrivEntityClassDetailForm" aeInit="true" class="form-horizontal">
+	 	<div class="form-group">
+			<label class="col-xs-2 control-label"><span class="require">*</span>Operation ID</label>
+			<div class="col-xs-4">
+				<span aeType="aeTextfield" id="privIdDetail" aeInit="true" dataField="privId" 
+				aeValidate="true" rules="{required:true,isPrivId:true}" onAddRules="isPrivId()" isValidate="true" ></span>
+			</div>
+			<label class="col-xs-2 control-label"><span class="require">*</span>Operation Action Name</label>
+			<div class="col-xs-4">				
+				<span aeType="aeTextfield" id="privNameDetail" aeInit="true" dataField="privName" 
+				aeValidate="true" rules="{required:true,messages:{required:'Please Input the Operation Action Name'}}" isValidate="true" ></span>
+			</div>			
+		</div>
+		<div class="form-group">
+			<label class="col-xs-2 control-label">Operation Remarks</label>
+			<div class="col-xs-4">				
+				<span aeType="aeTextfield" id="privDesc" aeInit="true" dataField="privDesc"  ></span>
+			</div>
+			<label class="col-xs-2 control-label"><span class="require">*</span>Privilege Entity Category Name</label>
+			<div class="col-xs-4">
+				<span aeType="aeTextpopup" id="selectEntClass" aeInit="true" dataField="name"  popupSource="/ARIESRES/secframe/sysmgr/entity/selectEntityClassDialog.html"
+				 popupType="page" popupTitle="Privilege Entity Category List" popupHeight="350" draggable="true" showButton="true" showClear="true" afterAction="selectEntityClassForAdd(json)"
+				 aeValidate="true" rules="{required:true,messages:{required:'Please Input the Privilege Entity Category Name'}}" isValidate="true"></span>
+			</div>	
+		</div>
+		<div class="form-group">
+		  	<div class="col-xs-6">
+				<span aeType="aeTextfield" id="entClassId" aeInit="true" dataField="entClassId" visible="false"></span>
+				<span aeType="aeTextfield" id="state" aeInit="true" dataField="state" visible="false"></span>
+			</div>
+		</div>
+		<div class="col-xs-12 text-center">
+			<button class="btn btn-primary" type="button" onclick="update()" id="updateBtn">Modify</button>
+			<button class="btn btn-primary" type="button" onclick="add()" id="addBtn">Add</button>
+			<button class="btn btn-primary" type="button" onclick="save()" id="saveBtn">Save</button>
+			<button class="btn btn-primary" type="button" onclick="del()" id="delBtn">Delete</button>
+		</div>
+	</div>
+</div>
+
+</body>
+  
+<!-- 运行脚本 -->
+<script type="text/javascript">
+var flag = true;
+seajs.use('aries-main',function(){
+	//初始化按钮
+	initButton();
+	$("#secPrivEntityClassDetailForm").aeForm('reload',[]);
+	$("#secPrivEntityClassDetailForm").aeForm('setEditSts',false);
+});
+//初始化按钮
+function initButton(){
+	$.disabledButton("updateBtn",true);
+	$.disabledButton("addBtn",false);
+	$.disabledButton("saveBtn",true);
+	$.disabledButton("delBtn",true);
+	$.disabledButton("selectEntClass",true);
+}
+
+//查询
+function search(){
+	//对privId格式进行校验
+	var validate = $("#secPrivEntityClassSearchForm").validate();
+    if(!validate){
+    	return;
+    }
+	var privId=$('#secPrivEntityClassSearchForm').aeForm('getValueByField','privId');
+	var privName=$('#secPrivEntityClassSearchForm').aeForm('getValueByField','privName');
+	var entityClassName = $('#name').aeTextpopup('getDisplayText');
+	if(privId){
+		privId = parseInt(privId);
+	}
+	var param = "".appendParam("privId",privId).appendParam("privName",privName).appendParam("entityClassName",entityClassName);
+	$("#secPrivEntityClassSearchResultTable").aeGrid('reload',$.aries.service.secframe.getPriv,param);  
+} 
+
+
+function loadPrivEntityClassDetailMsg(rowIndex,rowData,event){
+	$.disabledButton("updateBtn",false);
+	$.disabledButton("addBtn",false);
+	$.disabledButton("saveBtn",false);
+	$.disabledButton("delBtn",false);
+	$.disabledButton("selectEntClass",true);
+	    var privId = rowData.privId;
+	    var privName = rowData.privName;
+	    var entityClassName = rowData.name;  
+	    	var cond = "".appendParam("privId",privId);
+	    	$.ajaxPost($.aries.service.secframe.querySecPrivEntityClass,cond,function(data){
+				if(data){
+					$("#secPrivEntityClassDetailForm").aeForm('reload',data);
+					$("#selectEntClass").aeTextpopup('setDisplayText',data[0].name);
+				}
+			  });	
+	    	 $("#secPrivEntityClassDetailForm").aeForm('setEditSts',false);
+	    	 $.disabledButton("saveBtn",true);
+	    	 
+  }
+  
+function update(){
+	flag = false;
+	$.disabledButton("updateBtn",true);
+	$.disabledButton("addBtn",true);
+	$.disabledButton("saveBtn",false);
+	$.disabledButton("delBtn",true);
+	$.disabledButton("selectEntClass",false);
+	$("#secPrivEntityClassDetailForm").aeForm('setColEditSts','privName',true);
+	$("#secPrivEntityClassDetailForm").aeForm('setColEditSts','privDesc',true);
+	$("#secPrivEntityClassDetailForm").aeForm('setColEditSts','name',true);
+}
+
+//新增
+function add(){
+	flag = true;
+	$.disabledButton("updateBtn",true);
+	$.disabledButton("addBtn",true);
+	$.disabledButton("saveBtn",false);
+	$.disabledButton("delBtn",true);
+	$.disabledButton("selectEntClass",true);
+      $("#secPrivEntityClassDetailForm").aeForm('setEditSts',true);
+      $("#secPrivEntityClassDetailForm").aeForm('setValueByField','privId','');
+      $("#secPrivEntityClassDetailForm").aeForm('setValueByField','privName','');
+      $("#secPrivEntityClassDetailForm").aeForm('setValueByField','privDesc','');
+      $("#secPrivEntityClassDetailForm").aeForm('setValueByField','state','-1');
+      
+      $("#selectEntClass").aeTextpopup('setDisplayText','');
+      $("#selectEntClass").aeTextpopup('setValue','');
+    }
+
+function isPrivId(){
+	$.validator.addMethod("isPrivId", function(value) {
+        var regu = /^\d*$/; 
+        var reg = new RegExp(regu);
+        return reg.test(value);
+    }, 'please enter a number!');
+}
+
+function save(){
+   var validate = $("#secPrivEntityClassDetailForm").validate();
+    if(!validate){
+        return;
+       } 
+    var param = $("#secPrivEntityClassDetailForm").aeForm('getData');
+    var name = $('#selectEntClass').aeTextpopup('getDisplayText');
+    	param["name"] = name;
+         if(param == "" || param == null){
+        	 $.message.alert("",$.i18n('sec_privmanager_namenotnull'));
+         return;
+     }
+    var newArray = [];
+    newArray.push(param); 
+    var newdata = $.aries.common.setSaveDataState(newArray,flag);
+    var param1 = "".appendParam("savePrivEntityClassValue", newdata);
+    $.ajaxPost($.aries.service.secframe.savePrivEntityClass,param1,function(data){  	
+			$.message.success("",$.i18n('sec_privmanager_savesuccess'));
+			$("#secPrivEntityClassDetailForm").aeForm('setEditSts',false);
+			$("#secPrivEntityClassDetailForm").aeForm('clear');			
+			initButton();
+			search();
+          
+	  },function(code,info){
+			$.message.error("",$.i18n('sec_save_fail'));		
+	});
+   
+  }
+
+function del(){ 
+		var selRows=$("#secPrivEntityClassSearchResultTable").aeGrid('getSelections',true);
+        var delPrivId = selRows[0].privId;			  
+		var param = "".appendParam("delPrivId",delPrivId);
+	    $.ajaxPost($.aries.service.secframe.delPriv,param,function(data){			
+			  $.message.success("",$.i18n('sec_privmanager_deletesuccess'));
+			  $("#secPrivEntityClassDetailForm").aeForm('setEditSts',false);
+			  $("#secPrivEntityClassDetailForm").aeForm('clear');	
+			  search();
+		 },function(code,info){
+			$.message.error("",$.i18n('sec_delete_fail'));	    
+		}); 	  	    
+   }
+
+
+//popupPage afterAction
+function selectEntityClass(json){
+	$("#name").aeTextpopup('setDisplayText',json.name);
+	
+} 
+
+function selectEntityClassForAdd(json){
+	//$("#selectEntClass").aeTextpopup('setValue',json.entClassId);
+	$("#selectEntClass").aeTextpopup('setDisplayText',json.name);
+	$("#secPrivEntityClassDetailForm").aeForm('setValueByField','entClassId',json.entClassId);
+}
+
+</script>
+</html>

@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Privilege Entity Category Management</title>
+    <link href="/ARIESRES/assets/aries/css/base/aries-base.css" rel="stylesheet" type="text/css"/>
+    <script src="/ARIESRES/assets/aries/lib/jquery.js"></script>
+    <script src="/ARIESRES/assets/aries/main/sea.js"></script>
+</head>
+<body>
+<div class="clearfix">
+	<div class="pull-left" style="width:28%;">
+		<div id="entityTreePanel" aeType="aePanel" aeInit="true" level="5" title="Privilege Entity Category ">
+			<div aeType="aeTree" id="entityTree" style="overflow: auto;height:500px;" showCheckbox="false" showLine="true" aeInit="false" onclick="treeNodeClick()"
+	 	 		idField="entClassId" pIdField="parentId" labelField="name" valueField="entClassId" rootId="n">
+	 	 	</div>
+		</div>
+	</div>
+	<div class="pull-left" style="width:72%;">	
+		<div id="secFuncFormPanel" aeType="aePanel" aeInit="true" level="4" title="Privilege Entity Category Detail">
+	 		<div aeType="aeForm" id="secEntityClassDetailForm" aeInit="true" class="form-horizontal">
+	 			<div class="form-group">
+					<label class="col-xs-2 control-label"><span class="require">*</span><span class="i18n">sec_entityclassmanager_name</span></label>
+					<div class="col-xs-4">
+						<span aeType="aeTextfield" id="name" aeInit="true" dataField="name"  
+						aeValidate="true" rules="{required:true,messages:{required:'Please Input the Name'}}"></span>
+					</div>
+					<label class="col-xs-2 control-label"><span class="i18n">sec_entityclassmanager_note</span></label>
+					<div class="col-xs-4">				
+						<span aeType="aeTextfield" id="remarks" aeInit="true" dataField="remarks"  ></span>
+					</div>			
+				</div>
+				<div class="form-group">
+		  			<div class="col-xs-6">
+						<span aeType="aeTextfield" id="entClassId" aeInit="true" dataField="entClassId" visible="false"></span>
+						<span aeType="aeTextfield" id="parentId" aeInit="true" dataField="parentId" visible="false"></span>
+					</div>
+		  		</div>
+		  		<div class="col-xs-12 text-center">
+					<button class="btn btn-primary" type="button" onclick="add()" id="addBtn">Add</button>
+					<button class="btn btn-primary" type="button" onclick="save()" id="saveBtn">Save</button>
+					<button class="btn btn-primary" type="button" onclick="del()" id="delBtn">Delete</button>
+		  		</div>
+	 		</div>
+	 	 </div>
+	</div>
+</div>
+
+
+
+<script type="text/javascript">
+//var rootId="n";
+//var curNode;
+//var curentClassId;
+//页面初始化时加载树结构
+seajs.use('aries-main', function() {
+	var rootId="";
+	setBtnDisabled(3);
+	var flag = false;
+	//页面初始化时加载树结构
+	 $.ajaxPost($.aries.service.secframe.getAllEntityClass, null,function(data) {
+			if (data) {
+				var treeTitle = '{"parentId":"","entClassId":"-1","name":"Privilige Entity Category List",'+
+					'"createDate":"","doneCode":"","opId":"","orgId":"","state":""}';
+				data.unshift($.toObject(treeTitle));
+				$("#entityTree").aeTree('reload', data);
+			}
+		}, function(code,info) {
+				$.message.error("", $.i18n('sec_refresh_fail'));		
+			
+	} ); 
+	 $("#secEntityClassDetailForm").aeForm('reload',[]);
+	 $("#secEntityClassDetailForm").aeForm('setEditSts',false);
+});
+
+	
+	
+//禁用哪些按钮,flag： 1 = add,2 = update ,3 =init
+function setBtnDisabled(flag){
+	switch(flag){
+	case 1:
+		$.disabledButton("addBtn",true);
+		$.disabledButton("saveBtn",false);
+		$.disabledButton("delBtn",true);
+		break;
+	case 2:
+		$.disabledButton("addBtn",false);
+		$.disabledButton("saveBtn",false);
+		$.disabledButton("delBtn",false);
+		break;
+	case 3:
+		$.disabledButton("addBtn",true);
+		$.disabledButton("saveBtn",true);
+		$.disabledButton("delBtn",true);
+		break;
+		
+	}
+}
+
+//单击树节点
+function treeNodeClick(nodeData){
+	flag = false;
+	setBtnDisabled(2);
+	var curNode=nodeData;
+	var curPid = nodeData.parentId;
+	var curentClassId=nodeData.entClassId;
+	
+	if(curNode== undefined || curentClassId ==""){
+	    setBtnDisabled(3);
+	    return;
+	}
+
+	if(!curPid){
+		$.disabledButton("saveBtn",true);
+		$.disabledButton("delBtn",true);
+	}
+	
+	//刷新表单
+	//var conStr = "STATE=1 and ENT_CLASS_ID="+curentClassId;
+	var conStr = "".appendParam("entClassId",curentClassId);
+
+	$.ajaxPost($.aries.service.secframe.querySecEntityClass,conStr,function(data){
+		if(data){
+			$("#secEntityClassDetailForm").aeForm('reload',data);
+		}
+	},function(code,info){
+			$.message.error("",$.i18n('sec_refresh_fail'));	
+	 
+	}); 
+	//$("#secEntityClassDetailForm").aeForm('setColEditSts','name',true);
+	//$("#secEntityClassDetailForm").aeForm('setColEditSts','remarks',true);
+	$("#secEntityClassDetailForm").aeForm('setEditSts',true);
+}
+
+
+		
+//新增
+function add(){
+	var curNode = $("#entityTree").aeTree('getSelected');
+	var rootId = 'n';
+	var curFuncId=curNode.entClassId;
+	$("#secEntityClassDetailForm").aeForm('clear'); 
+	$("#secEntityClassDetailForm").aeForm('setValueByField','parentId',curFuncId);
+	$("#secEntityClassDetailForm").aeForm('setEditSts',true);
+	setBtnDisabled(1);
+	flag = true;
+				
+	}
+		 
+ //保存
+ function save(){
+	 var curNode = $("#entityTree").aeTree('getSelected');
+		var curFuncId=curNode.entClassId;
+		var curPid = curNode.parentId;
+		
+ 	//判空
+ 	 var validate = $("#secEntityClassDetailForm").validate();
+     if(!validate){
+    	 return;
+     }
+     
+ 	//判断字段内容是否改变
+ 	var vobean=$("#secEntityClassDetailForm").aeForm('getData');
+ 	if(vobean == null || vobean == ""){
+ 		$.message.success("",$.i18n('sec_entity_class_no_change'));
+ 		return;
+ 	}
+ 	//保存
+    //var newdata = $.aries.common.setSaveDataState(vobean,true);
+ 	var param = "".appendParam("vobean",$.setSaveDataState(vobean,flag)).appendParam("parentId",curFuncId);
+ 	
+ 	$.ajaxPost($.aries.service.secframe.save,param,function(data){
+ 		
+ 			$.message.success("",$.i18n('sec_save_ok'));
+ 			$.disabledButton("saveBtn",true);
+ 			//if(!curPid){
+ 				//$("#secEntityClassDetailForm").aeForm('clear');
+ 			//}
+ 			//else{
+ 				//对树进行刷新
+				$.ajaxPost($.aries.service.secframe.getAllEntityClass,null,function(data){
+						if(data){
+							var treeTitle = '{"parentId":"","entClassId":"-1","name":"Privilige Entity Category List",'+
+							'"createDate":"","doneCode":"","opId":"","orgId":"","state":""}';
+							data.unshift($.toObject(treeTitle));
+							$("#entityTree").aeTree('refresh',data);
+							$("#entityTree").aeTree('expandNode',curFuncId);
+							$("#entityTree").aeTree('expandNode',curPid);
+							$('#entityTree').aeTree('selectNode',curPid);
+						}
+					},function(code,info){
+						$.message.error("","tree load error");					
+					 
+				});
+ 				
+ 			//}
+ 		
+ 	  },function(code,info){
+			$.message.error("",$.i18n('sec_save_fail'));		
+ 		
+ 	});	
+ 	
+ 	 setBtnDisabled(2);
+ }
+
+ //删除
+ function del(){
+	var curNode = $("#entityTree").aeTree('getSelected');
+	var curFuncId = curNode.entClassId;
+	var curPid = curNode.parentId;
+ 	//var cNode=curNode;
+ 	//var cFuncId=cNode.value;
+ 	if(curNode==null ||curNode == "")
+ 	{
+ 		//alert("请选择菜单中的某一功能！");
+          $.message.alert("",$.i18n('sec_entity_class_select_entclass'));	    
+          return;
+ 	}
+ 	//根节点
+ 	if(!curPid){
+ 		//alert("不可删除根节点");
+ 		$.message.alert("",$.i18n('sec_entity_class_notdel_root'));	    
+         return;
+ 	}
+ 	
+ 	//删除
+ 	 var param = "".appendParam("ent_class_id",curFuncId);
+ 	var newdata = $.aries.common.setSaveDataState(param,false);
+ 	$.message.confirm("","",function(){
+ 	    	    //删除操作  
+ 			   $.ajaxPost($.aries.service.secframe.deleteEntClass,newdata,function(data){
+ 					
+ 						$.message.success("",$.i18n('sec_entity_class_del_success'));	
+ 						var parentNode=$("#entityTree").aeTree('findNodeById',curFuncId);
+ 						//对树进行刷新
+ 						$.ajaxPost($.aries.service.secframe.getAllEntityClass,null,function(data){
+ 								if(data){
+ 									var treeTitle = '{"parentId":"","entClassId":"-1","name":"Privilige Entity Category List",'+
+ 									'"createDate":"","doneCode":"","opId":"","orgId":"","state":""}';
+ 									data.unshift($.toObject(treeTitle));
+ 									$("#entityTree").aeTree('refresh',data);
+ 								}
+ 							},function(code,info){
+ 								$.message.error("","tree load error");
+ 							 							 
+ 						});
+ 						$("#secEntityClassDetailForm").aeForm('clear');
+ 						$("#secEntityClassDetailForm").aeForm('setEditSts',false);
+ 					
+ 				  },function(code,info){
+ 						$.message.error("",$.i18n('sec_del_fail'));
+ 					
+ 					
+ 					$("#secEntityClassDetailForm").aeForm('clear');
+ 					$("#secEntityClassDetailForm").aeForm('setEditSts',false);
+ 				});	
+ 	   });
+ 	
+ }
+ 
+
+ 
+setBtnDisabled(3);
+</script>
+</body>
+</html>

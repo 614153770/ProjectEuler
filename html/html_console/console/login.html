@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title>ASO Admin Login</title>
+    <link href="/ARIESRES/assets/appEngine/img/Appengine_logo.png" mce_href="/ARIESRES/assets/appEngine/img/Appengine_logo.png" rel="shortcut icon"/>
+    <link href="/ARIESRES/assets/aries/css/base/aries-base.css" rel="stylesheet" type="text/css">
+    <link href="css/extend.min.css" rel="stylesheet" type="text/css">
+    <link href="css/login.css" rel="stylesheet" type="text/css">
+</head>
+<body>
+<div id="global_loading" class="modal fade in fx-loadingPage" style="display:none;">
+    <div class="modal-backdrop fade in" style="height: 100%">
+        <img src="/ARIESRES/assets/appEngine/img/loading-page.svg" class="loading-page" alt="">
+    </div>
+</div>
+
+<div class="login">
+    <div class="login__box">
+        <div class="login__logo">
+            <img src="../assets/appEngine/img/Appengine_logo1.png"/>
+        </div>
+        <div class="login__form">
+            <div class="login__form__input_outer">
+                <i class="md-person"></i>
+                <input class="login__form__input_outer__ipt" id="login-user-name" name="" type="text" placeholder="Username" autocomplete="off" />
+            </div>
+            <div class="login__form__input_outer">
+                <i class="md-lock"></i>
+                <input class="login__form__input_outer__ipt" id="login-password" placeholder="Password" type="password" autocomplete="off"/>
+            </div>
+            <button id="login-btn-login" onclick='login()' class="btn btn-lg btn-primary btn-block login__form__btn" data-loading-text="Login...">Login</button>            
+            
+               <button id="login-btn-WClogin" onclick="loadQrCode()" class="btn btn-lg btn-primary btn-block login__form__btn" data-loading-text="Login...">WeChat Login</button>
+                    <a href="#nogo" class="login__form__forgetpwd">Forgot your password?</a>
+        </div><!-- login__form e-->
+    </div><!-- login__box e-->
+        <div class="" id="aso_qrCode_login" style="display:none">
+                <div class="loader-main" id="loaderOrganize-main">
+                        <span></span>
+                        <span></span>
+                        <span></span>
+                        <span></span>
+                        <span></span>
+                </div>
+                <img  class="qrCode-img" src="">
+    </div>
+       
+    <p class="login__copyright">Copyright © 2016 AsiaInfo. All rights reserved.</p>
+</div>
+<script src="/ARIESRES/assets/aries/lib/jquery.js" type="text/javascript"></script>
+<script src="/ARIESRES/assets/aries/main/sea.js" type="text/javascript"></script>
+<script type="text/javascript">
+    seajs.use(["aries-main", "./js/login.js"], function (moduleAriesMain, moduleLogin) {
+    	//清cookie
+    	$.removeCookie($.aries.config.sec.SEC_AUTH_TOKEN_KEY, {path : '/'});
+    	$.removeCookie("login_customer_id", {path : '/'});
+    	$.removeCookie($.aries.config.sec.SEC_AUTH_ROLETYPE_KEY, {path : '/'});
+
+		$.cookie($.aries.config.sec.SEC_AUTH_ROLETYPE_KEY, "Operator", {path : '/'});
+		addTenant2Cookie();
+    });
+    
+    function addTenant2Cookie() {
+        var reqstr = window.location.search.split("?")[1];
+        if(!reqstr){
+            alert("please input url with?tid=tenant");
+            return;
+        }
+        var tidreq = reqstr.split("=");
+        if(tidreq[0] != "tid"){
+            alert("please input url with?tid=tenant");
+            return;
+        }
+        var tid = tidreq[1];
+        //alert(tid);
+        $.cookie($.aries.config.sec.SEC_AUTH_TENANT_KEY, tid, {path : '/'});
+    }
+    
+    
+
+</script>
+</body>
+</html>
+
+

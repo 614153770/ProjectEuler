@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Service Permission Manager</title>
+    <link href="/ARIESRES/assets/aries/css/base/aries-base.css" rel="stylesheet" type="text/css"/>
+    <script src="/ARIESRES/assets/aries/lib/jquery.js"></script>
+    <script src="/ARIESRES/assets/aries/main/sea.js"></script>
+</head>
+<body>
+<div id="searchPanel" aeType="aePanel" aeInit="true" level="4" title="Search Condition">
+	<div aeType="aeForm" id="secServiceSearchForm" aeInit="true" class="form-horizontal">
+	 	<div class="form-group">
+	 		<label class="col-xs-2 control-label">Service ID</label>
+			<div class="col-xs-4">
+				<span aeType="aeTextfield" id="serviceId" aeInit="true" dataField="serviceId"  ></span>
+			</div>
+			<label class="col-xs-2 control-label">Service Name</label>
+			<div class="col-xs-4">
+				<span aeType="aeTextfield" id="serviceName" aeInit="true" dataField="serviceName"  ></span>
+			</div>						
+		</div>
+		<div class="form-group">
+			<label class="col-xs-2 control-label">Service Code</label>
+			<div class="col-xs-4">				
+				<span aeType="aeTextfield" id="serviceCode" aeInit="true" dataField="serviceCode"  ></span>
+			</div>
+			<div class="col-xs-6 text-right">
+				<button class="btn btn-primary" type="button" onclick="search()" ><span class="i18n">sec_query</span></button>
+		 	</div>			
+		</div>		
+	</div>
+</div>
+<div id="listPanel" aeType="aePanel" aeInit="true" level="4" title="Result List">
+	<div id="secServiceSearchResultTable" aeType="aeGrid" aeInit="true" isPaging="true" pagingSize="5" 
+	    datafield="" height="300px"  showIndex="false" singleSelect="true" 
+	    singleRowClass="false" onRowClick="loadServiceDetail" i18n="true">
+	    <span datafield="serviceId" title="$.i18n('sec_service_ID')" i18n="true" width="50"></span>
+	    <span datafield="serviceCode" title="$.i18n('sec_service_code')" i18n="true" width="150"></span>
+	    <span datafield="serviceName" title="$.i18n('sec_service_name')" i18n="true" width="150"></span>
+	    <span datafield="serviceInterface" title="$.i18n('sec_service_interface')" i18n="true" width="150"></span>
+	    <span datafield="serviceParam" title="$.i18n('sec_service_param')"  i18n="true" width="150"></span>
+	</div>
+</div>
+<div id="detailPanel" aeType="aePanel" aeInit="true" level="4" title="Service Detail">
+	<div aeType="aeForm" id="secServiceDetailForm" aeInit="true" class="form-horizontal">
+	 	<div class="form-group">
+			<label class="col-xs-2 control-label"><span class="require">*</span>Service Code</label>
+			<div class="col-xs-4">
+				<span aeType="aeTextfield" id="serviceCodeDetail" aeInit="true" dataField="serviceCode" 
+				aeValidate="true" rules="{required:true,messages:{required:'Please enter aboCode!'}}" isValidate="true" ></span>
+			</div>
+			<label class="col-xs-2 control-label"><span class="require">*</span>Service Name</label>
+			<div class="col-xs-4">				
+				<span aeType="aeTextfield" id="serviceNameDetail" aeInit="true" dataField="serviceName" 
+				aeValidate="true" rules="{required:true,messages:{required:'Please enter attrCode!'}}" isValidate="true" ></span>
+			</div>			
+		</div>
+		<div class="form-group">
+			<label class="col-xs-2 control-label">Service Interface</label>
+			<div class="col-xs-4">
+				<span aeType="aeTextfield" id="serviceInterface" aeInit="true" dataField="serviceInterface"  ></span>
+			</div>
+			<label class="col-xs-2 control-label">Service Paramter</label>
+			<div class="col-xs-4">
+				<span aeType="aeTextfield" id="serviceParam" aeInit="true" dataField="serviceParam"  ></span>
+			</div>			
+		</div>
+		<div class="form-group">
+			<div class="col-xs-4">
+				<span aeType="aeTextfield" id="serviceIdDetail" aeInit="true" dataField="serviceId" visible="false" ></span>
+			</div>
+		</div>
+		<div class="col-xs-12 text-center">
+			<button class="btn btn-primary" type="button" onclick="updateService()" id="updateBtn"><span class="i18n">sec_role_update</span></button>
+			<button class="btn btn-primary" type="button" onclick="addService()" id="addBtn"><span class="i18n">sec_role_add</span></button>
+			<button class="btn btn-primary" type="button" onclick="saveService()" id="saveBtn"><span class="i18n">sec_role_save</span></button>
+			<button class="btn btn-primary" type="button" onclick="delService()" id="delBtn"><span class="i18n">sec_role_del</span></button>
+		</div>		
+	</div>
+</div>
+
+</body>
+<script type="text/javascript">
+  seajs.use('aries-main',function(){
+	  var flag = true;
+	  $("#secServiceDetailForm").aeForm('reload',[]);
+	  $("#secServiceDetailForm").aeForm('setEditSts',false);
+	  initButton();
+	  search();
+});
+//初始化按钮
+function initButton(){
+	$.disabledButton("updateBtn",true);
+	$.disabledButton("addBtn",false);
+	$.disabledButton("saveBtn",true);
+	$.disabledButton("delBtn",true);
+}
+
+function search(){
+	var serviceId = $('#secServiceSearchForm').aeForm('getValueByField','serviceId');
+	serviceId=$.trim(serviceId);
+	var serviceName= $('#secServiceSearchForm').aeForm('getValueByField','serviceName');
+	serviceName=$.trim(serviceName);
+	var serviceCode = $('#secServiceSearchForm').aeForm('getValueByField','serviceCode');  
+	var cond = "".appendParam("serviceName",serviceName).appendParam("serviceId",serviceId).appendParam("serviceCode",serviceCode);
+	$("#secServiceSearchResultTable").aeGrid('reload',$.aries.service.secframe.refreshService,cond);
+} 
+
+//加载服务详细信息
+function loadServiceDetail(rowIndex,rowData,event){
+	$.disabledButton("updateBtn",false);
+	$.disabledButton("addBtn",false);
+	$.disabledButton("saveBtn",false);
+	$.disabledButton("delBtn",false);
+	var selServiceId = rowData.serviceId;
+	if (null == selServiceId  || selServiceId  ==""){
+	   $.message.alert("",$.i18n('sec_service_sel_one_service'));
+	   return;
+	}
+	var param = "".appendParam("id",selServiceId);
+	$.ajaxPost($.aries.service.secframe.getServiceById,param,function(data){
+		if(data){
+			$("#secServiceDetailForm").aeForm('reload',data);
+		}
+	  },function(code,info){
+			$.message.error("",$.i18n('sec_search_fail'));
+			
+		  
+	});
+	$("#secServiceDetailForm").aeForm('setEditSts',false);
+	$.disabledButton("saveBtn",true);
+	
+}
+
+//更新服务
+function updateService(){
+	flag = false;
+	$.disabledButton("updateBtn",true);
+	$.disabledButton("addBtn",true);
+	$.disabledButton("saveBtn",false);
+	$.disabledButton("delBtn",true);
+	$("#secServiceDetailForm").aeForm('setColEditSts','serviceCode',true);
+	$("#secServiceDetailForm").aeForm('setColEditSts','serviceName',true);
+	$("#secServiceDetailForm").aeForm('setColEditSts','serviceInterface',true);
+	$("#secServiceDetailForm").aeForm('setColEditSts','serviceParam',true);
+}
+
+//新增服务
+function addService(){
+	flag = true;
+	$.disabledButton("updateBtn",true);
+	$.disabledButton("addBtn",true);
+	$.disabledButton("saveBtn",false);
+	$.disabledButton("delBtn",true);
+	$("#secServiceDetailForm").aeForm('setEditSts',true);
+	$("#secServiceDetailForm").aeForm('setValueByField','serviceId','-1');
+	$("#secServiceDetailForm").aeForm('setValueByField','serviceName','');
+	$("#secServiceDetailForm").aeForm('setValueByField','serviceCode','');
+	$("#secServiceDetailForm").aeForm('setValueByField','serviceInterface','');
+	$("#secServiceDetailForm").aeForm('setValueByField','serviceParam','');	
+}
+
+//保存服务
+function saveService(){
+	 var validate = $("#secServiceDetailForm").validate();
+	if(!validate){
+		 return;
+	}
+	var param=$("#secServiceDetailForm").aeForm('getData',true);
+	param.serviceId = '-1';
+	var newdata = $.aries.common.setSaveDataState(param,flag);
+	$.ajaxPost($.aries.service.secframe.saveService,"serviceValue="+newdata,function(data){
+			$.message.success("",$.i18n('sec_save_ok'));
+			$("#secServiceDetailForm").aeForm('setEditSts',false);
+			$("#secServiceDetailForm").aeForm('clear');
+			initButton(); 
+			search();
+	  },function(code,info){
+		  $.message.error("",$.i18n('secframe_stationmoauthor_saveerror'));
+			
+		
+	});
+	
+}
+
+//删除服务
+function delService(){
+	var delServiceId = $('#secServiceDetailForm').aeForm('getValueByField','serviceId');
+	var param=$("#secServiceDetailForm").aeForm('getData',true);
+	var newdata = $.aries.common.setSaveDataState(param,false);
+	$.ajaxPost($.aries.service.secframe.delService,"serviceId="+delServiceId,function(data){
+			$.message.success("",$.i18n('sec_del_ok'));
+			$("#secServiceDetailForm").aeForm('setEditSts',false);
+			$("#secServiceDetailForm").aeForm('clear');
+			search();		
+	  },function(code,info){
+			$.message.error("",$.i18n('sec_del_fail'));	
+			
+		
+	});
+   initButton();
+}
+</script>
+</html>

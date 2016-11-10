@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<link href="/ARIESRES/assets/aries/css/base/aries-base.css"rel="stylesheet" type="text/css" />
+<link href="/ARIESRES/assets/appEngine/css/common.css" rel="stylesheet" type="text/css" />
+<link href="/ARIESRES/assets/appEngine/css/signIn.css" rel="stylesheet" type="text/css" />
+<link href="/ARIESRES/assets/appEngine/css/main.css" rel="stylesheet" type="text/css" />
+<link href="/ARIESRES/assets/appEngine/css/font.css" rel="stylesheet" type="text/css" />
+<link href="/ARIESRES/assets/appEngine/css/font-md.css" rel="stylesheet" type="text/css" />
+<script src="/ARIESRES/assets/aries/lib/jquery.js"></script>
+<script src="/ARIESRES/assets/aries/main/sea.js"></script>
+<title>Register</title>
+</head>
+<body>
+<div id="global_loading1" class="modal fade in fx-loadingPage" style="display:none;">
+    <div class="modal-backdrop fade in" style="height: 100%">
+        <img src="/ARIESRES/assets/appEngine/img/loading-page.svg" class="loading-page" alt="">
+    </div>
+</div>
+
+
+<div class="c_box" style="height:300px;">  
+	<div id="details" aeType="aeGrid" aeInit="true" singleSelect="true" singleRowClass="false"
+	    isPaging="true" pagingSize="2" width="100%" height="100%">
+	    <span datafield="serviceName" title="Service Name" ></span>
+	    <span datafield="state" title="State" ></span>
+	</div>
+	<div class="c_box">
+		<div class="c_submit" align="center">
+			<button type="button" class="btn btn-primary" onclick="retry()">Retry</button>
+			<button type="button" class="btn btn-primary" onclick="close()">Close</button>
+		</div>
+	</div>
+</div>
+    
+</body>
+<script type="text/javascript">
+seajs.use('aries-main',function(){
+	var data = '{"total":"2","rows":['+
+	'{"serviceName":"Construction","state":"Unexecuted"},'+
+	'{"serviceName":"Update order","state":"Unexecuted"}]}';
+
+    $('#details').aeGrid('reload',$.toObject(data));
+});
+
+function retry(){
+	
+}
+
+function close(){
+	$.closePopupPage();
+}
+
+
+</script>
+</html>

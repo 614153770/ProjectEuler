@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title><span class="i18n">sec_roleselect_title</span></title>
+    <link href="/ARIESRES/assets/aries/css/base/aries-base.css" rel="stylesheet" type="text/css"/>
+    <script src="/ARIESRES/assets/aries/lib/jquery.js"></script>
+    <script src="/ARIESRES/assets/aries/main/sea.js"></script>
+</head>
+<body>
+<div id="selectSearchPanel" aeType="aePanel" aeInit="true" level="4" title="Function Set Search">
+	<div aeType="aeForm" id="secRoleSelectSearchForm" aeInit="true" class="form-horizontal">
+	 	<div class="form-group">
+			<label class="col-xs-2 control-label"><span class="require">*</span>Function Set Name</label>
+			<div class="col-xs-4">				
+				<span aeType="aeTextfield" id="roleNameSelect" aeInit="true" dataField="roleName"  
+				aeValidate="true" rules="{required:true,messages:{required:'Please Input the Function Set Name'}}"></span>
+			</div>
+			<label class="col-xs-2 control-label"><span class="require">*</span>Function Set Type</label>
+			<div class="col-xs-4">
+				<span aeType="aeCombo" id="roleTypeSelect" aeInit="true" dataField="roleType"  valueField="codeId" optionField="codeName" 
+				aeValidate="true" rules="{required:true,messages:{required:'Please Select the Function Set Type'}}"></span>
+			</div>			
+		</div>
+		<div class="form-group">
+		  	<div class="col-xs-6">
+				<span aeType="aeCombo" id="regionCodeSelect" aeInit="true" dataField="regionCode" valueField="codeId" optionField="codeName" visible="false"></span>
+			</div>
+		</div>
+		<div class="col-xs-12 text-right">
+			<button class="btn btn-primary" type="button" onclick="selectSearch()" >Query</button>
+		 </div>
+	</div>
+</div>
+<div id="selectListPanel" aeType="aePanel" aeInit="true" level="4" title="Optional Function Set List">
+	<div id="secRoleSelectSearchResultGrid" aeType="aeGrid" aeInit="true"
+		datafield="" isPaging="true"
+		pagingSize="5" height="300px" pagingAlign="right" showIndex="false"
+		singleSelect="true"  singleRowClass="false" >
+		<span datafield="roleId" title="$.i18n('sec_role_id')" i18n="true" visible="true" ></span>
+		<span datafield="roleName" title="$.i18n('sec_role_name')"  i18n="true" ></span> 
+		<span datafield="roleType" title="$.i18n('sec_role_type')" i18n="true" visible="true" renderer="roleTypeRenderer"></span>
+	</div>
+	<div class="col-xs-12 text-center">			
+		<button class="btn btn-primary" type="button" onclick="copyFun()" ><span class="i18n">sec_copy_function</span></button>
+		<button class="btn btn-primary" type="button" onclick="copyEnt()" ><span class="i18n">sec_copy_entity</span></button>
+		<button class="btn btn-primary" type="button" onclick="cancel()" ><span class="i18n">sec_cancel</span></button>
+	</div>
+</div>
+
+</body>
+<script type="text/javascript">
+	seajs.use('aries-main', function() {
+		//roleType
+		  $.ajaxPost($.aries.service.secframe.getSecStaticData,'codeType=201309',function(data){
+	       if(data&&data.length!=0){
+	    	   $("#roleTypeSelect").aeCombo('reload',data); 
+	       }
+		 },function(code,info){
+			 
+		 });
+
+	});
+	
+	function selectSearch(){
+		var roleName =  $.trim($("#secRoleSelectSearchForm").aeForm('getValueByField','roleName'));
+		var roleType = $("#roleTypeSelect").aeCombo("getValue");
+		var regionCode = $("#regionCodeSelect").aeCombo("getValue");
+		var param = "".appendParam("roleName", roleName).appendParam("roleType", roleType).appendParam("regionCode", regionCode)
+		
+		/**
+		$.aries.ajax.post($.aries.service.secframe.refreshRoles,null,function(data){
+			if(data){
+				 $('#secRoleSelectSearchResultGrid').aeGrid('reload',data);
+			}
+		  },function(code,info){
+		     $.message.error("","load data fail,code:"+code+",info:"+info);
+		  }); 
+		*/
+		
+		$('#secRoleSelectSearchResultGrid').aeGrid('reload',$.aries.service.secframe.refreshRoles,param);
+	}
+	
+	/**
+	 * 拷贝所选角色的菜单权限
+	 */
+	function copyFun()
+	{	
+		var selRows = $("#secRoleSelectSearchResultGrid").aeGrid('getSelections');
+	    if(selRows != null && selRows.length > 0)
+	    {
+	    	var selRecords = $("#secRoleSelectSearchResultGrid").aeGrid('getSelections',true);
+	    	var srcRoleId = selRecords[0].roleId;
+	    	var param = "".appendParam("srcRoleId", srcRoleId).appendParam("destRoleId",Number(destRoleIdAndEntType)).appendParam("entType","F");
+	    	$.ajaxPost($.aries.service.secframe.copyRoleAllRight,param,function(data){
+	    		 $.message.success("",$.i18n("copy_privilege_success"));
+	    		 search();
+	    		},function(code,info){
+	    				$.message.error("",$.i18n("copy_privilege_failure"));
+	    			
+	    			
+	    		});
+	    }
+	    else
+	    {
+	    	$.message.alert("",$.i18n("sec_roleselect_select"));
+	    	return;
+	    }
+	}
+	/**
+	 * 拷贝所选角色的实体权限
+	 */
+	function copyEnt()
+	{
+		var selRows = $("#secRoleSelectSearchResultGrid").aeGrid('getSelections');
+	    if(selRows != null && selRows.length > 0)
+	    {
+	    	var selRecords = $("#secRoleSelectSearchResultGrid").aeGrid('getSelections',true);
+	    	var srcRoleId = selRecords[0].roleId;
+	    	var param = "".appendParam("srcRoleId", srcRoleId).appendParam("destRoleId", Number(destRoleIdAndEntType)).appendParam("entType","D");
+	    	$.aries.ajax.post($.aries.service.secframe.copyRoleAllRight,param,function(data){
+	    		 $.message.success("",$.i18n("copy_privilege_success"));
+	    		 search();
+	    		},function(code,info){
+	    				$.message.error("",$.i18n("copy_privilege_failure"));
+	    			
+	    			
+	    		});
+	    }
+	    else
+	    {
+	    	$.message.alert("",$.i18n("sec_roleselect_select"));
+	    	return;
+	    }
+	}
+	
+	/**
+	 * 退出，关闭窗口
+	 */
+	function cancel()
+	{
+		$.closePopupPage();
+	}
+	
+</script>
+</html>

@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<link href="/ARIESRES/assets/aries/css/base/aries-base.css"rel="stylesheet" type="text/css" />
+<link href="/ARIESRES/assets/appEngine/css/common.css" rel="stylesheet" type="text/css" />
+<link href="/ARIESRES/assets/appEngine/css/signIn.css" rel="stylesheet" type="text/css" />
+<link href="/ARIESRES/assets/appEngine/css/main.css" rel="stylesheet" type="text/css" />
+<link href="/ARIESRES/assets/appEngine/css/font.css" rel="stylesheet" type="text/css" />
+<link href="/ARIESRES/assets/appEngine/css/font-md.css" rel="stylesheet" type="text/css" />
+<script src="/ARIESRES/assets/aries/lib/jquery.js"></script>
+<script src="/ARIESRES/assets/aries/main/sea.js"></script>
+<title>Register</title>
+</head>
+<body>
+<div id="global_loading1" class="modal fade in fx-loadingPage" style="display:none;">
+    <div class="modal-backdrop fade in" style="height: 100%">
+        <img src="/ARIESRES/assets/appEngine/img/loading-page.svg" class="loading-page" alt="">
+    </div>
+</div>
+
+
+<div class="c_box" style="height:300px;">  
+	<div id="serverlist" aeType="aeGrid" aeInit="true" singleSelect="true" singleRowClass="false"
+	    isPaging="true" pagingSize="10" width="100%" height="100%" onRowClick="myOnRowClick()">
+	    <span datafield="clusterId" title="Cluster ID" visible="false"></span>
+	    <span datafield="domainCode" title="Domain Code" visible="false"></span>
+	    <span datafield="systemId" title="System ID" ></span>
+	    <span datafield="clusterName" title="Cluster Name" ></span>
+	</div>
+	<div class="c_box">
+		<div class="c_submit" align="center">
+			<button type="button" class="btn btn-primary" onclick="addServer()">Add Server</button>
+			<button type="button" class="btn btn-primary" onclick="delServer()">Delete Server</button>
+			<button type="button" class="btn btn-primary" onclick="close()">Close</button>
+		</div>
+	</div>
+</div>
+    
+</body>
+<script type="text/javascript">
+var version;
+var clusterId;
+var domainCode;
+var systemId;
+var constructId;
+
+seajs.use('aries-main',function(){
+	var popupParam = $.getPopupParam();
+	version = popupParam.get("version");
+	constructId = popupParam.get("constructId");
+	
+	qryServer();
+});
+
+function myOnRowClick(rowIndex,rowData,event){
+	clusterId = rowData.clusterId;
+	domainCode = rowData.domainCode;
+	systemId = rowData.systemId;
+}
+
+function qryServer(){
+	$.ajaxPost($.aries.service.aso.queryClusterByConstructId,"constructId="+constructId,function(data){
+        if(data){
+        	 $("#serverlist").aeGrid("reload",data);
+        }
+    },function(code,info){
+    	$("#global_loading").hide();
+    	if(undefined==info.hub_value[0]){
+            $.message.error("","Operation failed!");
+		 }else{
+            $.message.error("","Operation failed,code:"+info.hub_value[0].code+",info:"+info.hub_value[0].value);
+		 } 
+    });
+}
+
+function addServer(){
+	if(undefined==clusterId){
+		$.message.alert("","Please select a server!");
+		return;
+	}
+	var param = "clusterId="+clusterId+"&domainCode="+domainCode+"&systemId="+systemId+"&version="+version;
+	$("#global_loading").show();
+	var begin=new Date();  //开始时间
+	$.ajaxPost($.aries.service.aso.addSingleServer,param,function(data){
+        $("#global_loading").hide();
+        var end=new Date();    //结束时间
+        var time=(end.getTime()-begin.getTime())/1000/60;  //时间差
+        time=time.toFixed(2);
+		$.message.success("", "It takes "+time+" minutes.", function() {
+       		 qryConstructions();
+    		 },function(code,info){
+    			 if(undefined==info.hub_value[0]){
+    	             $.message.error("","Operation failed!");
+    			 }else{
+    	             $.message.error("","Operation failed,code:"+info.hub_value[0].code+",info:"+info.hub_value[0].value);
+    			 } 
+    		});
+    },function(code,info){
+        $("#global_loading").hide();
+        if(undefined==info.hub_value[0]){
+            $.message.error("","Operation failed!");
+		 }else{
+            $.message.error("","Operation failed,code:"+info.hub_value[0].code+",info:"+info.hub_value[0].value);
+		 } 
+    });
+}
+
+function delServer(){
+	
+}
+
+function close(){
+	$.closePopupPage();
+}
+
+
+</script>
+</html>

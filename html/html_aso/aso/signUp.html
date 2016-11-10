@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+    <link href="/ARIESRES/assets/aries/css/base/aries-base.css" rel="stylesheet" type="text/css"/>
+    <link href="/ARIESRES/assets/appEngine/css/common.css" rel="stylesheet" type="text/css"/>
+    <link href="/ARIESRES/assets/appEngine/css/signIn.css" rel="stylesheet" type="text/css"/>
+    <link href="/ARIESRES/assets/appEngine/css/font.css" rel="stylesheet" type="text/css"/>
+    <link href="/ARIESRES/assets/appEngine/css/font-md.css" rel="stylesheet" type="text/css"/>
+    <script src="/ARIESRES/assets/aries/lib/jquery.js"></script>
+    <script src="/ARIESRES/assets/aries/main/sea.js"></script>
+    <script type="text/javascript" src="/ARIESRES/assets/appEngine/js/signUp.js"></script>
+<title>HSM</title>
+</head>
+<body>
+<div class="appEngine-container">
+    <!--  <img class="signin-logo-img" src="/assets/appEngine/img/Appengine_logo2.png">
+    <span class="icon-close"></span> -->
+</div>
+    <!--title-->
+    <div class="signin-content">
+        <div class="signin-title">
+            <span class="signin-logotext">Sign Up</span>
+            <!-- <p>Already have an account?</p>  -->
+        </div>
+        <div aeType="aeForm" id="signDetail" aeInit="true" class="form-horizontal">
+            <div class="form-group">
+                <div class="signin-input">
+                    <input id="email" class="sign-input" type="text"/>
+                    <label for="email" >Email</label>
+                    <div class="control-line"></div>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="signin-input">
+                    <input id="passWord" class="sign-input" type="password"/>
+                    <label for="passWord" >Password</label>
+                    <div class="control-line"></div>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="sign-input-bor">
+                    <div class="signin-input">
+                        <input id="passWordConfirm" class="sign-input" type="password"/>
+                        <label for="passWordConfirm" >Type your password again</label>
+                        <div class="control-line"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="signin">
+            <button type="button" class="btn btn-block signUp-btn" onclick="signUp()">Sign Up</button>
+        </div>
+    </div>
+
+</body>
+<script type="text/javascript">
+
+seajs.use('aries-main',function(){
+	$.cookie($.aries.config.sec.SEC_AUTH_TENANT_KEY, "21", {path : '/'});
+//	$.cookie("appToken", "999", {path : '/'});
+});
+
+
+</script>
+ <script src="/ARIESRES/assets/appEngine/js/common.js"></script>
+</html>

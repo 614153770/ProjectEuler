@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Select Entity Class Dialog</title>
+    <link href="/ARIESRES/assets/aries/css/base/aries-base.css" rel="stylesheet" type="text/css"/>
+    <script src="/ARIESRES/assets/aries/lib/jquery.js"></script>
+    <script src="/ARIESRES/assets/aries/main/sea.js"></script>
+</head>
+<body>
+<div id="entityTree" aeType="aeTree" aeInit="true"  onclick="click()" style="overflow: auto;height:350px;"
+	idField="entClassId" pIdField="parentId" labelField="name" valueField="entClassId" rootId="n"  >
+</div>
+
+</body>
+
+
+<script type="text/javascript">
+
+seajs.use('aries-main', function() {
+	$.ajaxPost($.aries.service.secframe.getAllEntityClass, null,function(data) {
+			if (data) {
+				$("#entityTree").aeTree('reload', data);
+			}
+		}, function(code, info) {
+			$.message.error("","load data fail,code:"+ code + ",info:" + info);
+	});
+});
+
+var node = "";
+
+function click(nodeData){
+	//不可逆
+	var myIrGuide = $.getIrguide();
+	if(myIrGuide && !nodeData.aeChildren){
+		$.removePrivateData("entityClassNameData");
+		$.removePrivateData("entityClassIdData");
+		$.setPrivateData("entityClassNameData",nodeData.name);
+		$.setPrivateData("entityClassIdData",nodeData.entClassId);
+	}else{
+		node=nodeData;
+	}
+}
+//不可逆向导中的confirm按钮不调这个方法，直接调prev
+$.popupConfirmEvent=function(event){
+	var obj=node;
+	if(null == obj || obj.value==1){
+		$.message.alert("",$.i18n('sec_node_select'));
+		return;
+	}
+	$.closeTextPopup(obj);	
+};
+
+	
+</script>
+</html>

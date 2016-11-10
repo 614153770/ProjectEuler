@@ -1,0 +1,364 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Sec Function</title>
+     <link href="/ARIESRES/assets/aries/css/base/aries-base.css" rel="stylesheet" type="text/css"/>
+    <link href="/ARIESRES/assets/appEngine/css/common.css" rel="stylesheet" type="text/css"/>
+    <link href="/ARIESRES/assets/appEngine/css/signIn.css" rel="stylesheet" type="text/css"/>
+    <link href="/ARIESRES/assets/appEngine/css/main.css" rel="stylesheet" type="text/css"/>
+    <link href="/ARIESRES/assets/appEngine/css/font.css" rel="stylesheet" type="text/css"/>
+    <link href="/ARIESRES/assets/appEngine/css/font-md.css" rel="stylesheet" type="text/css"/>
+    <script src="/ARIESRES/assets/aries/lib/jquery.js"></script>
+    <script src="/ARIESRES/assets/aries/main/sea.js"></script>
+</head>
+<body>
+<div class="clearfix">
+	<div class="pull-left" style="width:32%;">
+		<div id="secFunctionTreePanel" aeType="aePanel" aeInit="true" level="5" title="Function Module Management">
+			<div aeType="aeTree" id="secFunctionTree" style="overflow: auto;height:500px;"  showLine="true" aeInit="true" 
+	   	 		idField="funcId" pIdField="parentId" labelField="name" valueField="funcId" rootId="n" onClick="SecfuncInfoLoad()" >
+			</div>
+		</div>
+	</div>
+	<div class="pull-left" style="width:68%;">
+		<div id="secFuncFormPanel" aeType="aePanel" aeInit="true" level="4" title="Menu Info">
+			<div aeType="aeForm" id="secFuncForm" aeInit="true" class="form-horizontal">
+				<div class="form-group">
+					<label class="col-xs-2 control-label"><span class="require">*</span>Menu Name</label>
+					<div class="col-xs-4">
+						<span aeType="aeTextfield" id="name" aeInit="true" dataField="name"  
+						aeValidate="true" rules="{required:true,messages:{required:'Please Input the Name'}}" ></span>
+					</div>
+					<label class="col-xs-2 control-label">Authentication Mode</label>
+					<div class="col-xs-4">				
+						<span aeType="aeCombo" id="verifyMode" aeInit="true"  dataField="verifyMode" valueField="codeNameNls" optionField="codeName" ></span>
+					</div>			
+				</div>
+				<div class="form-group">
+					<label class="col-xs-2 control-label">Icon Path</label>
+					<div class="col-xs-4">
+						<span aeType="aeTextfield" id="funcImg" aeInit="true" dataField="funcImg"  ></span>
+					</div>
+					<label class="col-xs-2 control-label"><span class="require">*</span>Function Type</label>
+					<div class="col-xs-4">				
+						<span aeType="aeCombo" id="funcType" aeInit="true"  dataField="funcType"  ></span>
+					</div>			
+				</div>
+				<div class="form-group">
+					<label class="col-xs-2 control-label">Module Parameter</label>
+					<div class="col-xs-4">
+						<span aeType="aeTextfield" id="funcArg" aeInit="true" dataField="funcArg"  ></span>
+					</div>
+					<label class="col-xs-2 control-label">DLL File Name</label>
+					<div class="col-xs-4">	
+						<span aeType="aeTextfield" id="dllPath" aeInit="true" dataField="dllPath" > </span>		
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="col-xs-2 control-label"><span class="require">*</span>Attributive Domain</label>
+					<div class="col-xs-4">
+						<span aeType="aeCombo" id="domainId" aeInit="true" dataField="domainId"  
+						aeValidate="true" rules="{required:true,messages:{required:'Please Select the Domain'}}" isValidate="true"></span>
+					</div>
+					<label class="col-xs-2 control-label">Menu Sequence</label>
+					<div class="col-xs-4">				
+						<span aeType="aeTextfield" id="funSeq" aeInit="true"  dataField="funSeq" ></span>
+					</div>			
+				</div>
+				<div class="form-group">
+					<label class="col-xs-2 control-label">Display Scheme</label>
+					<div class="col-xs-4">
+						<span aeType="aeCombo" id="dispType" aeInit="true" dataField="dispType"  ></span>
+					</div>
+					<label class="col-xs-2 control-label">Module Type</label>
+					<div class="col-xs-4">				
+						<span aeType="aeCombo" id="moduleType" aeInit="true"  dataField="moduleType"  valueField="codeId" optionField="codeName"  ></span>
+					</div>			
+				</div>
+				<div class="form-group">
+					<label class="col-xs-2 control-label">Association URL</label>
+					<div class="col-xs-10">
+						<span aeType="aeTextfield" id="viewname" aeInit="true" dataField="viewname"  ></span>
+					</div>			
+				</div>
+				<div class="form-group">
+					<label class="col-xs-2 control-label">Remarks</label>
+					<div class="col-xs-10">
+						<span aeType="aeTextfield" id="notes" aeInit="true" dataField="notes"  ></span>
+					</div>			
+				</div>
+		  		<div class="form-group">
+		  			<div class="col-xs-6">
+						<span aeType="aeTextfield" id="parentId" aeInit="true" dataField="parentId" visible="false"></span>
+						<span aeType="aeTextfield" id="funcId" aeInit="true" dataField="funcId" visible="false"></span>
+					</div>
+		  		</div>
+		  		<div class="col-xs-12 text-center">
+					<button class="btn btn-primary" type="button" onclick="addSecFunc()" id="addSecFuncBtn">Add</button>
+					<button class="btn btn-primary" type="button" onclick="saveSecFunc()" id="saveSecFuncBtn">Save</button>
+					<button class="btn btn-primary" type="button" onclick="delSecFunc()" id="delSecFuncBtn">Delete</button>
+		  		</div>
+			</div>
+		</div>
+	</div>
+</div>
+
+<script type="text/javascript">
+seajs.use('aries-main',function(){	 
+	setBtnDisabled(3);
+	var flag = false;	
+    //页面初始化时加载树结构
+	$.ajaxPost($.aries.service.secframe.getAllSecFunctions,null,function(data){
+			if(data){
+				$("#secFunctionTree").aeTree('reload',data);
+			}
+		},function(code,info){
+				$.message.error("","tree load error");
+			
+		 	
+		});  
+    
+    
+    //页面初始化时加载combo选项
+    var funcType = '[{"value":"H","text":"h"},{"value":"C","text":"c"}]';
+	$("#funcType").aeCombo('reload',$.parseJSON(funcType));
+	var domainId = '[{"value":"1","text":"domainId_1"}]';
+	$("#domainId").aeCombo('reload',$.parseJSON(domainId));
+	var dispType = '[{"value":"1","text":"tab"},{"value":"2","text":"win"},{"value":"3","text":"clint"}]';
+	$("#dispType").aeCombo('reload',$.parseJSON(dispType));
+	
+    $.ajaxPost($.aries.service.secframe.getSecStaticData,"codeType=68010",function(data){
+        if(data&&data.length!=0){
+        	$("#verifyMode").aeCombo('reload',data);  
+        }
+	     },function(code,info){
+	    	 
+	 });
+    $.ajaxPost($.aries.service.secframe.getSecStaticData,"codeType=68041",function(data){
+        if(data&&data.length!=0){
+        	$("#moduleType").aeCombo('reload',data);
+        }
+	     },function(code,info){	
+	    	 
+	 });
+    $("#secFuncForm").aeForm('reload',[]);
+    $("#secFuncForm").aeForm('setEditSts',false);
+});
+
+
+function SecfuncInfoLoad(nodeData){debugger;
+	flag = false;
+	var curNode=nodeData;
+	var curPid = nodeData.parentId;
+	var curFuncId=nodeData.funcId;
+	$("#secFuncForm").aeForm('setEditSts',true);
+	//没取到节点
+	if(curNode == undefined || curFuncId ==""){
+	    setBtnDisabled(3);
+	    return;
+	}
+	//根节点
+	else if(!curPid){
+		$.disabledButton("addSecFuncBtn",false);
+		$.disabledButton("saveSecFuncBtn",true);
+		$.disabledButton("delSecFuncBtn",true);
+	}
+	else{
+		setBtnDisabled(2);
+	}
+	//刷新表单
+	//var condition = "STATE=1 and FUNC_ID="+curFuncId;
+    var condition = "".appendParam("funcId",curFuncId);
+	$.ajaxPost($.aries.service.secframe.querySecFunction,condition,function(data){
+		if(data){
+			$("#secFuncForm").aeForm('reload',data);
+		}
+	},function(code,info){
+		$.message.error("","form load error");
+			
+	}); 
+	
+	//判断是否为叶子节点，决定VIEWNAME是否可编辑
+	//var children=$("#secFunctionTree").aeTree("getChildren",curFuncId);
+
+	//if(children==null || children.length<=0){
+	if(!nodeData.aeChildren){
+		$("#secFuncForm").aeForm('setColEditSts','viewname',true);
+	}
+	else{
+		$("#secFuncForm").aeForm('setColEditSts','viewname',false);
+	}
+
+}
+//新增
+function addSecFunc(){
+   
+	var curNode = $("#secFunctionTree").aeTree('getSelected');
+	var curFuncId=curNode.funcId;
+	var cond = "".appendParam("curFuncId",curFuncId);
+	/* //根节点
+	if(undefined != curFuncId && rootId ==curFuncId+""){
+		//刷新表单
+		$.ajaxPost($.aries.service.secframe.querySecFunction,cond,function(data){
+			if(data){
+				$("#secFuncForm").aeForm('reload',data);
+			}
+		},function(code,info){
+		 
+		}); 
+		$("#secFuncForm").aeForm('setValue','parentId',curFuncId);
+		setBtnDisabled(1);
+		$("#secFuncForm").aeForm('setColEditSts','viewName',true);
+		return;
+		
+	} */
+	
+	//子节点
+	
+	$.ajaxPost($.aries.service.secframe.checkIsLeaf,cond,function(data){
+		if(!data){
+			//刷新表单
+			$("#secFuncForm").aeForm('clear'); 
+			$("#secFuncForm").aeForm('setValueByField','parentId',curFuncId);
+			setBtnDisabled(1);
+			$("#secFuncForm").aeForm('setColEditSts','viewname',true);
+			flag = true;
+		}else{
+			$.message.alert("",$.i18n('sec_function_notdel_farnode'));
+		}
+	},function(code,info){
+		
+	}); 
+	
+}
+
+//保存
+function saveSecFunc(){
+	var curNode = $("#secFunctionTree").aeTree('getSelected');
+	var curFuncId=curNode.funcId;
+	var curPid = curNode.parentId;
+	var cond = "".appendParam("funcId",curFuncId);
+	
+	var validate = $("#secFuncForm").validate();
+    if(!validate){
+   	 return;
+    }
+    
+	var secFunction=$("#secFuncForm").aeForm('getData');
+	console.log(secFunction);
+	var newdata = $.aries.common.setSaveDataState(secFunction,flag);
+	secFunction = "".appendParam("secFunction",newdata);
+	if(secFunction==null||secFunction==""){
+		$.message.success("",$.i18n('sec_function_no_change'));
+		return;
+	}
+	$.ajaxPost($.aries.service.secframe.saveSecFunction,secFunction,function(){
+			$.message.success("",$.i18n('sec_function_save_ok'));
+			$.disabledButton("addSecFuncBtn",false);
+			$.disabledButton("saveSecFuncBtn",true);
+			$.disabledButton("delSecFuncBtn",false);
+			//根节点
+			if(!curPid){
+				$("#secFuncForm").aeForm('clear');
+			}
+			else{				
+				$.ajaxPost($.aries.service.secframe.getAllSecFunctions,null,function(data){
+							if(data){
+								$("#secFunctionTree").aeTree('refresh',data);
+								$("#secFunctionTree").aeTree('expandNode',curFuncId);
+								$("#secFunctionTree").aeTree('expandNode',curPid);
+								$('#secFunctionTree').aeTree('selectNode',curPid);
+							}
+						},function(code,info){
+		 						$.message.error("","tree load error");
+		 					
+						 
+					},{async:false}); 
+				
+			}
+	  },function(code,info){
+			$.message.error("",$.i18n('sec_function_save_fail'));
+			
+		setBtnDisabled(2);
+	},{async:false});	
+	
+}
+
+//删除
+function delSecFunc(){
+	var curNode = $("#secFunctionTree").aeTree('getSelected');
+	var curFuncId=curNode.funcId;
+	var curPid = curNode.parentId;
+	console.log(curPid);
+	if(curNode == null ||curNode == "")
+	{
+         $.message.alert("",$.i18n('sec_function_select_func'));	    
+         return;
+	}
+	//根节点
+	if(!curPid){
+		$.message.alert("",$.i18n('sec_function_notdel_root'));	    
+        return;
+	}
+	
+	//删除
+	var cond = "".appendParam("func_id",curFuncId);
+	var newdata = $.aries.common.setSaveDataState(cond,false);
+	$.message.confirm("","",function(){
+	    	    //删除操作  
+			   $.ajaxPost($.aries.service.secframe.deleteSecFunction,newdata,function(data){
+					$.message.success("",$.i18n('sec_function_del_success'));
+					setBtnDisabled(3);
+					//对树进行刷新
+					$.ajaxPost($.aries.service.secframe.getAllSecFunctions,null,function(data){
+							if(data){
+								$("#secFunctionTree").aeTree('refresh',data);
+								$("#secFunctionTree").aeTree('expandNode',curPid);
+							}
+						},function(code,info){
+		 						$.message.error("","tree load error");
+		 					
+						 
+					}); 
+					$("#secFuncForm").aeForm('clear');
+					$("#secFuncForm").aeForm('setEditSts',false);
+					
+				  },function(code,info){
+	 					$.message.error("",$.i18n('sec_function_del_fail'));
+	 					
+					
+					$("#secFuncForm").aeForm('clear');
+					$("#secFuncForm").aeForm('setEditSts',false);
+					setBtnDisabled(3);
+				});	
+	   });
+	
+}
+//禁用哪些按钮
+function setBtnDisabled(flag){
+	switch(flag){
+	case 1:
+		$.disabledButton("addSecFuncBtn",true);
+		$.disabledButton("saveSecFuncBtn",false);
+		$.disabledButton("delSecFuncBtn",true);
+		break;
+	case 2:
+		$.disabledButton("addSecFuncBtn",false);
+		$.disabledButton("saveSecFuncBtn",false);
+		$.disabledButton("delSecFuncBtn",false);
+		break;
+	case 3:
+		$.disabledButton("addSecFuncBtn",true);
+		$.disabledButton("saveSecFuncBtn",true);
+		$.disabledButton("delSecFuncBtn",true);
+		break;
+		
+	}
+}
+
+
+
+</script>
+</body>
+</html>

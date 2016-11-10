@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Role Type Dialog</title>
+    <link href="/ARIESRES/assets/aries/css/base/aries-base.css" rel="stylesheet" type="text/css"/>
+    <script src="/ARIESRES/assets/aries/lib/jquery.js"></script>
+    <script src="/ARIESRES/assets/aries/main/sea.js"></script>
+</head>
+<body>
+<div id="roleTypeDateGrid" aeType="aeGrid" aeInit="true"
+	datafield="" isPaging="true" pagingSize="5"
+	pagingAlign="right" height="300px" showIndex="false" 
+	singleSelect="false"  singleRowClass="false" >
+	<span datafield="codeId" title="$.i18n('setsecstaticdataforroletype_codeid')"  i18n="true" width="100"></span> 
+	<span datafield="codeName" title="$.i18n('setsecstaticdataforroletype_codename')" i18n="true" width="100"></span> 
+	<span datafield="codeNameNls" title="$.i18n('setsecstaticdataforroletype_codenamenls')" i18n="true" width="100"></span>
+</div>
+
+
+</body>
+<script type="text/javascript">
+
+     var selectRoleTypeId = "";
+	seajs.use('aries-main', function() {
+		/**
+		$.aries.ajax.post($.aries.service.secframe.refreshRoleTypeDate,null,function(data){
+			
+			if(data){
+				 $('#roleTypeDateGrid').aeGrid('reload',data);
+			}
+		  },function(code,info){
+		     $.aries.messagebox.error("","","load data fail,code:"+code+",info:"+info);
+		  }); 
+		*/
+		$('#roleTypeDateGrid').aeGrid('reload',$.aries.service.secframe.refreshRoleTypeDate,null);
+	});
+	
+	$.popupConfirmEvent=function(event){
+		var selRows =  $('#roleTypeDateGrid').aeGrid('getSelections',true);
+		if(selRows != null && selRows.length > 0)
+		{
+			selectRoleTypeId = selRows[0].codeNameNls;
+		}else{
+	    	$.message.alert("",$.i18n("sec_role_sel_one_role"));
+	    	return;
+	    }
+		$.closePopupPage();
+	};
+	
+	
+</script>
+</html>

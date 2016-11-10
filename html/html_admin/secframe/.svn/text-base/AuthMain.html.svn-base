@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+	<link href="/ARIESRES/assets/aries/css/base/aries-base.css"rel="stylesheet" type="text/css" />
+	<link href="/ARIESRES/assets/appEngine/css/common.css" rel="stylesheet" type="text/css" />
+	<link href="/ARIESRES/assets/appEngine/css/signIn.css" rel="stylesheet" type="text/css" />
+	<link href="/ARIESRES/assets/appEngine/css/main.css" rel="stylesheet" type="text/css" />
+	<link href="/ARIESRES/assets/appEngine/css/font.css" rel="stylesheet" type="text/css" />
+	<link href="/ARIESRES/assets/appEngine/css/font-md.css" rel="stylesheet" type="text/css" />
+	<script src="/ARIESRES/assets/aries/lib/jquery.js"></script>
+	<script src="/ARIESRES/assets/aries/main/sea.js"></script>
+	<title>Secframe Manager</title>
+</head>
+<body>
+<div class="clearfix">
+  <div style="padding-bottom:30px;">
+	<div class="pull-left" style="width:25%;">
+		<div aeType="aeTree" id="authMenu" style="overflow: auto;height:550px;" showCheckbox="false" showLine="true" aeInit="true" 
+   	 		idField="id" pIdField="pid" labelField="text" valueField="id" rootId="" onClick="secMenuTreeClick()" >
+		</div>
+	</div>
+	<div class="pull-left" style="width:75%;">
+		<div id="mainBody"></div>
+	</div>
+  </div>
+</div>
+<script type="text/javascript">
+seajs.use('aries-main',function(){
+	var data = '[{"id":"n","text":"'+$.i18n('n')+'","viewname":"","expanded":"true"},'+
+	'{"id":"40000001","pid":"n","text":"'+ $.i18n('40000001') +'","viewname":""},'+
+	'{"id":"40000002","pid":"n","text":"'+ $.i18n('40000002') +'","viewname":""},'+
+	'{"id":"40000003","pid":"n","text":"'+ $.i18n('40000003') +'","viewname":""},'+
+	'{"id":"40000004","pid":"n","text":"'+ $.i18n('40000004') +'","viewname":""},'+
+	//'{"id":"40000005","pid":"n","text":"'+ $.i18n('40000005') +'","viewname":""},'+
+	'{"id":"40000040","pid":"n","text":"'+ $.i18n('40000040') +'","viewname":""},'+
+	'{"id":"40000044","pid":"n","text":"'+ $.i18n('40000044') +'","viewname":""},'+
+	
+	'{"id":"40000007","pid":"40000001","text":"'+ $.i18n('40000007') +'","viewname":"/secframe/sysmgr/secfunction/secfunction.html"},'+
+	
+	'{"id":"40000008","pid":"40000002","text":"'+ $.i18n('40000008') +'","viewname":"/secframe/sysmgr/entity/EntityClassManager.html"},'+
+	'{"id":"40000009","pid":"40000002","text":"'+ $.i18n('40000009') +'","viewname":"/secframe/sysmgr/entity/EntityManager.html"},'+
+	'{"id":"40000010","pid":"40000002","text":"'+ $.i18n('40000010') +'","viewname":"/secframe/sysmgr/entity/privManager.html"},'+
+	'{"id":"40000049","pid":"40000002","text":"'+ $.i18n('40000049') +'","viewname":"/secframe/sysmgr/entity/EntityPrivRelaManager.html"},'+
+	
+	'{"id":"40000011","pid":"40000003","text":"'+ $.i18n('40000011') +'","viewname":"/secframe/sysmgr/role/RoleManager.html"},'+
+	'{"id":"40000024","pid":"40000003","text":"'+ $.i18n('40000024') +'","viewname":"/secframe/sysmgr/role/RoleExclude.html"},'+
+	'{"id":"40000048","pid":"40000003","text":"'+ $.i18n('40000048') +'","viewname":"/secframe/sysmgr/role/RoleExtend.html"},'+
+	
+	'{"id":"40000012","pid":"40000004","text":"'+ $.i18n('40000012') +'","viewname":"/secframe/sysmgr/role/RoleFunction.html"},'+
+	'{"id":"40000013","pid":"40000004","text":"'+ $.i18n('40000013') +'","viewname":"/secframe/sysmgr/role/RoleEntity.html"},'+
+	
+	//'{"id":"40000014","pid":"40000005","text":"'+ $.i18n('40000014') +'","viewname":"/secframe/sysmgr/author/authorManager.html?type=Operator"},'+
+	//'{"id":"40000033","pid":"40000005","text":"'+ $.i18n('40000033') +'","viewname":"/secframe/sysmgr/author/BatchOperatorAuthor.html"},'+
+	//'{"id":"40000034","pid":"40000005","text":"'+ $.i18n('40000034') +'","viewname":"/secframe/sysmgr/author/BatchPlayerAuthor.html"},'+
+	//'{"id":"40000035","pid":"40000005","text":"'+ $.i18n('40000035') +'","viewname":"/secframe/sysmgr/author/BatchStationAuthor.html"},'+
+	
+	'{"id":"40000041","pid":"40000040","text":"'+ $.i18n('40000041') +'","viewname":"/secframe/sysmgr/data/DataManager.html"},'+
+	'{"id":"40000042","pid":"40000040","text":"'+ $.i18n('40000042') +'","viewname":"/secframe/sysmgr/data/OwnerPermissionManager.html"},'+
+	'{"id":"40000043","pid":"40000040","text":"'+ $.i18n('40000043') +'","viewname":"/secframe/sysmgr/data/RoleData.html"},'+
+	
+	'{"id":"40000045","pid":"40000044","text":"'+ $.i18n('40000045') +'","viewname":"/secframe/sysmgr/service/ServiceManager.html"},'+
+	'{"id":"40000046","pid":"40000044","text":"'+ $.i18n('40000046') +'","viewname":"/secframe/sysmgr/service/RoleService.html"}'+
+	']';
+	$("#authMenu").aeTree('reload',$.parseJSON(data));
+	$("#authMenu").aeTree('expandAll');
+});
+
+
+
+var parameters;
+function secMenuTreeClick(nodeData){
+	var id = nodeData.id;
+	var children = $("#authMenu").aeTree('getChildren',id);
+	if(!(children instanceof Array)){
+		var viewname = nodeData.viewname.split("?",1);
+		if(nodeData.viewname.indexOf("?") != -1){
+			parameters = nodeData.viewname.split("?")[1];
+		}
+		includePage(nodeData.viewname,function(){});
+	}
+}
+function includePage(page,callback){
+    $.includeHtml("mainBody",page,callback);
+}
+</script>
+</body>
+</html>

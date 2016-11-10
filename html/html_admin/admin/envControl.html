@@ -1,0 +1,355 @@
+<!DOCTYPE html>
+<html>
+<head>
+ <meta charset="UTF-8">
+    <link href="/ARIESRES/assets/aries/css/base/aries-base.css" rel="stylesheet" type="text/css"/>
+    <link href="/ARIESRES/assets/appEngine/css/common.css" rel="stylesheet" type="text/css"/>
+    <link href="/ARIESRES/assets/appEngine/css/signIn.css" rel="stylesheet" type="text/css"/>
+    <link href="/ARIESRES/assets/appEngine/css/main.css" rel="stylesheet" type="text/css"/>
+    <link href="/ARIESRES/assets/appEngine/css/font.css" rel="stylesheet" type="text/css"/>
+    <link href="/ARIESRES/assets/appEngine/css/font-md.css" rel="stylesheet" type="text/css"/>
+    <script src="/ARIESRES/assets/aries/lib/jquery.js"></script>
+    <script src="/ARIESRES/assets/aries/main/sea.js"></script>
+    <title>Environment Control</title>
+</head>
+<body>
+<div id="global_loading" class="modal fade in fx-loadingPage" style="display:none;">
+    <div class="modal-backdrop fade in" style="height: 100%">
+        <img src="/ARIESRES/assets/appEngine/img/loading-page.svg" class="loading-page" alt="">
+    </div>
+</div>
+<div id='mainPage'>
+<div id="panel1" aeType="aePanel" aeInit="true" title="Install">
+	<div aeType="aeForm" id="install" aeInit="true" class="form-horizontal" >
+	  <div class="form-group">
+	  	<label class="col-xs-2 control-label">Environment</label>
+		<div class="col-xs-3" >
+			<span aeType="aeCombo" id="envId" aeInit="true" dataField="envId" optionField="codeName" valueField="codeValue" emptyText="-Please select the value!-" width="300" showClear="true" value="AI_Cloudy_Veris7.5"></span>
+		</div>	
+		<label class="col-xs-2 control-label">Offer Name</label>
+		<div class="col-xs-3">
+			<span aeType="aeCombo" id="offerName" aeInit="true" dataField="offerName" optionField="prodOfferName" valueField="prodOfferCode" emptyText="-Please select the value!-" width="300" showClear="true" value="IMAGE_Veris7.5_AC"></span>
+		</div>
+		<div class="col-xs-2 text-right">
+			<button class="btn btn-primary" type="button" onclick="install()" >Install</button>
+	  	</div>
+	  </div>
+	</div>
+</div>
+
+<div id="panel2" aeType="aePanel" aeInit="true" title="Management">
+	<div class="aries_demo bs-example">
+		<div class="c_box" style="height:300px;">  
+			<div id="constructionGrid" aeType="aeGrid" aeInit="true" singleSelect="true" singleRowClass="false"
+			    isPaging="true" pagingSize="10" width="100%" height="100%" onRowClick="myOnRowClick()">
+			    <span datafield="constructId" title="Construct ID" width="64" align="left" visible="false"></span>
+			   	<span datafield="orderId" title="Order ID" width="64" align="left" visible="false"></span>
+			    <span datafield="offerCode" title="Offer Code" width="128"></span>
+			    <span datafield="envId" title="Env ID" width="100"></span>
+			    <span datafield="webUrl" title="Web URL" width="128" renderer="operationRenderer"></span>
+			    <span datafield="custLoginId" title="Customer Id" width="100"></span>
+			    <span datafield="version" title="Version" width="60"></span>
+			</div>
+			 <div class="c_box">
+				<div class="c_submit" align="center">
+					<button type="button" class="btn btn-primary" onclick="uninstall()">Uninstall</button>
+					<button type="button" class="btn btn-primary" onclick="startEnv()">Start</button>
+					<button type="button" class="btn btn-primary" onclick="stopEnv()">Stop</button>
+					<button type="button" class="btn btn-primary" onclick="deleteEnv()">Delete</button>
+					<!-- <button type="button" class="btn btn-primary" onclick="servManager()">Server Management</button> -->
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+
+
+</div>
+<script type="text/javascript">
+var custLoginId;
+var offerCode;
+var constructId;
+var orderId;
+var tid;
+var version;
+
+function qryConstructions(){
+    $("#global_loading").show();
+	$.ajaxPost($.aries.service.aso.qryConstructionsByCustId,"custLoginId="+custLoginId,function(data){
+		$("#global_loading").hide();
+        if(data){
+            $("#constructionGrid").aeGrid("reload",data);
+        }
+    },function(code,info){
+    	$("#global_loading").hide();
+    	if(undefined==info.hub_value[0]){
+            $.message.error("","Operation failed!");
+		 }else{
+            $.message.error("","Operation failed,code:"+info.hub_value[0].code+",info:"+info.hub_value[0].value);
+		 } 
+    });
+}
+function getStaticDataByCodeType(){
+	$("#global_loading").show();
+	var TA_ENV_NAME = "ENV_CODE";
+	$.ajaxPost($.aries.service.aso.getStaticDataByCodeType,"codeType="+TA_ENV_NAME,function(data){
+		$("#global_loading").hide();
+        if(data){
+            $("#envId").aeCombo("reload",data);
+        }
+    },function(code,info){
+    	$("#global_loading").hide();
+    	if(undefined==info.hub_value[0]){
+            $.message.error("","Operation failed!");
+		 }else{
+            $.message.error("","Operation failed,code:"+info.hub_value[0].code+",info:"+info.hub_value[0].value);
+		 } 
+    });
+}
+function qryProduOfferList(){
+	$("#global_loading").show();
+	var offerType = "super"
+	$.ajaxPost($.aries.service.aso.qryProduOfferList,"supplierTennatId="+tid+"&offerType="+offerType,function(data){
+		$("#global_loading").hide();
+        if(data){
+            $("#offerName").aeCombo("reload",data);
+        }
+    },function(code,info){
+    	$("#global_loading").hide();
+    	if(undefined==info.hub_value[0]){
+            $.message.error("","Operation failed!");
+		 }else{
+            $.message.error("","Operation failed,code:"+info.hub_value[0].code+",info:"+info.hub_value[0].value);
+		 } 
+    });
+}
+
+seajs.use('aries-main',function(){
+	custLoginId = $.cookie("login_customer_id");
+	tid = $.cookie($.aries.config.sec.SEC_AUTH_TENANT_KEY);
+	qryConstructions();
+	getStaticDataByCodeType();
+	qryProduOfferList();
+});
+
+function myOnRowClick(rowIndex,rowData,event){
+	offerCode = rowData.offerCode;
+	constructId = rowData.constructId;
+	orderId = rowData.orderId;
+	version = rowData.version;
+	/* custLoginId = rowData.custLoginId; */
+}
+function operationRenderer(colValue,rowIndex,rowData){
+	return '<a href=" '+ colValue + '" target="_blank">' + colValue + '</a>';
+}
+function install(){
+	 if(undefined==custLoginId){
+         $.message.error("","Please login!");
+         return;
+	 }
+	var envId =  $("#install").aeForm('getValueByField','envId');
+	var offerCodeValue =  $("#install").aeForm('getValueByField','offerName');
+	if(undefined==envId||""==envId){
+        $.message.error("","Please select a enviroment!");
+        return;
+	 }
+	if(undefined==offerCodeValue||""==offerCodeValue){
+         $.message.error("","Please an product offer!");
+         return;
+	 }
+	 var param = "offerCode="+offerCodeValue+"&envId="+envId+"&custLoginId="+custLoginId;
+     $("#global_loading").show();
+     
+     var begin=new Date();  //开始时间
+	 $.ajaxPost($.aries.service.aso.installWithVersion,param,function(data){
+         $("#global_loading").hide();
+	        
+         var end=new Date();    //结束时间
+         var time=(end.getTime()-begin.getTime())/1000/60;  //时间差
+         time=time.toFixed(2);
+		$.message.success("", "It takes "+time+" minutes.", function() {
+       		 qryConstructions();
+    		 },function(code,info){
+    			 if(undefined==info.hub_value[0]){
+    	             $.message.error("","Operation failed!");
+    			 }else{
+    	             $.message.error("","Operation failed,code:"+info.hub_value[0].code+",info:"+info.hub_value[0].value);
+    			 } 
+         });
+	        
+	    },function(code,info){
+            $("#global_loading").hide();
+            if(undefined==info.hub_value[0]){
+	             $.message.error("","Operation failed!");
+			 }else{
+	             $.message.error("","Operation failed,code:"+info.hub_value[0].code+",info:"+info.hub_value[0].value);
+			 } 
+	    });
+}
+
+function uninstall(){
+	if(undefined==custLoginId){
+		$.message.alert("","Please log in!");
+		return;
+	}
+	if(undefined==offerCode){
+		$.message.alert("","Please select an offer!");
+		return;
+	}
+	
+	var param = "offerCode="+offerCode+"&custLoginId="+custLoginId+"&constructId="+constructId+"&orderId="+orderId;
+	$("#global_loading").show();
+	var begin=new Date();  //开始时间
+	$.ajaxPost($.aries.service.aso.uninstall,param,function(data){
+        $("#global_loading").hide();
+        var end=new Date();    //结束时间
+        var time=(end.getTime()-begin.getTime())/1000/60;  //时间差
+        time=time.toFixed(2);
+		$.message.success("", "It takes "+time+" minutes.", function() {
+       		 qryConstructions();
+    		 },function(code,info){
+    			 if(undefined==info.hub_value[0]){
+    	             $.message.error("","Operation failed!");
+    			 }else{
+    	             $.message.error("","Operation failed,code:"+info.hub_value[0].code+",info:"+info.hub_value[0].value);
+    			 } 
+        });
+        
+    },function(code,info){
+        $("#global_loading").hide();
+        if(undefined==info.hub_value[0]){
+            $.message.error("","Operation failed!");
+		 }else{
+            $.message.error("","Operation failed,code:"+info.hub_value[0].code+",info:"+info.hub_value[0].value);
+		 } 
+    });
+}
+
+function startEnv(){
+	if(undefined==custLoginId){
+		$.message.alert("","Please log in!");
+		return;
+	}
+	if(undefined==offerCode){
+		$.message.alert("","Please select an offer!");
+		return;
+	}
+	var param = "offerCode="+offerCode+"&custLoginId="+custLoginId+"&version="+version;
+	$("#global_loading").show();
+	var begin=new Date();  //开始时间
+	$.ajaxPost($.aries.service.aso.startEnv,param,function(data){
+        $("#global_loading").hide();
+        var end=new Date();    //结束时间
+        var time=(end.getTime()-begin.getTime())/1000/60;  //时间差
+        time=time.toFixed(2);
+		$.message.success("", "It takes "+time+" minutes.", function() {
+       		 qryConstructions();
+    		 },function(code,info){
+    			 if(undefined==info.hub_value[0]){
+    	             $.message.error("","Operation failed!");
+    			 }else{
+    	             $.message.error("","Operation failed,code:"+info.hub_value[0].code+",info:"+info.hub_value[0].value);
+    			 } 
+        });
+    },function(code,info){
+        $("#global_loading").hide();
+        if(undefined==info.hub_value[0]){
+            $.message.error("","Operation failed!");
+		 }else{
+            $.message.error("","Operation failed,code:"+info.hub_value[0].code+",info:"+info.hub_value[0].value);
+		 } 
+    });
+}
+
+function stopEnv(){
+	if(undefined==custLoginId){
+		$.message.alert("","Please log in!");
+		return;
+	}
+	if(undefined==offerCode){
+		$.message.alert("","Please select an offer!");
+		return;
+	}
+	var param = "offerCode="+offerCode+"&custLoginId="+custLoginId+"&constructId="+constructId;
+	$("#global_loading").show();
+	var begin=new Date();  //开始时间
+	$.ajaxPost($.aries.service.aso.stopExpCache,param,function(data){
+        $("#global_loading").hide();
+        var end=new Date();    //结束时间
+        var time=(end.getTime()-begin.getTime())/1000/60;  //时间差
+        time=time.toFixed(2);
+		$.message.success("", "It takes "+time+" minutes.", function() {
+       		 qryConstructions();
+    		 },function(code,info){
+    			 if(undefined==info.hub_value[0]){
+    	             $.message.error("","Operation failed!");
+    			 }else{
+    	             $.message.error("","Operation failed,code:"+info.hub_value[0].code+",info:"+info.hub_value[0].value);
+    			 } 
+    		});
+    },function(code,info){
+        $("#global_loading").hide();
+        if(undefined==info.hub_value[0]){
+            $.message.error("","Operation failed!");
+		 }else{
+            $.message.error("","Operation failed,code:"+info.hub_value[0].code+",info:"+info.hub_value[0].value);
+		 } 
+    });
+}
+
+function deleteEnv(){
+	if(undefined==custLoginId){
+		$.message.alert("","Please log in!");
+		return;
+	}
+	if(undefined==offerCode){
+		$.message.alert("","Please select an offer!");
+		return;
+	}
+	var param = "offerCode="+offerCode+"&custLoginId="+custLoginId+"&constructId="+constructId;
+	$("#global_loading").show();
+	var begin=new Date();  //开始时间
+	$.ajaxPost($.aries.service.aso.deleteEnv,param,function(data){
+        $("#global_loading").hide();
+       
+        var end=new Date();    //结束时间
+        var time=(end.getTime()-begin.getTime())/1000/60;  //时间差
+        time=time.toFixed(2);
+		$.message.success("", "It takes "+time+" minutes.", function() {
+       		 qryConstructions();
+    		 },function(code,info){
+    			 if(undefined==info.hub_value[0]){
+    	             $.message.error("","Operation failed!");
+    			 }else{
+    	             $.message.error("","Operation failed,code:"+info.hub_value[0].code+",info:"+info.hub_value[0].value);
+    			 } 
+        });
+        
+    },function(code,info){
+        $("#global_loading").hide();
+        if(undefined==info.hub_value[0]){
+            $.message.error("","Operation failed!");
+		 }else{
+            $.message.error("","Operation failed,code:"+info.hub_value[0].code+",info:"+info.hub_value[0].value);
+		 } 
+    });
+}
+
+function servManager(){
+	if(undefined==custLoginId){
+		$.message.alert("","Please log in!");
+		return;
+	}
+	if(undefined==version){
+		$.message.alert("","Please select a system!");
+		return;
+	}
+	var popupParam = new $.DataMap();
+	popupParam.put("version",version);
+	popupParam.put("constructId",constructId);
+	$.openPopupPage("/admin/serverManagement.html",popupParam,"Server List","","",{"showButton":false,"draggable":true,"resizable":true});
+
+}
+</script>
+</body>
+</html>

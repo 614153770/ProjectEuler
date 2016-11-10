@@ -1,0 +1,495 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Author Manager</title>
+    <link href="/ARIESRES/assets/aries/css/base/aries-base.css" rel="stylesheet" type="text/css"/>
+    <script src="/ARIESRES/assets/aries/lib/jquery.js"></script>
+    <script src="/ARIESRES/assets/aries/main/sea.js"></script>
+</head>
+<body > 
+<div id="jspDiv">
+	<div id="infoPanel" aeType="aePanel" aeInit="true" level="4" title="Operator Info">
+		<div aeType="aeForm" id="opForm" aeInit="true" class="form-horizontal">
+			<div class="form-group">
+				<label class="col-xs-2 control-label"><span class="require">*</span>Operator</label>
+				<div class="col-xs-4">
+					<span aeType="aeCombo" id="opId" aeInit="true" dataField="opId"  valueField="operatorId" optionField="code" ></span>
+				</div>			
+			</div>		
+		</div>
+	</div>
+</div>
+<div id="searchPanel" aeType="aePanel" aeInit="true" level="4" title="Function Set Search">
+	<div aeType="aeForm" id="authoredForm" aeInit="true" class="form-horizontal">
+	 	<div class="form-group">
+			<label class="col-xs-2 control-label">ID</label>
+			<div class="col-xs-4">
+				<span aeType="aeTextfield" id="roleId" aeInit="true" dataField="roleId"  ></span>
+			</div>
+			<label class="col-xs-2 control-label">Function Set Name</label>
+			<div class="col-xs-4">				
+				<span aeType="aeTextfield" id="roleName" aeInit="true" dataField="roleName"  ></span>
+			</div>			
+		</div>
+		<div class="form-group">
+			<label class="col-xs-2 control-label">Function Set Type</label>
+			<div class="col-xs-4">
+				<span aeType="aeCombo" id="roleType" aeInit="true" dataField="roleType"  valueField="codeId" optionField="codeName" ></span>
+			</div>
+			<label class="col-xs-2 control-label">Region Code</label>
+			<div class="col-xs-4">
+				<span aeType="aeCombo" id="regionCode" aeInit="true" dataField="regionCode" valueField="codeId" optionField="codeName"></span>
+			</div>			
+		</div>		
+		<div class="col-xs-12 text-right">
+			<button class="btn btn-primary" type="button" onclick="searchAuthored()" ><span class="i18n">sec_query</span></button>
+		</div>		
+	</div>
+</div>
+<div id="listPanel" aeType="aePanel" aeInit="true" level="4" title="Authorized Function Set List">
+	<div id="authoredRoleGrid" aeType="aeGrid" aeInit="true"
+	    datafield="" isPaging="true" pagingSize="5" height="300"
+	    width="100%"    showIndex="false" singleSelect="false" i18n="true"   singleRowClass="false" onPageChange="checkOp">
+	    <span datafield="authorId" visible="false"></span>
+	    <span datafield="roleId" visible="false"></span>
+	    <span datafield="objId" title="$.i18n('sec_obj_id')" width="100"  i18n="true"></span>
+	    <span datafield="roleName" title="$.i18n('sec_role_name')" width="100" i18n="true"></span>
+	    <span datafield="roleType" title="$.i18n('sec_role_type')" width="100" i18n="true"></span>
+	    <span datafield="regionCode" title="$.i18n('sec_region_code')" width="100" i18n="true"></span>
+	    <span datafield="domainId" visible="false"></span>
+	    <span datafield="authorType" title="$.i18n('sec_author_type')" width="100" i18n="true" ></span>
+	    <span datafield="authorEntityId" visible="false"></span> 
+	    <span datafield="authorValidDate" title="$.i18n('sec_author_valid_date')" width="100" i18n="true"></span>
+	    <span datafield="authorExpireDate" title="$.i18n('sec_author_valid_date')"  width="100" i18n="true"></span>	    
+	</div>
+	<div class="col-xs-12 text-center">			
+		<button class="btn btn-primary" type="button" onclick="popupDiv()" ><span class="i18n">sec_add_author</span></button>
+		<button class="btn btn-primary" type="button" onclick="modifyAuthor()" ><span class="i18n">sec_modify_author</span></button>
+		<button class="btn btn-primary" type="button" onclick="unAuthor()" ><span class="i18n">sec_delete_author</span></button>
+	</div>
+</div>
+
+
+<!-- detailDiv -->
+
+<div id="detailDiv"  style="display: none;" >
+	<div aeType="aeForm" id="detailForm" aeInit="true" class="form-horizontal">
+		<div class="form-group">
+			<label class="col-xs-2 control-label">Authorization Type</label>
+			<div class="col-xs-4">
+				<span aeType="aeCombo" id="authorTypeDetail" aeInit="true" dataField="authorType" ></span>
+			</div>			
+		</div>	
+		<div class="form-group">
+			<label class="col-xs-2 control-label">Authorization Valid Date</label>
+			<div class="col-xs-4">
+				<span aeType="aeCalendar" id="authorValidDateDetail" aeInit="true" dataField="authorValidDate" showTime="true" showClear="true"></span>
+			</div>	
+			<label class="col-xs-2 control-label">Authorization Expire Date</label>
+			<div class="col-xs-4">
+				<span aeType="aeCalendar" id="authorExpireDateDetail" aeInit="true" dataField="authorExpireDate"  showTime="true" showClear="true"></span>
+			</div>		
+		</div>	
+	</div>
+	<div class="col-xs-12 text-center">			
+		<button class="btn btn-primary" type="button" onclick="saveDetailModify()" ><span class="i18n">sec_save</span></button>
+		<button class="btn btn-default" type="button" onclick="cancelDetailModify()" ><span class="i18n">sec_cancel</span></button>
+	</div>
+</div>
+
+
+<!-- authorableDiv -->
+
+<div id="authorableDiv"  style="display: none;" >
+	<div id="authorableSearchPanel" aeType="aePanel" aeInit="true" level="4" title="Function Set Search">
+		<div aeType="aeForm" id="authorableForm" aeInit="true" class="form-horizontal">
+		 	<div class="form-group">
+				<label class="col-xs-2 control-label">ID</label>
+				<div class="col-xs-4">
+					<span aeType="aeTextfield" id="roleIdPopup" aeInit="true" dataField="roleId"  ></span>
+				</div>
+				<label class="col-xs-2 control-label">Function Set Name</label>
+				<div class="col-xs-4">				
+					<span aeType="aeTextfield" id="roleNamePopup" aeInit="true" dataField="roleName"  ></span>
+				</div>			
+			</div>
+			<div class="form-group">
+				<label class="col-xs-2 control-label">Function Set Type</label>
+				<div class="col-xs-4">
+					<span aeType="aeCombo" id="roleTypePopup" aeInit="true" dataField="roleType"  valueField="codeId" optionField="codeName" ></span>
+				</div>
+				<label class="col-xs-2 control-label">Region Code</label>
+				<div class="col-xs-4">
+					<span aeType="aeCombo" id="regionCodePopup" aeInit="true" dataField="regionCode" valueField="codeId" optionField="codeName"></span>
+				</div>			
+			</div>		
+			<div class="col-xs-12 text-right">
+				<button class="btn btn-primary" type="button" onclick="search()" ><span class="i18n">sec_query</span></button>
+			</div>		
+		</div>
+	</div>
+	<div id="authorableListPanel" aeType="aePanel" aeInit="true" level="4" title="Authorizable Function Set List">
+		<div id="authorableGrid" aeType="aeGrid" aeInit="true" editable="true"
+		    datafield="" isPaging="true" pagingSize="5" height="150"
+		    showIndex="false" singleSelect="false" i18n="true"   singleRowClass="false">
+		    <span datafield="roleId" visible="false"></span>
+		    <span datafield="roleName" title="$.i18n('sec_role_name')" width="100" i18n="true"></span>
+		    <span datafield="roleType" title="$.i18n('sec_role_type')" width="100" i18n="true"></span>
+		    <span datafield="regionCode" title="$.i18n('sec_region_code')" width="100" i18n="true"></span>
+		    <span datafield="domainId" visible="false"></span>
+		    <span datafield="domainName" visible="false"></span>
+		    <span datafield="authorType" title="$.i18n('sec_author_type')" width="100" i18n="true"></span>
+		    <span datafield="authorEntityId" visible="false"></span>
+		    <span datafield="authorValidDate" title="$.i18n('sec_author_valid_date')"  width="100"  i18n="true"  ></span>
+		    <span datafield="authorExpireDate" title="$.i18n('sec_author_valid_date')"  width="100"  i18n="true"  ></span>
+		    <span datafield="authorId" visible="false"></span>
+		    <span datafield="state" visible="false"></span>
+		    <span datafield="notes" visible="false"></span>
+		</div>
+		<div class="col-xs-12 text-center">			
+			<button class="btn btn-primary" type="button" onclick="author()" ><span class="i18n">sec_confirm_author</span></button>
+			<button class="btn btn-primary" type="button" onclick="modifyAuthorBacth()" ><span class="i18n">sec_batch_modify_author</span></button>
+			<button class="btn btn-default" type="button" onclick="cancelAuthor()" ><span class="i18n">sec_cancel</span></button>
+		</div>
+	</div>
+	<div id="batchModifyDiv"  style="display: none;" >
+		<div id="batchModifyPanel" aeType="aePanel" aeInit="true" level="4" title="Batch Modify Authorization">
+			<div aeType="aeForm" id="batchModifyForm" aeInit="true" class="form-horizontal">
+				<div class="form-group">
+					<label class="col-xs-2 control-label">Authorization Type</label>
+					<div class="col-xs-4">
+						<span aeType="aeCombo" id="authorType" aeInit="true" dataField="authorType" ></span>
+					</div>			
+				</div>	
+				<div class="form-group">
+					<label class="col-xs-2 control-label">Authorization Valid Date</label>
+					<div class="col-xs-4">
+						<span aeType="aeCalendar" id="authorValidDate" aeInit="true" dataField="authorValidDate" showTime="true" showClear="true"></span>
+					</div>	
+					<label class="col-xs-2 control-label">Authorization Expire Date</label>
+					<div class="col-xs-4">
+						<span aeType="aeCalendar" id="authorExpireDate" aeInit="true" dataField="authorExpireDate"  showTime="true" showClear="true"></span>
+					</div>		
+				</div>	
+			</div>
+			<div class="col-xs-12 text-center">			
+				<button class="btn btn-primary" type="button" onclick="saveBatchModify()" ><span class="i18n">sec_save</span></button>
+				<button class="btn btn-default" type="button" onclick="cancelBatchModify()" ><span class="i18n">sec_cancel</span></button>
+			</div>
+		</div>
+	</div>
+</div>
+
+
+</body>	
+
+
+
+<script type="text/javascript"> 
+ seajs.use('aries-main',function(){
+	 
+	 //初始化页面下拉框
+	 var authorType = '[{"value":"A","text":"Workable"},{"value":"B","text":"Authorizable"},{"value":"C","text":"Both"}]';
+	 $("#authorTypeDetail").aeCombo('reload',$.parseJSON(authorType));
+	 $("#authorType").aeCombo('reload',$.parseJSON(authorType));
+	 
+	 $.ajaxPost($.aries.service.hubconsole.queryOperList,null,function(data){
+	        if(data&&data.length!=0){
+	    		$("#opId").aeCombo('reload',data); 
+	        }
+		},function(code,info){
+			 
+		}); 
+
+	 //roleType
+	  $.ajaxPost($.aries.service.secframe.getSecStaticData,'codeType=201309',function(data){
+        if(data&&data.length!=0){
+        	$("#roleType").aeCombo('reload',data); 
+        	$("#roleTypePopup").aeCombo('reload',data); 
+        }
+	 },function(code,info){
+		 
+	 });
+	 //regionCode
+	  $.ajaxPost($.aries.service.secframe.getSecStaticData,'codeType=50001',function(data){
+        if(data&&data.length!=0){
+        	$("#regionCode").aeCombo('reload',data); 
+        	$("#regionCodePopup").aeCombo('reload',data); 
+        }
+	 },function(code,info){
+		 
+	 });
+	 
+ });
+
+ var objectId = [];
+ var type = parameters.split('=')[1];
+ var dateLimit;
+  
+ /*  function refresh(){
+	  var opId = $("#opForm").aeForm('getValueByField','opId');
+	  if(opId!=null && ""!=opId){
+	  	objectId[0] =  parseInt(opId);
+	  }
+	  if(objectId==null || objectId.length<=0){
+		  //alert(g_I18NMessage("secframe_4", "sec_select_obj"));
+		  $.message.error("",$.i18n("sec_select_obj"));
+		  return;
+	  }
+	  searchAuthored();
+  } */
+	 
+	 //查询可关联的功能集
+	function search(){
+		 if(objectId==null || objectId.length<=0){
+			  //alert(g_I18NMessage("secframe_4", "sec_select_obj"));
+			   $.message.error("",$.i18n("sec_select_obj"));
+			  return;
+		  }
+
+		var roleName =  $("#authorableForm").aeForm('getValueByField','roleName');
+	    roleName = $.trim(roleName); //去空格
+	   var roleType = $("#authorableForm").aeForm('getValueByField','roleType');
+	   var regionCode =$("#authorableForm").aeForm('getValueByField','regionCode');
+	   var roleId = $("#authorableForm").aeForm('getValueByField','roleId');
+	   
+	   var cond = "".appendParam("objectId",objectId).appendParam("type",type).appendParam("roleName",roleName)
+	   .appendParam("strRoleType",roleType).appendParam("regionCode",regionCode).appendParam("roleId",roleId);
+	   //var cond = "objectId=["+objectId+"]&type="+type+"&roleName="+roleName+"&strRoleType="+roleType+"&regionCode="+regionCode+"&roleId="+roleId;
+	 
+	  /*  $.ajaxPost($.aries.service.secframe.refreshAllAuthorableRole,cond,function(data){
+			if(data){
+				$("#authorableGrid").aeGrid('reload',data);
+			}
+		},function(code,info){
+			$.message.error("",$.i18n.sec_query_authorable_role_error);
+		});   */
+	   $("#authorableGrid").aeGrid('reload',$.aries.service.secframe.refreshAllAuthorableRole,cond);
+	}
+	
+  
+  //查询已关联功能集
+	function searchAuthored(){
+		 var opId = $("#opForm").aeForm('getValueByField','opId');
+
+		  if(opId!=null && ""!=opId){
+		  	objectId[0] =  parseInt(opId);
+		  }
+		 if(objectId==null || objectId.length<=0){
+			  //alert(g_I18NMessage("secframe_4", "sec_select_obj"));
+			   $.message.error("",$.i18n("sec_select_obj"));
+			  return;
+		  }
+	
+	    var roleName =  $("#authoredForm").aeForm('getValueByField','roleName');
+	    roleName = $.trim(roleName); //去空格
+	   var roleType = $("#authoredForm").aeForm('getValueByField','roleType');
+	   var regionCode =$("#authoredForm").aeForm('getValueByField','regionCode');
+	   var roleId = $("#authoredForm").aeForm('getValueByField','roleId');
+
+	   var cond = "".appendParam("objectIds",objectId).appendParam("type",type).appendParam("roleName",roleName)
+	   				.appendParam("strRoleType",roleType).appendParam("regionCode",regionCode).appendParam("roleId",roleId);
+	
+	   $("#authoredRoleGrid").aeGrid('reload',$.aries.service.secframe.refreshAuthoredRoles,cond);
+	}
+  
+	function popupDiv(){
+		var title = $.i18n('sec_authorable_role_list');
+		//$.aries.popup.openDiv('authorableDiv',title,'1000','',{"draggable":true,"resizable":true});
+		$.openPopupDiv('authorableDiv',title,'1000','800',{"draggable":true,"resizable":true,"showButton":false});	
+	}
+	
+
+	function unAuthor(){
+		var selRows = $("#authoredRoleGrid").aeGrid('getSelections',true);
+		if(selRows != null && selRows.length > 0){
+			 $.message.confirm("",$.i18n("sec_confirm_delete"),function(){
+			    	var roleIds = [];
+			    	var auIds = [];
+			    	for(var i=0; i < selRows.length; i++){
+			    		var roleId = selRows[i].roleId;
+			    		var auId = selRows[i].authorEntityId;
+			    		roleIds[i] = roleId;
+			    		auIds[i] = auId;
+			   		}	   
+			    	
+			    	// 回收功能集效用服务
+/* 			    	cond = "roleIds=["+roleIds+"]&authoredAuEntId=["+auIds+"]";
+ */
+			 	   var cond = "".appendParam("roleIds",roleIds).appendParam("authoredAuEntId",auIds);
+			    	 $.ajaxPost($.aries.service.secframe.delAuthor,cond,function(){	
+			    		 
+		 				$.message.success("",$.i18n("sec_delete_success"));
+		 				searchAuthored();
+						search();
+			 		},function(code,info){
+			 			$.message.error("",$.i18n("sec_delete_fail"));
+			 			searchAuthored();
+						search();
+			 		});
+			    	
+			});		
+		}
+		else{
+	    	$.message.alert("",$.i18n("sec_roleselect_select"));
+	    	return;
+	    }
+	}
+	
+
+	function author(){
+		var selRows = $("#authorableGrid").aeGrid('getSelections');
+		var seldatas = $("#authorableGrid").aeGrid('getSelections',true);
+		
+	    if(selRows != null && selRows.length > 0){
+	    	$.message.confirm("",$.i18n("sec_author_confirm"),function(){
+			    	
+			    		var auEntId = [];
+	    				//若没有授权实体的新增授权实体
+	    				/* var cond = "objectId=["+objectId+"]&type="+type; */
+	    				var cond = "".appendParam("objectId",objectId).appendParam("type",type);
+	    				 $.aries.ajax.get($.aries.service.secframe.addAuthorEntity,cond,function(data){
+				 			if(data){
+				 				for(var i = 0; i<data.length; i++){
+									auEntId[i] = parseInt(data[i]);
+								}
+				 				/* var param = "auEntId=["+auEntId+"]&values="+JSON.stringify(seldatas); */
+				 				var param = "".appendParam("auEntId",auEntId).appendParam("values",seldatas);
+				 				 $.ajaxPost($.aries.service.secframe.saveAuthor,param,function(data){
+			    					 $.message.success("",$.i18n("sec_author_success"));
+			    					 cancelAuthor();
+		    						searchAuthored();
+		    						search();
+						 		},function(code,info){
+						 			$.message.error("",$.i18n("sec_author_fail"));
+						 			searchAuthored();
+		    						search();
+						 		});
+				 			}
+				 		},function(code,info){
+				 			$.message.error("","Add Author Entity Error!");
+				 		});
+	  			
+			 });		
+		}	    
+	    else{
+	    	$.message.alert("",$.i18n("sec_roleselect_select"));
+	    	return;
+	    }	
+	}
+	
+	
+	function modifyAuthorBacth(){
+		$("#batchModifyDiv").show();
+	}
+	function cancelAuthor(){
+		$.closePopupDiv();
+		searchAuthored();
+		search();
+	}
+
+	
+	function saveBatchModify(){
+		var selRows = $("#authorableGrid").aeGrid('getSelections',true);
+		var validDate = $("#batchModifyForm").aeForm('getValueByField','authorValidDate');
+		var expireDate = $("#batchModifyForm").aeForm('getValueByField','authorExpireDate');
+		var authorType = $("#batchModifyForm").aeForm('getValueByField','authorType');
+		if(validDate>expireDate){
+			$.message.alert("",$.i18n("sec_date_confirm"));
+			return;
+		}
+		
+		/* 
+		for(var i=0;i<selRows.length;i++){
+			$('#authorableGrid').aeGrid("setValue",selRows[i],'authorValidDate',validDate);		
+			$('#authorableGrid').aeGrid("setValue",selRows[i],'authorExpireDate',expireDate);
+			$('#authorableGrid').aeGrid("setValue",selRows[i],'authorType',authorType);
+			
+		} */
+		cancelBatchModify();
+	}
+	function cancelBatchModify(){
+		$("#batchModifyForm").aeForm('clear');
+		$("#batchModifyDiv").hide();
+	}
+
+	function modifyAuthor(){
+		var title = $.i18n("sec_modify_author");
+		var selRows = $("#authoredRoleGrid").aeGrid('getSelections');
+		if(selRows != null && selRows.length > 0)
+		{
+			//$.aries.popup.openDiv('detailDiv',$.i18n("sec_modify_author"),'1000','',{"draggable":true,"resizable":true});
+			$.openPopupDiv('detailDiv',title,'','',{"draggable":true,"resizable":true,"showButton":false});	
+			$("#detailForm").aeForm('clear');
+		}
+		else
+	    {
+	    	$.message.alert("",$.i18n("sec_roleselect_select"));
+	    	return;
+	    }
+	}
+	
+	function saveDetailModify(){
+		
+		var validDate = $("#detailForm").aeForm('getValueByField','authorValidDate');
+		var expireDate = $("#detailForm").aeForm('getValueByField','authorExpireDate');
+		var authorType = $("#detailForm").aeForm('getValueByField','authorType');
+		  
+		if(validDate>expireDate){
+			$.message.alert("",$.i18n("sec_date_confirm"));
+			return;
+		}
+			var authorIdStr = new Array();
+			var selRows = $("#authoredRoleGrid").aeGrid('getSelections',true);
+		    if(selRows != null && selRows.length > 0)
+		    {
+		    	for(var i=0; i < selRows.length; i++)
+		   		{	
+		    		var authorId = selRows[i].authorId;
+		   			authorIdStr[i] = authorId;
+		   		}
+	   		}
+			
+		    var authorData = $('#detailForm').aeForm("getData");
+		    var newdata = $.aries.common.setSaveDataState(authorData,false);
+		    /* var param = "authorIds=["+authorIdStr+"]&value="+authorData; */
+		    var param = "".appendParam("authorIds",authorIdStr).appendParam("value",newdata);
+			 $.ajaxPost($.aries.service.secframe.saveModify,param,function(data){
+				 $.message.success("",$.i18n("sec_update_success"));
+				 $("#detailForm").aeForm('clear');
+				 cancelDetailModify();
+				 searchAuthored();
+	 		},function(code,info){
+	 			$.message.error("",$.i18n("sec_update_fail"));
+	 		});
+	}
+	
+	function cancelDetailModify(){
+		$.closePopupDiv();
+		searchAuthored();
+		search();
+	}
+	
+	
+	/* function showJsp(){
+		var type = parameters.split('=')[1];
+		$.ajaxPost($.aries.service.secframe.getUrlByType,null,function(data){
+			//获取到url
+			var url = "/ARIESRES/" + data;
+			if(url != null && url !="" ){
+				//TODO
+				 $.includeHtml("jspDiv","demo/demo.html");
+				//jspDiv.innerHTML ="<iframe id='orgPage' name='orgPages' src='"+url+"' frameborder='0' width='100%' onload='iframeLoad()'/>";
+			}else{
+				//alert(g_I18NMessage("secframe_4", "sec_iframe_error"));
+				$.message.error("",$.i18n("sec_iframe_error"));
+			}
+		},function(code,info){
+			$.message.error("",$.i18n("sec_iframe_error"));
+		}); 		
+	} */
+  </script>
+
+ 
+</html>

@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Not Contain Role Entity</title>
+    <link href="/ARIESRES/assets/aries/css/base/aries-base.css" rel="stylesheet" type="text/css"/>
+    <script src="/ARIESRES/assets/aries/lib/jquery.js"></script>
+    <script src="/ARIESRES/assets/aries/main/sea.js"></script>
+</head>
+<body>
+<div id="associablePanel" aeType="aePanel" aeInit="true" level="4" title="Associable Entity Search">
+	<div aeType="aeForm" id="notContainRoleEntityForm" aeInit="true" class="form-horizontal">
+	 	<div class="form-group">
+			<label class="col-xs-2 control-label"><span class="require">*</span>Privilege Entity Category</label>
+			<div class="col-xs-4">
+				<span aeType="aeTextfield" id="name" aeInit="true" dataField="name"  ></span>
+			</div>
+			<label class="col-xs-2 control-label">Entity Name</label>
+			<div class="col-xs-4">				
+				<span aeType="aeTextfield" id="entName" aeInit="true" dataField="entName"  ></span>
+			</div>			
+		</div>
+		<div class="form-group">
+			<label class="col-xs-2 control-label">Operation Name</label>
+			<div class="col-xs-4">
+				<span aeType="aeTextfield" id="privName" aeInit="true" dataField="privName"  ></span>
+			</div>
+			<label class="col-xs-2 control-label">Entity  ID</label>
+			<div class="col-xs-4">				
+				<span aeType="aeTextfield" id="entId" aeInit="true" dataField="entId"  ></span>
+			</div>			
+		</div>
+		<div class="form-group">
+		  	<div class="col-xs-12">
+				<span aeType="aeTextfield" id="entClassId" aeInit="true" dataField="entClassId" visible="false"></span>
+				<span aeType="aeTextfield" id="privId" aeInit="true" dataField="privId" visible="false"></span>
+				<span aeType="aeTextfield" id="roleId" aeInit="true" dataField="roleId" visible="false"></span>
+			</div>
+		</div>
+		<div class="col-xs-12 text-right">
+			<button class="btn btn-primary" type="button" onclick="searchNotContain()" ><span class="i18n">sec_query</span></button>
+		</div>
+	</div>
+</div>
+<div id="associableListPanel" aeType="aePanel" aeInit="true" level="4" title="Associable Entity  List">	
+	<div id="notContainRoleEntityGrid" aeType="aeGrid" aeInit="true"
+		datafield="" isPaging="true" pagingSize="5"
+		pagingAlign="right" height="300PX" showIndex="false" 
+		singleSelect="false" singleRowClass="false">
+		<span datafield="entId" title="$.i18n('sec_entitymanager_entid')" i18n="true" width="100" ></span> 
+		<span datafield="entName" title="$.i18n('sec_entitymanager_entityname')" i18n="true" width="100" ></span> 
+		<span datafield="privId" title="$.i18n('sec_EntityPrivRelaManager_privid')" i18n="true" width="100" ></span> 
+		<span datafield="privName" title="$.i18n('sec_privname')" i18n="true" width="100" ></span> 
+		<span datafield="name" title="$.i18n('sec_entityclassmanager_name')" i18n="true" width="100" ></span> 
+		<span datafield="entValidDate" title="$.i18n('sec_validdate')" i18n="true" width="100" ></span> 
+		<span datafield="entExpireDate" title="$.i18n('sec_expiredate')" i18n="true" width="100" ></span> 
+		<span datafield="remarks" title="$.i18n('sec_entitymanager_entitynote')" i18n="true" width="100" ></span> 
+		<span datafield="privDesc" title="$.i18n('sec_privdesc')" i18n="true" width="100" ></span> 
+		<span datafield="flag" title="" i18n="true"  visible="false" width="100"></span>
+	</div>
+</div>
+
+</body>
+<script type="text/javascript">
+
+seajs.use('aries-main',function(){
+
+});
+
+function searchNotContain(){
+	var name = $("#notContainRoleEntityForm").aeForm('getValueByField','name');
+	if(name=="") {
+			$.message.alert("",$.i18n("sec_entityclass_notnull"));
+			return;
+		}
+	var entName =  $("#notContainRoleEntityForm").aeForm('getValueByField','entName');
+	var privName = $("#notContainRoleEntityForm").aeForm('getValueByField','privName');
+	var entId = $("#notContainRoleEntityForm").aeForm('getValueByField','entId');
+	
+	var param = "".appendParam("roleId", selRoleId).appendParam("entClassId", selEntityClassId).appendParam("entName", entName).appendParam(
+			"privName", privName).appendParam("entId", entId).appendParam("date", date); 
+	/**
+	$.aries.ajax.post($.aries.service.secframe.refreshPrivEntityByRoleGrant,param,function(data){
+		if(data){
+			 $('#notContainRoleEntityGrid').aeGrid('reload',data);
+		}
+	  },function(code,info){
+	     $.message.error("","load data fail,code:"+code+",info:"+info);
+	  }); 
+	*/
+	
+	
+	$('#notContainRoleEntityGrid').aeGrid('reload',$.aries.service.secframe.refreshPrivEntityByRoleGrant,param);
+}
+
+$.popupConfirmEvent=function(event){
+	var selRows =$("#notContainRoleEntityGrid").aeGrid('getSelections',true);
+	if(null == selRows||selRows.length<=0){
+      	$.message.alert("",$.i18n("sec_authorableentity_select"));
+	    return;
+	}
+    var addEntityPrivs= [];
+    var oneEntityPriv="";
+    var oneDate ="";
+    var addDates=[];
+    var roleId=[];
+    for(var i = 0 ;i<selRows.length;i++){
+    	var validDate = selRows[i].entValidDate;
+		var expireDate = selRows[i].entExpireDate;
+		if(validDate>expireDate){
+			$.message.alert("",$.i18n("sec_date_confirm"));
+			return;
+		}	
+		
+		addDates[i] = validDate+","+expireDate;
+    	
+       	var entId = selRows[i].entId;
+       	var privId = selRows[i].privId;
+       
+       	addEntityPrivs[i] = entId+","+privId+"";
+	}
+	//var param = "".appendParam("baseRoleId", selRoleId).appendParam("addEntityPriv", addEntityPrivs).appendParam("addDate", addDates).appendParam("delEntityPriv", "");
+	  var param = "".appendParam("baseRoleId", selRoleId)+"&addEntityPriv=\"["+addEntityPrivs+"]\"&addDate=\"["+addDates+"]\"&delEntityPriv=";
+	$.ajaxPost($.aries.service.secframe.saveAddDelRoleEntityPage, param, function(data){
+		$.message.success("",$.i18n("sec_role_entity_save_ok"));
+		loadRoleEntity();
+		searchNotContain();
+		cancel1();
+	},function(code,info){
+		$.message.error("",$.i18n('sec_save_fail'));
+			
+		
+	});
+   	
+};
+
+
+function cancel1(){
+	var myIrGuide = $.aries.page.data.getData("irGuide");
+	if(myIrGuide && $("#"+myIrGuide).length){
+		$("#"+myIrGuide).aeIrguide("prev",true);
+	}else{
+		$.closePopupPage();
+	}
+}
+</script>
+</html>

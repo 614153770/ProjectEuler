@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<link href="/ARIESRES/assets/aries/css/base/aries-base.css"rel="stylesheet" type="text/css" />
+<link href="/ARIESRES/assets/appEngine/css/common.css" rel="stylesheet" type="text/css" />
+<link href="/ARIESRES/assets/appEngine/css/signIn.css" rel="stylesheet" type="text/css" />
+<link href="/ARIESRES/assets/appEngine/css/main.css" rel="stylesheet" type="text/css" />
+<link href="/ARIESRES/assets/appEngine/css/font.css" rel="stylesheet" type="text/css" />
+<link href="/ARIESRES/assets/appEngine/css/font-md.css" rel="stylesheet" type="text/css" />
+<script src="/ARIESRES/assets/aries/lib/jquery.js"></script>
+<script src="/ARIESRES/assets/aries/main/sea.js"></script>
+<title>Order</title>
+</head>
+<body>
+<div id="global_loading" class="modal fade in fx-loadingPage" style="display:none;">
+    <div class="modal-backdrop fade in" style="height: 100%">
+        <img src="/ARIESRES/assets/appEngine/img/loading-page.svg" class="loading-page" alt="">
+    </div>
+</div>
+
+<div id="mainPage">
+	<div aeType="aeForm" id="searchDetail" aeInit="true"
+		class="form-horizontal">
+		<div class="form-group">
+			<label class="col-xs-2 control-label">Offer Type</label>
+			<div class="col-xs-3">
+				<span aeType="aeCombo" id="offerType" aeInit="true"
+					dataField="offerType" showClear="true" onValueChange="getOfferTypeChange"  value='super'></span>
+			</div>
+			<label id='secOfferTypeLabel' class="col-xs-1 control-label" style="display:none;">Saas Type</label>
+			<div id='secOfferTypeDiv' class="col-xs-3" style="display:none;">
+        		<span aeType="aeCombo" dataField="secondOfferType" showClear="true" emptyText="-Please select saas type!-" id="secondOfferType" aeInit="true"></span>
+      		</div>
+			<div class="col-xs-1 text-right">
+				<button class="btn btn-primary" type="button"
+					onclick="qryOrderByOfferType()">Search</button>
+			</div>
+		</div>
+	</div>
+
+	<div class="aries_demo bs-example">
+		<div class="c_box" style="height: 300px;" id="order">
+		
+			<div id="orderGrid" aeType="aeGrid" aeInit="true" singleSelect="true"
+				singleRowClass="false" isPaging="true" pagingSize="10" width="100%"
+				height="100%" onRowClick="myOnRowClick()">
+				<span datafield="orderId" title="Order ID" width="64" align="left"visible="false"></span> 
+				<span datafield="offerName"title="Offer Name" width="100"></span> 
+				<span datafield="offerType"title="Offer Type" width="100"></span> 
+				<span datafield="webUrl" title="Web URL" width="150" renderer="operationRenderer"></span> 
+				<span datafield="custLoginId" title="Customer Id" width="100"></span> 
+				<span datafield="openState" title="Open State" width="80" visible="false"></span> 
+				<span datafield="state" title="State" width="80"></span>
+				
+			</div>
+			
+			<div aeType="aeForm" id="constructForm" aeInit="true"
+				class="form-horizontal">
+				<div class="form-group">
+					<label class="col-xs-2 control-label"></label>
+					<div class="col-xs-3">
+						<span aeType="aeCombo" id="envId" aeInit="true" dataField="envId" optionField="codeName" valueField="codeValue" emptyText="-Please select the value!-" width="300" showClear="true"></span>
+					</div>
+					<div class="col-xs-2 text-right">
+						<button type="button" class="btn btn-primary" onclick="construt()">Construct</button>
+					<!-- <button type="button" class="btn btn-primary" onclick="details()">Details</button>-->					</div>
+				</div>
+			</div>
+		</div>
+		<div class="c_box" style="height: 300px;display:none;" id="envorder">
+			<div id="envorderGrid" aeType="aeGrid" aeInit="true" singleSelect="true"
+				singleRowClass="false" isPaging="true" pagingSize="10" width="100%"
+				height="100%">
+				<span datafield="orderId" title="Order ID" width="64" align="left"visible="false"></span> 
+				<span datafield="offerName" title="Offer Name" width="100"></span> 
+				<span datafield="offerType" title="Offer Type" width="100"></span> 
+				<span datafield="envOrder.platformVersion" title="Platform Version" width="100"></span>
+				<span datafield="envOrder.architecture" title="Architecture" width="100"></span>  
+				<!-- <span datafield="webUrl" title="Web URL" width="150" renderer="operationRenderer"></span>  -->
+				<span datafield="custLoginId" title="Customer Id" width="100"></span> 
+				<span datafield="openState" title="Open State" width="80"></span> 
+				<span datafield="state" title="State" width="80" visible="false"></span>
+				<span datafield="" title="Operation" width="80" renderer="fillRenderer"></span>
+				
+			</div>
+		</div>
+	</div>
+</div>
+
+	<script type="text/javascript">
+		var orderId;
+		var custLoginId;
+		var offerType;
+		seajs.use('aries-main', function() {
+			var offerType  = '[{"text":"IDE","value":"ide"},{"text":"SUPER","value":"super"},{"text":"Saas","value":"saas"}]';
+			$("#offerType").aeCombo('reload',$.parseJSON(offerType)); 
+			$('#offerType').aeCombo('setDefault','super');
+			custLoginId = $.cookie("login_customer_id");
+			qryOrderByOfferType();
+			getStaticDataByCodeType();
+		});
+		function getStaticDataByCodeType(){
+			$("#global_loading").show();
+			var TA_ENV_NAME = "ENV_CODE";
+			$.ajaxPost($.aries.service.aso.getStaticDataByCodeType,"codeType="+TA_ENV_NAME,function(data){
+				$("#global_loading").hide();
+		        if(data){
+		            $("#envId").aeCombo("reload",data);
+		        }
+		    },function(code,info){
+		    	$("#global_loading").hide();
+		    	if(undefined==info.hub_value[0]){
+		            $.message.error("","Operation failed!");
+				 }else{
+		            $.message.error("","Operation failed,code:"+info.hub_value[0].code+",info:"+info.hub_value[0].value);
+				 } 
+		    });
+		}
+
+		function qryOrderByOfferType() {
+			var offerType = $("#searchDetail").aeForm('getValueByField','offerType');
+			var secondOfferType = $("#searchDetail").aeForm('getValueByField','secondOfferType');
+			var param = "offerType=" + offerType+"&secondOfferType="+secondOfferType;
+            $("#global_loading").show();
+			$.ajaxPost($.aries.service.aso.qryOrderByOfferType, param,function(data) {
+				 $("#global_loading").hide();
+				if (data) {
+					if(offerType == "saas"){
+						$("#envorder").show();
+						$("#order").hide();
+						$("#envorderGrid").aeGrid("reload", data);
+					}else{
+						$("#envorder").hide();
+						$("#order").show();
+						$("#orderGrid").aeGrid("reload", data);
+					}
+				}
+			}, function(code, info) {
+				 $("#global_loading").hide();
+				 $.message.error("", "Operation failed!");
+			});
+		}
+		function operationRenderer(colValue,rowIndex,rowData){
+			return '<a href=" '+ colValue + '" target="_blank">' + colValue + '</a>';
+		}
+		function construt() {
+			var envId = $('#envId').aeCombo('getValue');
+			if(undefined==custLoginId){
+				$.message.alert("","Please log in!");
+				return;
+			}
+			if(undefined==orderId){
+				$.message.alert("","Please select an order!");
+				return;
+			}
+			if(undefined==envId||""==envId){
+				$.message.alert("","Please select an enviroment!");
+				return;
+			}
+			var param = "orderId=" + orderId + "&envId=" + envId
+					+ "&custLoginId=" + custLoginId;
+            $("#global_loading").show();
+			var begin=new Date();  //开始时间
+			$.ajaxPost($.aries.service.aso.addConstruction, param, function(data) {
+		            $("#global_loading").hide();
+		            var end=new Date();    //结束时间
+		            var time=(end.getTime()-begin.getTime())/1000/60;  //时间差
+		            time=time.toFixed(2);
+					$.message.success("", "It takes "+time+" minutes.", function() {
+						qryOrderByOfferType();
+					}, function(code, info) {
+				         if(undefined==info.hub_value[0]){
+		    	             $.message.error("","Operation failed!");
+		    			 }else{
+		    	             $.message.error("","Operation failed,code:"+info.hub_value[0].code+",info:"+info.hub_value[0].value);
+		    			 } 
+					});
+			}, function(code, info) {
+	            $("#global_loading").hide();
+	            if(undefined==info.hub_value[0]){
+   	             $.message.error("","Operation failed!");
+   			 }else{
+   	             $.message.error("","Operation failed,code:"+info.hub_value[0].code+",info:"+info.hub_value[0].value);
+   			 } 
+			});
+		}
+		
+		//envorder install
+		function fillRenderer(colValue, rowData, rowIndex) {
+			orderId = rowData.orderId;
+			offerType = rowData.offerType;
+			var order = rowData;
+			return "<a onclick=\"fillServInfo('"+$.escapeHTML(rowData)+"')\">Install</a>"+"&nbsp;&nbsp;&nbsp;&nbsp;<a onclick=\"showServInfo('"+$.escapeHTML(rowData)+"')\">Show</a>";
+			/* if(offerType == "saas"){
+				openServInfo(offerType);
+			} */
+		}
+		
+		function myOnRowClick(rowIndex, rowData, event) {
+			orderId = rowData.orderId;
+		}
+		
+		function details(){
+			$.openPopupPage("/admin/constructDetails.html","","Details","","",{"showButton":false,"draggable":true,"resizable":true});
+		}
+		
+		function fillServInfo(rowData){
+			var custLoginId = $.cookie("login_customer_id");
+			if(""==custLoginId || undefined==custLoginId){
+				$.message.error("", "No permission,please log in!");
+			}else{
+				//popupParam的用法
+			    var popupParam = new $.DataMap();
+				popupParam.put("order",rowData);
+				$.openPopupPage("/admin/fillServInfo.html",popupParam,"Server Information","","300",{"showButton":false,"afterAction":"","draggable":true,"resizable":true});
+			}
+	    }
+		
+		function showServInfo(rowData){
+			var custLoginId = $.cookie("login_customer_id");
+			if(""==custLoginId || undefined==custLoginId){
+				$.message.error("", "No permission,please log in!");
+			}else{
+				//popupParam的用法
+				var popupParam = new $.DataMap();
+				popupParam.put("order",rowData);
+				$.openPopupPage("/admin/showServInfo.html",popupParam,"Server Information","","300",{"showButton":false,"afterAction":"","draggable":true,"resizable":true});
+			}
+		}
+	    //offerType值改变促发事件
+	    function getOfferTypeChange(target, newValue, oldValue, event){
+	    	var offerType = $('#offerType').aeCombo('getValue');
+	    	
+	    	if(offerType == "saas"){
+	    		$('#secOfferTypeLabel').show();
+	    		$('#secOfferTypeDiv').show();
+	    		//$('#secondOfferType').aeCombo('visible',true);
+	    		var secondOfferTypeData = '[{"text":"DevEnv","value":"devenv"},{"text":"TestCat","value":"testcat"},{"text":"Svn","value":"svn"},{"text":"Sonar","value":"sonar"}]';
+	    		$('#secondOfferType').aeCombo('clear').aeCombo('reload',$.parseJSON(secondOfferTypeData));
+	    		$('#secondOfferType').aeCombo('setValue','devenv');
+	    	}else{
+	    		$('#secondOfferType').aeCombo('clear');
+	    		//$('#secondOfferType').aeCombo('visible',false);
+	    		$('#secOfferTypeLabel').hide();
+	    		$('#secOfferTypeDiv').hide();
+	    	}
+	    	
+	    }
+	</script>
+</body>
+</html>

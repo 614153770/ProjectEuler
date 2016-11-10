@@ -1,0 +1,49 @@
+10
+
+dir
+36093
+http://deploy-scm70@10.11.20.110/svn/AppEngine/ASO/trunk/saas/web/html/html_admin/secframe/sysmgr
+http://deploy-scm70@10.11.20.110/svn/AppEngine
+
+
+
+2016-08-03T07:46:53.980730Z
+35521
+zuogy
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+5b57b312-d45c-11e1-ba1f-37b838959fb7
+
+secfunction
+dir
+
+service
+dir
+
+role
+dir
+
+author
+dir
+
+secData
+dir
+
+data
+dir
+
+entity
+dir
+

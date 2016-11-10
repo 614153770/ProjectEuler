@@ -1,0 +1,192 @@
+@font-face {
+	font-family: 'vs-icon';
+	src:    url('font/vs/vs-icon.eot?jals5i');
+	src:    url('font/vs/vs-icon.eot?jals5i#iefix') format('embedded-opentype'),
+	url('font/vs/vs-icon.ttf?jals5i') format('truetype'),
+	url('font/vs/vs-icon.woff?jals5i') format('woff'),
+	url('font/vs/vs-icon.svg?jals5i#vs-icon') format('svg');
+	font-weight: normal;
+	font-style: normal;
+}
+
+[class^="vs-"], [class*=" vs-"] {
+	/* use !important to prevent issues with browser extensions that change fonts */
+	font-family: 'vs-icon' !important;
+	speak: none;
+	font-style: normal;
+	font-weight: normal;
+	font-variant: normal;
+	text-transform: none;
+	line-height: 1;
+
+	/* Better Font Rendering =========== */
+	-webkit-font-smoothing: antialiased;
+	-moz-osx-font-smoothing: grayscale;
+}
+
+.vs-arrow-left:before {
+	content: "\e900";
+}
+.vs-arrow-right:before {
+	content: "\e901";
+}
+.vs-bank-note:before {
+	content: "\e902";
+}
+.vs-bargaining:before {
+	content: "\e903";
+}
+.vs-broadband:before {
+	content: "\e904";
+}
+.vs-calendar:before {
+	content: "\e905";
+}
+.vs-calendar2:before {
+	content: "\e906";
+}
+.vs-camera:before {
+	content: "\e907";
+}
+.vs-chat:before {
+	content: "\e908";
+}
+.vs-chat2:before {
+	content: "\e909";
+}
+.vs-circle-minus:before {
+	content: "\e90a";
+}
+.vs-circle-plus:before {
+	content: "\e90b";
+}
+.vs-clock:before {
+	content: "\e90c";
+}
+.vs-credit_card:before {
+	content: "\e90d";
+}
+.vs-dollar:before {
+	content: "\e90e";
+}
+.vs-email:before {
+	content: "\e90f";
+}
+.vs-entertainment:before {
+	content: "\e910";
+}
+.vs-envelope:before {
+	content: "\e911";
+}
+.vs-exclamation:before {
+	content: "\e912";
+}
+.vs-facebook:before {
+	content: "\e913";
+}
+.vs-famliy:before {
+	content: "\e914";
+}
+.vs-g:before {
+	content: "\e915";
+}
+.vs-google-plus2:before {
+	content: "\e916";
+}
+.vs-headset:before {
+	content: "\e917";
+}
+.vs-iconfont-iconcartadd:before {
+	content: "\e918";
+}
+.vs-iconfont-shoppingcartok:before {
+	content: "\e919";
+}
+.vs-info:before {
+	content: "\e91a";
+}
+.vs-instagram:before {
+	content: "\e91b";
+}
+.vs-install:before {
+	content: "\e91c";
+}
+.vs-Internet:before {
+	content: "\e91d";
+}
+.vs-list:before {
+	content: "\e91e";
+}
+.vs-mail:before {
+	content: "\e91f";
+}
+.vs-notification:before {
+	content: "\e920";
+}
+.vs-phone:before {
+	content: "\e921";
+}
+.vs-pin-2:before {
+	content: "\e922";
+}
+.vs-pin:before {
+	content: "\e923";
+}
+.vs-question:before {
+	content: "\e924";
+}
+.vs-question2:before {
+	content: "\e925";
+}
+.vs-recommendation:before {
+	content: "\e926";
+}
+.vs-scales:before {
+	content: "\e927";
+}
+.vs-setting:before {
+	content: "\e928";
+}
+.vs-shield:before {
+	content: "\e929";
+}
+.vs-shopping-cart:before {
+	content: "\e92a";
+}
+.vs-switch:before {
+	content: "\e92b";
+}
+.vs-tag:before {
+	content: "\e92c";
+}
+.vs-tax:before {
+	content: "\e92d";
+}
+.vs-telephone:before {
+	content: "\e92e";
+}
+.vs-truck:before {
+	content: "\e92f";
+}
+.vs-twitter:before {
+	content: "\e930";
+}
+.vs-user-login:before {
+	content: "\e931";
+}
+.vs-user:before {
+	content: "\e932";
+}
+.vs-wallet:before {
+	content: "\e933";
+}
+.vs-warning:before {
+	content: "\e934";
+}
+.vs-wechat:before {
+	content: "\e935";
+}
+.vs-write:before {
+	content: "\e936";
+}
+

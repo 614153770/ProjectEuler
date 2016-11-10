@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <link href="/ARIESRES/assets/appEngine/img/Appengine_logo.png" mce_href="/ARIESRES/assets/appEngine/img/Appengine_logo.png" rel="shortcut icon"/>
+    <link href="/ARIESRES/assets/aries/css/base/aries-base.css" rel="stylesheet" type="text/css"/>
+    <link href="/ARIESRES/assets/appEngine/css/common.css" rel="stylesheet" type="text/css"/>
+    <link href="/ARIESRES/assets/appEngine/css/main.css" rel="stylesheet" type="text/css"/>
+    <link href="/ARIESRES/assets/appEngine/css/font.css" rel="stylesheet" type="text/css"/>
+    <link href="/ARIESRES/assets/appEngine/css/font-md-new.css" rel="stylesheet" type="text/css"/>
+    <script src="/ARIESRES/assets/aries/lib/jquery.js"></script>
+    <script src="/ARIESRES/assets/aries/main/sea.js"></script>
+    <script src="/ARIESRES/assets/appEngine/js/index.js"></script>
+    <title>ASO</title>
+</head>
+<body >
+<div id="global_loading" class="modal fade in fx-loadingPage" style="display:none;">
+    <div class="modal-backdrop fade in" style="height: 100%">
+        <img src="/ARIESRES/assets/appEngine/img/loading-page.svg" class="loading-page" alt="">
+    </div>
+</div>
+<div class="cc-header-back clearfix">
+    <div class="container">
+        <div class="header">
+            <img class="signin-logo-img" src="../assets/appEngine/img/Appengine_logo1.png">
+            <div class="user-name">
+                <div><span class="icon-account-circle"></span><div class="user-name-info" id="currentUser"></div><span class="icon-select1"></span></div>
+                <ul style="display: none">
+                    <li>MyProfile</li>
+                    <li>Logout</li>
+                </ul>
+                <button class="btn product-signIn-btn" onclick="signIn()" style="display: none">Sign in</button>
+            </div>
+            <div class="header-info">
+                <ul>
+                    <li src="#ide"   ><a class="active">Product</a></li>
+                    <li src="#image" ><a href="/aso/helpInfo.html">Help Center</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="appEngine-banner-info col-xs-5">
+            <h1>Veris Cloud Core</h1>
+            <div class="col-xs-10">
+                <p class="mini-banner-info">A radical approach to transformation within 7 months
+                    Pay-as-you-use cloud SaaS for optimal cost efficiency
+                    Outstanding configurability with Tier-1 availability</p>
+              </div>
+            <button type="button" class="btn appEngine-banner-info-btn" onclick="applyImageCc('IMAGE_Veris7.5_CC')"><span class="md md-trending-flat"></span>Apply Now</button>
+            </div>
+    </div>
+</div>
+</div>
+<div class="container">
+    <div class="appEngine-image-container" >
+        <div class="row container-box">
+            <div class="col-xs-6 ide-discripation">
+                <a lang=" http://player.youku.com/player.php/sid/XNzYyNTAzMjU2/v.swf " target="_blank" href="http://v.youku.com/v_show/id_XNzYyNTAzMjU2.html" class="vimeoLink">
+                    <img src="../assets/appEngine/img/Appengine_veriscc_video1.png">
+                </a>
+                <a lang=" http://player.youku.com/player.php/sid/XNzYyNTAzMjU2/v.swf "  target="_blank" href="http://v.youku.com/v_show/id_XNzYyNTAzMjU2.html" class="vimeoLink">
+                    <img src="../assets/appEngine/img/Appengine_veriscc_video2.png">
+                </a>
+            </div>
+            <div class="col-xs-5 ide-discripation mini-discripation">
+                <h1>Veris Cloud Core</h1>
+                <div class="imageCon-discripation">
+                    <p>Veris Cloud Core is AsiaInfo’s complete BSS suite, delivered as a SaaS solution.
+                        It is hosted on cloud infrastructure that scales as you grow.
+                        And with its out of the box set-up it can be production-ready in as little as 7 months.</p>
+                    <p>High levels of configurability enable business processes, offers and customer channels to be re-designed
+                        to suit your approach to business - offering self-reliance and exceptionally low time-to-market for new and dynamic offers.</p>
+                    <h4>Features and Advantages of Veris Cloud:</h4>
+                    <p>Veris Cloud Core can lower your total cost of ownership by up to 40% compared to traditional BSS commercial models</p>
+                    <p>Best practice processes and capabilities require 55% fewer resources from your team during system design and implementation</p>
+                    <p>Pre-integrated Tier-1 BSS capabilities enable 40% faster deployments, enabling a head start to your digital plans</p>
+                    <p>Outstanding BSS configurability empowers your business to swiftly launch new offers and services without customization and change requests</p>
+                    <p>Flexible on-demand migration options offer a low-risk transformation approach with minimum subscriber disruption</p>
+                    <p>Our Veris product offers cost-efficient functional upgrades from continuous product evolution by Asia’s leading dedicated BSS provider</p>
+                    <p>Open partner interoperability immediately enables new digital business models, IoT and Operator-as-a-Service models</p>
+                    <p>Embedded multi-tenant capabilities enable business harmonization across operator groups</p>
+                    <p>Fully secure operational services offload monitoring, maintenance and security management duties – and public cloud significantly saves data center costs
+                    SaaS offers cost transparency, optimal resource management and lower budget commitment</p>
+                    <p>Available on public, private or hybrid cloud infrastructure to suit different cloud strategies, policies and regulatory requirements</p>
+                    <p>Immediately accessible on secure Amazon Web Services (AWS) facilities in the Europe and Asia, benchmarked to support 100 million subscribers</p>
+                    <p>Proven platform that already delivers superior customer experience to over 1 billion subscribers worldwide</p>
+                    <p>Veris Cloud Core, has been designed to enable operators to rapidly and efficiently deliver on their strategic transformation needs today
+                        without expensive, lengthy and risky legacy system overhauls.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="footer"> 2016 Asiainfo, Inc. All Rights Reserved</div>
+</body>
+
+<script type="text/javascript">
+    seajs.use('aries-main',function(){
+		 $.cookie($.aries.config.sec.SEC_AUTH_ROLETYPE_KEY, "Customer", {path : '/'});
+         var currentUser =  $.cookie("login_customer_id");
+         if(currentUser){
+             $('#currentUser').html(currentUser);
+         }else{
+              $('.product-signIn-btn').show();
+             $('.user-name').find('span').hide();
+             $('.user-name').find('#currentUser').hide();
+         }
+
+    });
+
+</script>
+ <script src="/ARIESRES/assets/appEngine/js/common.js"></script>
+</html>

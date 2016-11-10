@@ -1,0 +1,35 @@
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link href="/ARIESRES/assets/aries/css/base/aries-base.css" rel="stylesheet" type="text/css">
+<script src="/ARIESRES/assets/aries/lib/jquery.js" type="text/javascript"></script>
+<script src="/ARIESRES/assets/aries/main/sea.js" type="text/javascript"></script>
+
+<title></title>
+</head>
+<body >  
+<div class="c_box">
+		
+	<div class="c_title">
+		<div class="text"><span class="i18n">sec_batch_station_author</span></div>
+	</div>
+	<div aeType="aeTips" id="myTips" aeInit="true" content="$.i18n('sec_station_tips')"   i18n="true"></div>
+	
+	<span class="i18n">sec_select_file</span><span class="e_elements" style="width:500px;"><button class="e_button-right" type="button" aeType="aeImport" id="myImport" aeInit="true" server="/ConfigHub?servicecode=upload" ><i class="e_ico-import"></i><span></span></button>
+	<span class="e_input e_input-left"><span><input id="input"/></span></span></span>
+</div>
+</body>
+ 
+<script type="text/javascript"> 
+ seajs.use('aries-main',function(){
+ });
+/* function doParams(){
+	var formData = {};
+	formData.param1="111111";
+	formData.param2="2222222";
+	//console.log(formData);
+	return formData;
+} */
+
+  </script>
+</html>

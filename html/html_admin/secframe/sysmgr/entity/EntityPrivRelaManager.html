@@ -1,0 +1,347 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Entity Privilege Association Manager</title>
+    <link href="/ARIESRES/assets/aries/css/base/aries-base.css" rel="stylesheet" type="text/css"/>
+    <script src="/ARIESRES/assets/aries/lib/jquery.js"></script>
+    <script src="/ARIESRES/assets/aries/main/sea.js"></script>
+</head>
+<body>
+<div class="clearfix">
+	<div class="pull-left" style="width:49%;margin-right:10px;">
+		<div id="entitySearchPanel" aeType="aePanel" aeInit="true" level="4" title="Entity Query info">
+			<div aeType="aeForm" id="secEntitySearchForm" aeInit="true" class="form-horizontal">
+			 	<div class="form-group">
+					<label class="col-xs-2 control-label">Entity ID</label>
+					<div class="col-xs-4">
+						<span aeType="aeTextfield" id="entId" aeInit="true" dataField="entId"  ></span>
+					</div>
+					<label class="col-xs-2 control-label">Entity Name</label>
+					<div class="col-xs-4">				
+						<span aeType="aeTextfield" id="entName" aeInit="true" dataField="entName"  ></span>
+					</div>			
+				</div>
+				<div class="form-group">
+					<label class="col-xs-2 control-label">Entity Category Name</label>
+					<div class="col-xs-4">
+						<span aeType="aeTextpopup" id="nameEntity" aeInit="true" dataField="name"  popupSource="/ARIESRES/secframe/sysmgr/entity/selectEntityClassDialog.html"
+						 popupType="page" popupTitle="Privilege Entity Category List" popupHeight="350" draggable="true" showButton="true" showClear="true" afterAction="selectEntityClass(json)"></span>
+					</div>	
+					<div class="col-xs-6 text-right">
+						<button class="btn btn-primary" type="button" onclick="search()" >Query</button>
+				 	</div>	
+				</div>
+			</div>
+		</div>
+		<div id="entityListPanel" aeType="aePanel" aeInit="true" level="4" title="Entity List">
+			<div id="secEntitySearchResultTable" aeType="aeGrid" aeInit="true" datafield=""
+				isPaging="true" pagingSize="5" width="100%" height="300px"
+				pagingAlign="right" showIndex="false" singleSelect="true" singleRowClass="false" onRowClick="loadEntityDetailMsg()">
+				<span datafield="entId" title="Entity ID" visible="true" width="100" align="center" ></span> 
+				<span datafield="entName" title="Entity Name" width="100" align="center" ></span>
+			    <span datafield="name" title="Entity Category Name" width="100" align="center" ></span>
+			    <span datafield="entClassId" title="Entity Class ID" width="100" align="center" ></span> 
+		    </div>
+		</div>
+	</div>
+	<div class="pull-left" style="width:49%;">
+		<div id="privilegeSearchPanel" aeType="aePanel" aeInit="true" level="4" title="Privilege Action Search">
+			<div aeType="aeForm" id="secPrivEntityClassSearchForm" aeInit="true" class="form-horizontal">
+			 	<div class="form-group">
+					<label class="col-xs-2 control-label">Privilege ID</label>
+					<div class="col-xs-4">
+						<span aeType="aeTextfield" id="privId" aeInit="true" dataField="privId"  ></span>
+					</div>
+					<label class="col-xs-2 control-label">Privilege Name</label>
+					<div class="col-xs-4">				
+						<span aeType="aeTextfield" id="privName" aeInit="true" dataField="privName"  ></span>
+					</div>			
+				</div>
+				<div class="form-group">
+					<label class="col-xs-2 control-label">Entity Category Name</label>
+					<div class="col-xs-4">
+						<span aeType="aeTextpopup" id="namePrivilege" aeInit="true" dataField="name"  popupSource="/ARIESRES/secframe/sysmgr/entity/selectEntityClassDialog.html"
+						 popupType="page" popupTitle="Privilege Entity Category List" popupHeight="350" draggable="true" showButton="true" showClear="true" afterAction="selectEntityClass2(json)"></span>
+					</div>	
+					<div class="col-xs-6 text-right">
+						<button class="btn btn-primary" type="button" onclick="search2()" >Query</button>
+				 	</div>	
+				</div>
+			</div>
+		</div>
+		<div id="privilegeListPanel" aeType="aePanel" aeInit="true" level="4" title="Privilege Action List">
+			<div id="secPrivEntityClassSearchResultTable" aeType="aeGrid" aeInit="true" datafield=""
+				 isPaging="true" pagingSize="5" width="100%" height="300px"
+				 pagingAlign="right" showIndex="false" singleSelect="true"  singleRowClass="false" onRowClick="loadPrivEntityClassDetailMsg()">
+				<span datafield="privId" title="Privilege ID" width="100" align="center" ></span>
+			    <span datafield="privName" title="Privilege Name" width="100" align="center" ></span> 
+			    <span datafield="name" title="Entity Category Name" width="100" align="center" ></span>
+			    <span datafield="entClassId" title="Entity Class ID"  width="100" align="center" ></span> 
+		     </div>
+		</div>
+	</div>
+	 <div class="col-xs-12 text-center">
+		<button class="btn btn-primary" type="button" onclick="add()" id="addBtn">Add Association</button>
+	</div>	 
+</div>
+<div id="associationSearchPanel" aeType="aePanel" aeInit="true" level="4" title="Entity Privilege Association Query info">
+	<div aeType="aeForm" id="secEntityPrivRelaSearchForm" aeInit="true" class="form-horizontal">
+	 	<div class="form-group">
+			<label class="col-xs-2 control-label">Entity ID</label>
+			<div class="col-xs-4">
+				<span aeType="aeTextfield" id="entIdRela" aeInit="true" dataField="entId"  ></span>
+			</div>
+			<label class="col-xs-2 control-label">Entity Name</label>
+			<div class="col-xs-4">				
+				<span aeType="aeTextfield" id="entNameRela" aeInit="true" dataField="entName"  ></span>
+			</div>			
+		</div>
+		<div class="form-group">
+			<label class="col-xs-2 control-label">Privilege ID</label>
+			<div class="col-xs-4">
+				<span aeType="aeTextfield" id="privIdRela" aeInit="true" dataField="privId"  ></span>
+			</div>
+			<label class="col-xs-2 control-label">Privilege Name</label>
+			<div class="col-xs-4">				
+				<span aeType="aeTextfield" id="privNameRela" aeInit="true" dataField="privName"  ></span>
+			</div>			
+		</div>
+		<div class="form-group">
+			<label class="col-xs-2 control-label">Entity Category Name</label>
+			<div class="col-xs-4">
+				<span aeType="aeTextpopup" id="nameRela" aeInit="true" dataField="name"  popupSource="/ARIESRES/secframe/sysmgr/entity/selectEntityClassDialog.html"
+				 popupType="page" popupTitle="Privilege Entity Category List" popupHeight="350" draggable="true" showButton="true" showClear="true" afterAction="selectEntityClass3(json)"></span>
+			</div>	
+			<div class="col-xs-6 text-right">
+				<button class="btn btn-primary" type="button" onclick="search3()" >Query</button>
+		 	</div>	
+		</div>
+		<div class="form-group">
+		  	<div class="col-xs-6">
+				<span aeType="aeTextfield" id="entClassId" aeInit="true" dataField="entClassId" visible="false"></span>
+			</div>
+		</div>
+	</div>
+</div>
+<div id="associationListPanel" aeType="aePanel" aeInit="true" level="4" title="Entity Privilege Association List">
+	<div id="secEntityPrivRelaSearchResultTable" aeType="aeGrid" aeInit="true" datafield=""
+		isPaging="true" pagingSize="5" width="100%" height="300px"
+		pagingAlign="right" showIndex="false" singleSelect="true" singleRowClass="false"  onRowClick="loadPrivEntityRelaDetailMsg()">
+		<span datafield="entId" title="Entity ID" width="100" align="center"></span> 
+		<span datafield="entName" title="Entity Name" width="100" align="center"></span> 
+		<span datafield="name" title="Entity Category Name" width="100" align="center"></span>
+		<span datafield="privId" title="Privilege ID" width="100" align="center"></span> 
+		<span datafield="privName" title="Privilege Name"  width="100" align="center"></span> 
+		
+	</div>
+	<div class="col-xs-12 text-center">
+		<button class="btn btn-primary" type="button" onclick="del()" id="delBtn">Delete Association</button>
+	</div>
+</div>
+
+
+</body>
+<script type="text/javascript">
+
+seajs.use('aries-main', function() {
+	$.disabledButton("addBtn",true);
+	$.disabledButton("delBtn",true);
+	search();
+	search2();
+});
+
+//查询按钮（实体查询信息）
+function search(){
+	var entId=$('#secEntitySearchForm').aeForm('getValueByField','entId');
+	var entName=$('#secEntitySearchForm').aeForm('getValueByField','entName');
+	entName=$.trim(entName);
+	var entityClassName = $('#nameEntity').aeTextpopup('getDisplayText');
+	var param = "".appendParam("entId",entId).appendParam("entName",entName).appendParam("entityClassName",entityClassName);
+	
+	$("#secEntitySearchResultTable").aeGrid('reload',$.aries.service.secframe.getEntity,param);
+} 
+
+//查询按钮（权限行为信息查询）
+function search2(){
+	var privId=$('#secPrivEntityClassSearchForm').aeForm('getValueByField','privId');
+	var privName=$('#secPrivEntityClassSearchForm').aeForm('getValueByField','privName');
+	var entityClassName = $('#namePrivilege').aeTextpopup('getDisplayText');
+	
+	var param = "".appendParam("privId",privId).appendParam("privName",privName).appendParam("entityClassName",entityClassName);
+
+	$("#secPrivEntityClassSearchResultTable").aeGrid('reload',$.aries.service.secframe.getPriv,param);
+} 
+
+//查询按钮（实体操作行为关联查询信息）
+function search3(){
+	var entId=$('#secEntityPrivRelaSearchForm').aeForm('getValueByField','entId');
+	var entName=$('#secEntityPrivRelaSearchForm').aeForm('getValueByField','entName');
+	entName=$.trim(entName);
+	var entityClassName = $('#nameRela').aeTextpopup('getDisplayText');
+	var privId=$('#secEntityPrivRelaSearchForm').aeForm('getValueByField','privId');
+	var privName=$('#secEntityPrivRelaSearchForm').aeForm('getValueByField','privName');
+   
+    var param = "".appendParam("entId",entId).appendParam("entName",entName).appendParam("entityClassName",entityClassName).appendParam("privName",privName).appendParam("privId",privId);
+
+    $("#secEntityPrivRelaSearchResultTable").aeGrid('reload',$.aries.service.secframe.getEntityPrivRela,param);
+} 
+
+//新增关联(没国际化)
+function add(){
+	var selectedEntity = $('#secEntitySearchResultTable').aeGrid('getSelections',true);
+	var selectedPriv = $('#secPrivEntityClassSearchResultTable').aeGrid('getSelections',true);
+	
+	if (null == selectedEntity || selectedEntity.length <= 0){
+    	$.message.alert("","Please select entity which need be Relate");
+	    return;
+	}
+	if (null == selectedPriv || selectedPriv.length <= 0){
+	    $.message.alert("","Please select Privilege which need be Relate");
+	    return;
+	}
+	var entId = selectedEntity[0].entId;
+	var entClassId = selectedEntity[0].entClassId;
+	var privId = selectedPriv[0].privId;
+	var privClassId = selectedPriv[0].entClassId;
+	if (entClassId!=privClassId){
+	     $.message.alert("","selected Entity Category is different");
+    	return;
+	}
+	var param = "".appendParam("entId",entId).appendParam("privId",privId).appendParam("entClassId",entClassId);
+	$.ajaxPost($.aries.service.secframe.addPrivEntityRela,param,function(data){
+		if(data == "0"){
+			$.message.success("","Associated successful");	
+		}else if(data == "-4"){
+			$.message.alert("","Already related");
+		}
+	  },function(code,info){
+		  $.message.error("","Associated failed");			
+	});
+ 	search3();
+}
+
+
+//加载实体详细信息（左）
+function loadEntityDetailMsg(rowIndex,rowData,event){
+	$.disabledButton("addBtn",false);
+	$.disabledButton("delBtn",true);
+	var entId = rowData.entId;
+	if (undefined == entId || entId ==""){
+       $.message.alert("",$.i18n('sec_entitymanager_select'));
+       return;
+    }
+	
+	/*
+	var cond = "".appendParam("entId",entId);
+	
+	$.ajaxPost($.aries.service.secframe.querySecEntity,cond,function(data){
+		if(data){
+			$("#secEntitySearchForm").aeForm('reload',data);
+			$("#selectEntity").aeTextpopup('setDisplayText',data[0].name);
+		}
+	  },function(code,info){
+		$.message.error("",$.i18n('sec_search_fail'));
+	});
+	
+	$("#secEntitySearchForm").aeForm('setEditSts',true);
+    */
+}
+
+//加载权限实体类信息（右）
+function loadPrivEntityClassDetailMsg(rowIndex,rowData,event){
+	$.disabledButton("addBtn",false);
+	$.disabledButton("delBtn",true);
+	var privId = rowData.privId; 
+	if (undefined == privId || privId ==""){
+       $.message.alert("",$.i18n('sec_privmanager_select'));
+       return;
+    }
+	
+	/* 
+	var cond = "".appendParam("privId",privId);
+	
+	$.ajaxPost($.aries.service.secframe.querySecPrivEntityClass,cond,function(data){
+		if(data){
+			$("#secPrivEntityClassSearchForm").aeForm('reload',data);
+			$("#namePrivilege").aeTextpopup('setDisplayText',data[0].name);
+		}
+	  },function(code,info){
+		$.message.error("",$.i18n('sec_search_fail'));
+	});
+	
+	$("#secPrivEntityClassSearchForm").aeForm('setEditSts',true);
+    */
+}
+
+//加载实体操作行为关联信息（下）
+function loadPrivEntityRelaDetailMsg(rowIndex,rowData,event){
+	$.disabledButton("addBtn",true);
+	$.disabledButton("delBtn",false);
+	var relaId = rowData.relaId;
+	  
+	 if (undefined == relaId || relaId ==""){
+	       $.message.alert("",$.i18n('sec_privmanager_select'));
+	       return;
+	    }
+		
+		/* var cond = "".appendParam("relaId",relaId);
+		
+		$.ajaxPost($.aries.service.secframe.querySecEntityPrivRela,cond,function(data){
+			if(data){
+				$("#secEntityPrivRelaSearchForm").aeForm('reload',data);
+				$("#nameRela").aeTextpopup('setDisplayText',data[0].name);
+			}
+		  },function(code,info){
+			$.message.error("",$.i18n('sec_search_fail'));
+		});
+		
+		$("#secEntityPrivRelaSearchForm").aeForm('setEditSts',true);
+	    */
+	}
+
+//删除关联
+function del(){
+	var selectedRela = $('#secEntityPrivRelaSearchResultTable').aeGrid('getSelections',true);
+	if (null == selectedRela || selectedRela.length <= 0){
+	    $.message.alert("","Please Choose relation which need be disassociate");
+	       return;
+	}
+	var entId = selectedRela[0].entId;
+	var entClassId = selectedRela[0].entClassId;
+	var privId = selectedRela[0].privId;
+	var relaId = selectedRela[0].relaId;
+		
+	var param = "".appendParam("entId",entId).appendParam("privId",privId).appendParam("entClassId",entClassId).appendParam("relaId",relaId);
+	$.ajaxPost($.aries.service.secframe.delPrivEntityRela,param,function(data){
+		if(data == "0"){
+			$.message.success("",$.i18n('sec_delete_success'));	
+		}else if(data == "-4"){
+			$.message.alert("","不存在");
+		}
+		search3();
+	  },function(code,info){
+		  $.message.error("",$.i18n('sec_delete_fail'));	
+		  
+	});
+	
+	//$("#secEntityPrivRelaSearchForm").aeForm('clear');
+	
+}
+
+//popupPage afterAction
+function selectEntityClass(json){
+	$("#nameEntity").aeTextpopup('setDisplayText',json.name);
+}
+
+  function selectEntityClass2(json){
+   $("#namePrivilege").aeTextpopup('setDisplayText',json.name);
+}
+  
+  function selectEntityClass3(json){
+   $("#nameRela").aeTextpopup('setDisplayText',json.name);
+  }
+	
+	
+</script>
+</html>

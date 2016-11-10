@@ -1,0 +1,481 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Role Entity</title>
+    <link href="/ARIESRES/assets/aries/css/base/aries-base.css" rel="stylesheet" type="text/css"/>
+    <script src="/ARIESRES/assets/aries/lib/jquery.js"></script>
+    <script src="/ARIESRES/assets/aries/main/sea.js"></script>
+</head>
+<body>
+<div id="searchPanel" aeType="aePanel" aeInit="true" level="4" title="Function Set Search">
+	<div aeType="aeForm" id="secRoleSearchForm" aeInit="true" class="form-horizontal">
+	 	<div class="form-group">
+			<label class="col-xs-2 control-label">ID</label>
+			<div class="col-xs-4">
+				<span aeType="aeTextfield" id="roleId" aeInit="true" dataField="roleId"  ></span>
+			</div>
+			<label class="col-xs-2 control-label">Function Set Name</label>
+			<div class="col-xs-4">				
+				<span aeType="aeTextfield" id="roleName" aeInit="true" dataField="roleName"  ></span>
+			</div>			
+		</div>
+		<div class="form-group">
+			<label class="col-xs-2 control-label">Function Set Type</label>
+			<div class="col-xs-4">
+				<span aeType="aeCombo" id="roleType" aeInit="true" dataField="roleType"  valueField="codeId" optionField="codeName" ></span>
+			</div>
+			<div class="col-xs-6 text-right">
+				<button class="btn btn-primary" type="button" onclick="search()" ><span class="i18n">sec_query</span></button>
+		 	</div>			
+		</div>
+		<div class="form-group">
+		  	<div class="col-xs-12">
+				<span aeType="aeCombo" id="regionCode" aeInit="true" dataField="regionCode" valueField="codeId" optionField="codeName" visible="false"></span>
+			</div>
+		</div>		
+	</div>
+</div>
+<div id="listPanel" aeType="aePanel" aeInit="true" level="4" title="Available Function Set List">
+	<div id="secRoleSearchResultGrid" aeType="aeGrid" aeInit="true"
+		datafield="" isPaging="true" pagingSize="5"
+		pagingAlign="right" height="200px" showIndex="false" singleSelect="false" >
+		<span datafield="roleId" title="$.i18n('sec_role_id')" i18n="true" width="100"></span>
+		<span datafield="roleName" title="$.i18n('sec_role_name')" i18n="true" width="100"></span> 
+		<span datafield="roleType" title="$.i18n('sec_role_type')" i18n="true" renderer="roleTypeRenderer" width="100"></span>
+	</div>
+	<div class="col-xs-12 text-center">
+		<button class="btn btn-primary" type="button" onclick="loadRoleEntity()" ><span class="i18n">sec_query_entity</span></button>
+	</div>
+</div>
+<div id="entityPanel" aeType="aePanel" aeInit="true" level="4" title="Associated Entity Search">
+	<div aeType="aeForm" id="roleEntityForm" aeInit="true" class="form-horizontal">
+	 	<div class="form-group">
+			<label class="col-xs-2 control-label">Entity ID</label>
+			<div class="col-xs-4">
+				<span aeType="aeTextfield" id="entId" aeInit="true" dataField="entId"  ></span>
+			</div>
+			<label class="col-xs-2 control-label">Entity Name</label>
+			<div class="col-xs-4">				
+				<span aeType="aeTextfield" id="entName" aeInit="true" dataField="entName"  ></span>
+			</div>			
+		</div>
+		<div class="form-group">
+			<label class="col-xs-2 control-label">Operation Name</label>
+			<div class="col-xs-4">
+				<span aeType="aeTextfield" id="privName" aeInit="true" dataField="privName"  ></span>
+			</div>
+			<label class="col-xs-2 control-label">Date type</label>
+			<div class="col-xs-4">				
+				<span aeType="aeCombo" id="dateType" aeInit="true" dataField="dateType"  ></span>
+			</div>			
+		</div>
+		<div class="col-xs-12 text-right">
+			<button class="btn btn-primary" type="button" onclick="searchEnt()" ><span class="i18n">sec_query</span></button>
+		</div>
+	</div>
+</div>
+<div id="entityListPanel" aeType="aePanel" aeInit="true" level="4" title="Associated Entity  Search">
+	<div id="roleEntityGrid" aeType="aeGrid" aeInit="true"
+		datafield="" isPaging="true" pagingSize="5"
+		pagingAlign="right" height="200PX" showIndex="false" 
+		singleSelect="false" ingleRowClass="false">
+		<span datafield="roleId" title="$.i18n('sec_role_id')" i18n="true"  width="100" visible="false"></span> 
+		<span datafield="roleName" title="$.i18n('sec_role_name')" i18n="true" width="100"></span> 
+		<span datafield="entId" title="$.i18n('sec_entitymanager_entid')" i18n="true" width="100" ></span> 
+		<span datafield="entName" title="$.i18n('sec_entitymanager_entityname')" i18n="true" width="100" ></span> 
+		<span datafield="privId" title="$.i18n('sec_EntityPrivRelaManager_privid')" i18n="true" width="100" ></span> 
+		<span datafield="privName" title="$.i18n('sec_privname')" i18n="true" width="100" ></span> 
+		<span datafield="lowerLimit" title="$.i18n('sec_lowerlimit')" i18n="true" width="100" ></span> 
+		<span datafield="upperLimit" title="$.i18n('sec_upperlimit')" i18n="true"  width="100"></span> 
+		<span datafield="entValidDate" title="$.i18n('sec_validdate')" i18n="true" width="100" ></span> 
+		<span datafield="entExpireDate" title="$.i18n('sec_expiredate')" i18n="true"  width="100"></span> 
+		<span datafield="remarks" title="$.i18n('sec_entitymanager_entitynote')" i18n="true" width="100" ></span> 
+		<span datafield="privDesc" title="$.i18n('sec_privdesc')" i18n="true" width="100" ></span> 
+		<span datafield="opId" title="$.i18n('sec_operator')" i18n="true" width="100" ></span>
+	</div>
+	<div class="col-xs-12 text-center">			
+		<button class="btn btn-primary" type="button" onclick="addRoleEntityRelat()" id="addBtn"><span class="i18n">sec_role_add</span></button>
+		<button class="btn btn-primary" type="button" onclick="deleteRoleEntityRelat()" id="delBtn"><span class="i18n">sec_role_del</span></button>
+		<button class="btn btn-primary" type="button" onclick="modifyDate()" id="updateBtn"><span class="i18n">sec_modify_date</span></button>
+		<button class="btn btn-primary" type="button" onclick="updateLimit()" id="limitBtn"><span class="i18n">sec_update_limit</span></button>
+		<button class="btn btn-primary" type="button" onclick="exportRelate()" id="relateBtn"><span class="i18n">sec_export_relate</span></button>
+		<button class="btn btn-primary" type="button" onclick="exportAll()" id="allBtn"><span class="i18n">sec_export_all</span></button>
+	</div>
+</div>
+
+
+<!-- popup div -->
+<div id="limitDiv" style="display: none" >
+	<div aeType="aeForm" id="DateForm" aeInit="true" class="form-horizontal">
+	 	<div class="form-group">
+			<label class="col-xs-2 control-label"><span class="i18n">sec_lowerlimit</span></label>
+			<div class="col-xs-4">
+				<span aeType="aeTextfield" id="lowerLimit" aeInit="true" dataField="lowerLimit"  ></span>
+			</div>
+			<label class="col-xs-2 control-label"><span class="i18n">sec_upperlimit</span></label>
+			<div class="col-xs-4">				
+				<span aeType="aeTextfield" id="upperLimit" aeInit="true" dataField="upperLimit"  ></span>
+			</div>			
+		</div>
+		<div class="form-group">
+		  	<div class="col-xs-12">
+				<span aeType="aeTextfield" id="entIdLimit" aeInit="true" dataField="entId" visible="false"></span>
+				<span aeType="aeTextfield" id="privIdLimit" aeInit="true" dataField="privId" visible="false"></span>
+				<span aeType="aeTextfield" id="roleIdLimit" aeInit="true" dataField="roleId" visible="false"></span>
+				<span aeType="aeTextfield" id="roleGrantIdLimit" aeInit="true" dataField="roleGrantId" visible="false"></span>
+			</div>
+		</div>	
+	</div>
+</div>
+
+<div id="dateDiv" style="display: none" >
+	<div aeType="aeForm" id="DateForm" aeInit="true" class="form-horizontal">
+	 	<div class="form-group">
+			<label class="col-xs-2 control-label"><span class="i18n">sec_validdate</span></label>
+			<div class="col-xs-4">
+				<span aeType="aeCalendar" id="entValidDate" aeInit="true" dataField="entValidDate" showClear="true" ></span>
+			</div>
+			<label class="col-xs-2 control-label"><span class="i18n">sec_expiredate</span></label>
+			<div class="col-xs-4">				
+				<span aeType="aeCalendar" id="entExpireDate" aeInit="true" dataField="entExpireDate"  showClear="true"></span>
+			</div>			
+		</div>
+		<div class="form-group">
+		  	<div class="col-xs-12">
+				<span aeType="aeTextfield" id="entId" aeInit="true" dataField="entId" visible="false"></span>
+				<span aeType="aeTextfield" id="privId" aeInit="true" dataField="privId" visible="false"></span>
+				<span aeType="aeTextfield" id="roleId" aeInit="true" dataField="roleId" visible="false"></span>
+				<span aeType="aeTextfield" id="roleGrantId" aeInit="true" dataField="roleGrantId" visible="false"></span>
+			</div>
+		</div>	
+	</div>
+</div>
+
+
+<div id="demo-irguide" aeType="aeIrguide" aeInit="true" style="display:none;" button="true" width="1100" height="600" title="Irguide"
+	onStart="doStart()" onPrev="doPrev()">
+    <ul>
+        <li  stepId="step1" src="/ARIESRES/secframe/sysmgr/role/notContainRoleEntity.html"><a><span class="i18n">sec_roleentity_noentity</span></a></li>
+        <li  stepId="step2" src="/ARIESRES/secframe/sysmgr/entity/selectEntityClassDialog.html"><a><span class="i18n">sec_roleentity_select</span></a></li>
+    </ul>
+</div>
+
+</body>
+<script type="text/javascript">
+var selRoleId = [];
+var selEntityClassId;
+var date="10";
+seajs.use('aries-main',function(){
+		var regionCode = '[{"value":"1","text":"all"},{"value":"2","text":"valid"},{"value":"3","text":"expire"}]';
+		$("#regionCode").aeCombo('reload',$.parseJSON(regionCode));
+	
+	  $.ajaxPost($.aries.service.secframe.getSecStaticData,'codeType=201309',function(data){
+     if(data&&data.length!=0){
+       $.setPrivateData("_role_type",data);
+  	   $("#roleType").aeCombo('reload',data); 
+     }
+	 },function(code,info){
+		 
+	 });
+});
+
+function roleTypeRenderer(colValue, rowData, rowIndex){
+	var text = "";
+	if(colValue){
+		var _role_type = $.getPrivateData("_role_type");
+		if(_role_type && $.isArray(_role_type) && _role_type.length){
+			for(var i = 0;i < _role_type.length;i++){
+				if(_role_type[i] && colValue == _role_type[i].codeId){
+					text = _role_type[i].codeName;
+					break;
+				}
+			}
+		}
+	}
+	return text;
+}
+
+
+function search(){
+	var roleId = $("#secRoleSearchForm").aeForm('getValueByField','roleId');
+	var roleName =  $("#secRoleSearchForm").aeForm('getValueByField','roleName');
+	var roleType = $("#roleType").aeCombo('getValue');
+	var regionCode = $("#regionCode").aeCombo('getValue');
+	
+	var cond = "".appendParam("roleName", roleName).appendParam("roleType", roleType)
+				 .appendParam("regionCode", regionCode).appendParam("roleId", roleId);	
+	/**
+	$.ajaxPost($.aries.service.secframe.refreshRoleByOper,null,function(data){
+		if(data){
+			 $('#secRoleSearchResultGrid').aeGrid('reload',data);
+		}
+	  },function(code,info){
+	     $.message.error("","load data fail,code:"+code+",info:"+info);
+	  }); 
+	*/
+	$('#secRoleSearchResultGrid').aeGrid('reload',$.aries.service.secframe.refreshRoleByOper,cond);
+}
+
+function loadRoleEntity(){
+	    var selRows = $("#secRoleSearchResultGrid").aeGrid('getSelections',true);
+		if (null === selRows||selRows.length<=0)
+		{
+	    	$.message.alert("",$.i18n("sec_roleselect_select"));
+		    return;
+		}
+		var roleId = [];
+		for(var i=0;i<selRows.length;i++)
+		{
+			roleId[i] =selRows[i].roleId;
+			roleId[i] = roleId[i];
+			selRoleId[i] = roleId[i];
+		}
+		
+		var cond = "".appendParam("roleIds", roleId);
+	  
+		/**
+	  $.ajaxPost($.aries.service.secframe.refreshRoleEntityByRoles,"roleIds="+roleId,function(data){
+			if(data){
+				 $('#roleEntityGrid').aeGrid('reload',data);
+			}
+		  },function(code,info){
+		     $.message.error("","load data fail,code:"+code+",info:"+info);
+		  }); 
+	*/
+		$('#roleEntityGrid').aeGrid('reload',$.aries.service.secframe.refreshRoleEntityByRoles,cond);
+}
+
+
+function searchEnt(){
+	var entId = $("#roleEntityForm").aeForm('getValueByField','entId');
+	var entName =  $("#roleEntityForm").aeForm('getValueByField','entName');
+	var privName = $("#roleEntityForm").aeForm('getValueByField','privName');
+	var dateType =  $("#dateType").aeCombo("getValue");
+	
+	var selRows = $("#secRoleSearchResultGrid").aeGrid('getSelections',true);
+	if (null === selRows||selRows.length<=0)
+	{
+    	$.message.alert("",$.i18n("sec_roleselect_select"));
+	    return;
+	}
+	var roleId = [];
+	for(var i=0;i<selRows.length;i++)
+	{
+		roleId[i] =selRows[i].roleId;
+		roleId[i] = roleId[i];
+		selRoleId[i] = roleId[i];
+	}
+	
+	var cond = "".appendParam("roleIds",selRoleId).appendParam("entName",entName)
+				 .appendParam("privName",privName).appendParam("entId",entId).appendParam("type",dateType);
+	
+	
+	$('#roleEntityGrid').aeGrid('reload',$.aries.service.secframe.refreshRoleEntitys,cond);
+   
+}
+
+function addRoleEntityRelat(){
+	    var selRows = $("#secRoleSearchResultGrid").aeGrid('getSelections',true);
+		if (null == selRows||selRows.length<=0)
+		{
+	    	$.message.alert("",$.i18n("sec_roleselect_select"));
+		    return;
+		}
+		var roleId = [];
+		for(var i=0;i<selRows.length;i++)
+		{
+			roleId[i] =selRows[i].roleId;
+			selRoleId[i] = roleId[i];
+		}
+		
+	    $("#demo-irguide").aeIrguide("start");
+}
+
+function doStart(){
+	if($("#notContainRoleEntityForm").length){
+		$("#name").next().children().on("click",function(){
+			$("#demo-irguide").aeIrguide("next");
+		});
+	}
+}
+function doPrev(active){
+	if(active == "step1"){
+		//if($("#notContainRoleEntityForm").length){
+			selEntityClassId = $.getPrivateData("entityClassIdData");
+			$("#name").aeTextfield('setValue',$.getPrivateData("entityClassNameData"));
+		//}
+	}
+}
+
+function deleteRoleEntityRelat(){
+	var selRows =  $("#roleEntityGrid").aeGrid('getSelections',true);
+	if (null == selRows||selRows.length<=0)
+  	{
+      	$.message.alert("",$.i18n("sec_authoredentity_select"));
+	    return;
+	}
+	
+	 var entStr = [];
+	 var roleId = [];
+	for(var i=0;i<selRows.length;i++)
+	{
+		var antId = selRows[i].entId;
+		var privId =selRows[i].privId;
+		entStr[i] = antId+";"+privId;
+		
+		roleId[i] = selRows[i].roleId;
+	}
+	//var param = "".appendParam("roleId", roleId).appendParam("ents", entStr);
+	var param = "".appendParam("roleId", roleId)+"&ents=\"["+entStr+"]\"";
+	$.message.confirm("",$.i18n("sec_confirm_delete"),"",function(){
+				$.ajaxPost($.aries.service.secframe.delRoleEntityRelat,param,function(data){
+					 $.message.success("",$.i18n("sec_delete_success"));
+					loadRoleEntity();
+					refreshNotContain();
+		 		},function(code,info){
+ 						$.message.error("",$.i18n('sec_del_fail'));
+ 					
+		 			
+		 		});
+		});		
+}	    
+
+function modifyDate(){
+	var selRows =  $("#roleEntityGrid").aeGrid('getSelections',true);
+	var title = $.i18n('sec_modify_date');
+	if (null == selRows||selRows.length<=0)
+  	{
+      	$.message.alert("",$.i18n("sec_modify_authoredent_select"));
+	    return;
+	}
+	
+	var entId = selRows[0].entId;
+    var privId = selRows[0].privId;
+    var roleId = selRows[0].roleId;
+	var param ="".appendParam("roleId", roleId).appendParam("entId", entId).appendParam("privId", privId);
+	
+	$.ajaxPost($.aries.service.secframe.getSecPrivEntityByRole,param,function(data){
+	    	if(data){
+				 $('#DateForm').aeForm('reload',data);
+			}
+	    }); 
+	
+    disableButton();
+	//$.aries.popup.openDiv('dateDiv',title,'800','');
+    $.openPopupDiv('dateDiv',title,'','',{"onConfirm":"saveDate()","draggable":true,"resizable":true});		
+}
+
+function saveDate(){
+		var dateData = $("#DateForm").aeForm('getData');
+		var validDate = $("#DateForm").aeForm('getValueByField',"entValidDate");
+		var expireDate = $("#DateForm").aeForm('getValueByField',"entExpireDate");
+		
+		if(dateData===""||dateData===null){
+		   	 $.message.alert("",$.i18n('sec_role_nochange'));
+		   	 return;
+	    }
+		
+		if(validDate>expireDate){
+			$.message.alert("",$.i18n("sec_date_confirm"));
+			return;
+		}
+		
+		var newdata = $.aries.common.setSaveDataState(dateData,false);
+	    var savedata = [];
+	    savedata.push($.parseJSON(newdata));
+	    var param = "".appendParam("values", savedata);
+	    
+		 $.ajaxPost($.aries.service.secframe.saveLimit,param,function(data){
+			 $.message.success("",$.i18n("sec_save_ok"));
+				loadRoleEntity();
+				$.closePopupDiv();
+				ableButton();
+		 },function(code,info){
+				$.message.error("",$.i18n("sec_function_save_fail"));
+				
+	 			
+	 		});
+}
+
+
+
+function updateLimit(){
+	var selRows =  $("#roleEntityGrid").aeGrid('getSelections',true);
+	var title = $.i18n('sec_update_limit');
+	if (null == selRows||selRows.length<=0)
+  	{
+      	$.message.alert("",$.i18n("sec_modify_authoredent_select"));
+	    return;
+	}
+	
+	var entId = selRows[0].entId;
+    var privId = selRows[0].privId;
+    var roleId = selRows[0].roleId;
+	var param ="".appendParam("roleId", roleId).appendParam("entId", entId).appendParam("privId", privId);
+	$.ajaxPost($.aries.service.secframe.getSecPrivEntityByRole,param,function(data){
+	    	if(data){
+				 $('#limitForm').aeForm('reload',data);
+			}
+	    }); 
+	
+	//$.aries.popup.openDiv('limitDiv',title,'800','');
+	$.openPopupDiv('limitDiv',title,'','',{"onConfirm":"saveLimit()","draggable":true,"resizable":true});		
+	disableButton();
+}
+
+function saveLimit(){
+	var limitData = $("#limitForm").aeForm('getData');
+	var upper = $("#limitForm").aeForm('getValueByField',"upperLimit");
+	var lower = $("#limitForm").aeForm('getValueByField',"lowerLimit");
+	
+	if(limitData===""||limitData==null){
+	   	 $.message.alert("",$.i18n('sec_role_nochange'));
+	   	 return;
+   }
+	if(upper>upper){
+		$.message.alert("",$.i18n("sec_limit_confirm"));
+		return;
+	}
+	
+	var newdata = $.aries.common.setSaveDataState(limitData,false);
+    var savedata = [];
+    savedata.push($.parseJSON(newdata));
+    var param = "".appendParam("values", savedata);
+	 $.ajaxPost($.aries.service.secframe.saveLimit,param,function(data){
+		 $.message.success("",$.i18n("sec_save_ok"));
+			loadRoleEntity();
+			$.closePopupDiv();
+			ableButton();
+	 },function(code,info){
+			$.message.error("",$.i18n("sec_function_save_fail"));
+			
+ 			
+ 		});
+}
+
+
+function ableButton(){
+	$.disabledButton("deleteBtn",false); 
+	$.disabledButton("updateBtn",false); 
+	$.disabledButton("limitBtn",false); 
+	$.disabledButton("relateBtn",false); 
+	$.disabledButton("allBtn",false); 
+}
+function disableButton(){
+	$.disabledButton("deleteBtn",true); 
+	$.disabledButton("updateBtn",true); 
+	$.disabledButton("limitBtn",true); 
+	$.disabledButton("relateBtn",true); 
+	$.disabledButton("allBtn",true); 
+}
+
+function exportRelate(){
+	$.message.alert("","导出关联实体");
+}
+
+function exportAll(){
+	$.message.alert("","导出全量实体");
+}
+</script>
+</html>

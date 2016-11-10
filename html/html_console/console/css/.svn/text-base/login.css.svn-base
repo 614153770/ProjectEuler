@@ -1,0 +1,104 @@
+@charset "utf-8";
+/* CSS Document */
+body{
+    background:#111214 url(../images/login_bg.jpg) no-repeat center;
+    background-size: cover;
+}
+.login{
+   position: relative;
+   width:100%;
+   height: 100%;   
+}
+
+.login__box{   
+    position: absolute;
+    top: 40%;
+    left: 50%;
+    margin-left: -175px;
+    margin-top: -200px;
+    width:350px;
+}
+.login__logo{
+    width:100%;
+    text-align: center;
+    margin-bottom: 85px;
+}
+
+.login__form__input_outer{
+    width:100%;
+    height: 50px;
+    line-height: 50px;
+    background-color: #fff\9;
+    background-color: rgba(255, 255, 255, 0.1);
+    border-radius: 2px;
+    margin-top: 20px;
+    position: relative;
+}
+.login__form__input_outer i{
+    font-size: 18px;
+    color: #979898;
+    margin-right: 5px;
+    position: absolute;
+    left:10px; 
+    top:50%;
+    margin-top:-9px;   
+}
+.login__form__input_outer__ipt{
+    background:none;
+    border:none;
+    outline: none;    
+    color: #333\9;
+    color: rgba(255, 255, 255, 1);
+    width:100%;
+    height: 100%;
+    padding:0 15px 0 35px;
+    display: block;
+}
+input::-webkit-input-placeholder {
+    color:rgba(255, 255, 255, .4);
+}
+input:-moz-placeholder {
+    color:rgba(255, 255, 255, .4);
+}
+:-ms-input-placeholder { /* Internet Explorer 10+ */
+color:rgba(255, 255, 255, .4);
+}
+
+.login__form__input_outer__ipt--user-input{
+    color: #333\9;
+    color: rgba(255, 255, 255, 1);
+}
+.login__form__input_outer__tips{
+    position: absolute;
+    left:35px;
+    top:0;
+    height:50px;
+    line-height: 50px;
+    z-index: 1;
+    color: #333\9;
+    color: rgba(255, 255, 255, 1); 
+    font-size: 14px;
+}
+.login__form__btn{
+  margin-top: 30px;
+  margin-bottom: 10px;
+  transition:all .2s ease-in;
+}
+.login__form__forgetpwd{
+    float: right;
+    color: #038cd6;
+    font-size: 12px;
+}
+
+.login__copyright{
+    position: absolute;
+    bottom:10px;
+    width:100%;
+    text-align: center;
+    color: #999\9;
+    color:rgba(255, 255, 255, .4);
+
+}
+/* input:-webkit-autofill { 
+-webkit-box-shadow: 0 0 0px 1000px rgba(0, 0, 0, 0.5) inset;
+}  */

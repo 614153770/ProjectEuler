@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<link href="/ARIESRES/assets/aries/css/base/aries-base.css"rel="stylesheet" type="text/css" />
+<link href="/ARIESRES/assets/appEngine/css/common.css" rel="stylesheet" type="text/css" />
+<link href="/ARIESRES/assets/appEngine/css/signIn.css" rel="stylesheet" type="text/css" />
+<link href="/ARIESRES/assets/appEngine/css/main.css" rel="stylesheet" type="text/css" />
+<link href="/ARIESRES/assets/appEngine/css/font.css" rel="stylesheet" type="text/css" />
+<link href="/ARIESRES/assets/appEngine/css/font-md.css" rel="stylesheet" type="text/css" />
+<script src="/ARIESRES/assets/aries/lib/jquery.js"></script>
+<script src="/ARIESRES/assets/aries/main/sea.js"></script>
+<title>Register</title>
+</head>
+<body>
+    <div id="servInfoDetail" aeType="aeForm" aeInit="true" class="form-horizontal">
+				<div class="form-group">
+					<label class="col-xs-3 control-label">ProjectCode</label>
+					<div class="col-xs-5">
+						<span aeType="aeTextfield" id="projectCode" dataField="projectCode" value="http://www.baidu.com" aeInit="true" editable="false" width="300" showClear="true"></span> 
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="col-xs-3 control-label">SVN URL</label>
+					<div class="col-xs-5">
+						<span aeType="aeTextfield" id="svnUrl" dataField="svnUrl" aeInit="true" editable="false" width="300" showClear="true"></span> 
+					</div>
+					<div class="col-xs-3">
+						<button class="btn btn-primary" id="forwardSvn" type="button" onclick="forwardSvn()">Forward</button> 
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="col-xs-3 control-label">SVN Admin Account</label>
+					<div class="col-xs-5">
+						<span aeType="aeTextfield" id="svnAdminAcct" dataField="svnAdminAcct" aeInit="true" editable="false" width="300" showClear="true"></span> 
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="col-xs-3 control-label">SVN Admin Password</label>
+					<div class="col-xs-5">
+						<span aeType="aeTextfield" id="svnAdminPassword" dataField="svnAdminPassword" password="true" aeInit="true" editable="false" width="300" showClear="true"></span> 
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="col-xs-3 control-label">WEB/HUB/REDIS</label>
+					<div class="col-xs-5">
+						<span aeType="aeTextfield" id="webHubRedisIp" dataField="webHubRedisIp" aeInit="true" editable="false" width="300" showClear="true"></span> 
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="col-xs-3 control-label">APP</label>
+					<div class="col-xs-5">
+						<span aeType="aeTextfield" id="appIp" dataField="appIp" aeInit="true" editable="false" width="300" showClear="true"></span> 
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="col-xs-3 control-label">DB</label>
+					<div class="col-xs-5">
+						<span aeType="aeTextfield" id="dbIp" dataField="dbIp" aeInit="true" editable="false" width="300" showClear="true"></span> 
+					</div>
+				</div>
+			</div>
+    
+</div>
+
+</body>
+<script type="text/javascript">
+seajs.use('aries-main',function(){
+	//$.getPopupParam的用法
+	var order;
+	var popupParam = $.getPopupParam();
+	if(popupParam){
+		order = JSON.parse(popupParam.get("order"));
+	}
+	var envOrder = order.envOrder;
+	$("#servInfoDetail").aeForm('reload',envOrder);
+	if(null == envOrder.svnUrl||"" == envOrder.svnUrl){
+		$("#forwardSvn").attr("disabled", true); 
+	}
+	
+});
+
+function forwardSvn(){
+	//var svnUrl = $('#svnUrl').aeTextfield('getValue');
+	window.location.href= "http://10.1.241.59:8080/svnadmin/login.jsp";
+}
+</script>
+</html>
